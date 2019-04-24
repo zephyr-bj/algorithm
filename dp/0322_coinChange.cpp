@@ -14,3 +14,5 @@
         if(bin.back()==INT_MAX)return -1;
         return bin.back();
     }
+// first optimal divide: the amount first
+// secondary optimal divide: the coins
