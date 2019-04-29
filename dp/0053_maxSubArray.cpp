@@ -6,3 +6,6 @@
         }
         return ans;
     }
+/*
+variable: the max subarrary with current element
+*/
