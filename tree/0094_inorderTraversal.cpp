@@ -14,3 +14,17 @@
         }
         return ans;
     }
+/*
+    void inTool(TreeNode * root, vector<int>&ans){
+        if(root==NULL)return;
+        inTool(root->left, ans);
+        ans.push_back(root->val);
+        inTool(root->right, ans);
+    }
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int>ans;
+        inTool(root, ans);
+        return ans;
+    }
+// need to check if root == NULL before trying to access its member
+*/
