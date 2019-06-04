@@ -1,4 +1,5 @@
-    bool tool(int n, string port, vector<string>&ans, unordered_map<string,multimap<string,int>>&bin){
+/*DFS*/    
+bool tool(int n, string port, vector<string>&ans, unordered_map<string,multimap<string,int>>&bin){
         if(n==0)return true;
         unordered_map<string,multimap<string,int>>::iterator it = bin.find(port);
         if(it==bin.end())return false;
