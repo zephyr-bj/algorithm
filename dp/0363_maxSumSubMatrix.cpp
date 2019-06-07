@@ -26,20 +26,62 @@
     }
     
 /* Kadane's algorithm    
-int maxSubArraySum(int a[], int size) 
-{ 
-   int max_so_far = 0, max_ending_here = 0; 
-   for (int i = 0; i < size; i++) 
-   { 
-       max_ending_here = max_ending_here + a[i]; 
-       if (max_ending_here < 0) 
-           max_ending_here = 0; 
-  
-       /* Do not compare for all elements. Compare only    
-          when  max_ending_here > 0 */
-       else if (max_so_far < max_ending_here) 
-           max_so_far = max_ending_here; 
-   } 
-   return max_so_far; 
-} 
+int kadane(int* arr, int* start, int* finish, int n)  {  
+    int sum = 0, maxSum = INT_MIN, i;  
+    *finish = -1;  
+    int local_start = 0;  
+    for (i = 0; i < n; ++i)  {  
+        sum += arr[i];  
+        if (sum < 0)  {  
+            sum = 0;  
+            local_start = i + 1;  
+        } else if (sum > maxSum)  {  
+            maxSum = sum;  
+            *start = local_start;  
+            *finish = i;  
+        }  
+    }  
+    if (*finish != -1)  
+        return maxSum;  
+    // Special Case: When all numbers in arr[] are negative  
+    maxSum = arr[0];  
+    *start = *finish = 0;  
+    // Find the maximum element in array  
+    for (i = 1; i < n; i++)  {  
+        if (arr[i] > maxSum)  {  
+            maxSum = arr[i];  
+            *start = *finish = i;  
+        }  
+    }  
+    return maxSum;  
+}  
+void findMaxSum(vector<vector<int>>M)  {   
+    int maxSum = INT_MIN, finalLeft, finalRight,  
+                          finalTop, finalBottom;  
+    int left, right, i;  
+    int ROW=M.size();
+    int COL=M[0].size();
+    int* temp = (int*)malloc(sizeof(int)*ROW); 
+    int sum, start, finish;  
+    // Set the left column  
+    for (left = 0; left < COL; ++left)  {  
+        memset(temp, 0, sizeof(temp));  
+        // Set the right column for the left column set by outer loop  
+        for (right = left; right < COL; ++right)  {  
+            for (i = 0; i < ROW; ++i)  
+                temp[i] += M[i][right];  
+
+            sum = kadane(temp, &start, &finish, ROW);
+
+            if (sum > maxSum)  {  
+                maxSum = sum;  
+                finalLeft = left;  
+                finalRight = right;  
+                finalTop = start;  
+                finalBottom = finish;  
+            }  
+        }  
+    }  
+    free(temp);
+}
 */
