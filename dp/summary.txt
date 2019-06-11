@@ -1,0 +1,40 @@
+## bool 
+regular express
+wildcard express
+interleave srings
+word break
+
+## total number of paths (recursive method works NOT as efficient)
+unique paths
+unique paths with obstacles
+min path sum
+dungeon game
+climb stairs
+number of Docoding ways
+number of BSTs
+
+## extremum
+max continuous subarray sum
+min edit distance
+max rectangle area in matrix
+max number of subsequence
+min cut to form palindrome substring
+max product of numbers from sub array
+max stock profit IV
+max rob money
+max rob money II
+max square area in matrix
+max stock profit V
+max score by burst bulloons
+min number of coins combining to a mount of money
+max product of numbers from substring
+max sub matrix sum
+max (largest) divisible subset
+
+got local optimal solution with new comming element 
+  local: for all the old elements 
+         for part of the old elements (burst bulloon)
+         
+transition rules from local optimal for a larger local optimal 
+  define dp variables (max profit IV and V)
+  solution is set (divisible subset / sub matrix sum)
