@@ -8,3 +8,6 @@
         }
         return bin.size();
     }
+/*
+can not use stack rising sequence trick
+*/
