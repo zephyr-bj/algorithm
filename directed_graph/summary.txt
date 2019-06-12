@@ -1,0 +1,14 @@
+dsf
+clone graph (edge list, pointer to nodes represents visited)
+reconstruct itineary (edge list, integer represents visited)
+longest increasing integer path in matrix (matrix)
+word search II (matrix)
+number of isolated islands in matrix (matrix)
+word break II
+surrounded regions in matrix(matrix)
+word search (matrix)
+
+bsf
+course schedule (edge list, integer represents visited)
+course schedule II (edge list, integer represents visted)
+
