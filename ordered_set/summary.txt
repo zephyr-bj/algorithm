@@ -1,0 +1,11 @@
+data stream as disjoint intervals
+count the ranges, whose element sum is within [lb, ub]
+find the longest Increasing sequence
+design a structure, maintain the median of a data stream
+
+lower_bound
+upper_bound 
+define a set with customized compare, say a stuct my_cmp, it should define a "operator ()"
+    set<T,my_cmp>bin;
+    set<int, greator<int>>bin;
+  
