@@ -1,6 +1,6 @@
 dsf
 clone graph (edge list, pointer to nodes represents visited)
-reconstruct itineary (edge list, integer represents visited)
+reconstruct itinerary (edge list, integer represents visited)
 longest increasing integer path in matrix (matrix)
 word search II (matrix)
 number of isolated islands in matrix (matrix)
@@ -11,4 +11,10 @@ word search (matrix)
 bsf
 course schedule (edge list, integer represents visited)
 course schedule II (edge list, integer represents visted)
+
+graph traversal:
+edge lists are represented by map from "src" to "dst"
+visited recording could be array or map using the "dst" as key. 
+    for the course schedule problem, visiting recording is vector of number;
+    for the itinerary problem, visiting recording is map from "src to dst" pair to "visiting times"
 
