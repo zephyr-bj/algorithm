@@ -1,0 +1,4 @@
+priority_queue<T>bin, is a max heap by default, with the bin.top() is the max
+priority_queue<T,greater<T>>bin, is a min heap, with the bin.top() is the min
+
+BST sort "sideways", heap sort "upwards"
