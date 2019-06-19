@@ -1,0 +1,61 @@
+remove element from list [5]
+  by position (0019)
+  delete duplicates (all of them) (0082)
+  delete duplicates (except the first one) (0083)
+  remove elements by val (0203)
+  delete element by pointer only (0237)
+  
+merge lists [2]
+  merge two lists (0021)
+  merge K lists (0023)
+  odd even list (0328) 
+  
+reserver lists [4]
+  swap node pairs (0024)
+  reverse K-length groups (0025)
+  reverse between two nodes (0092)
+  reverse List (0206)
+  
+rotate lists [1]
+  rotate right (0061)
+  
+partition list [4] 
+  partition list (0086)
+  reorder list (0143) partition+reverse+merge
+  is palindrome (0234) partition+reverse+cmp
+  
+detect cycle [2]
+  has cycle ? (0141)
+  where is the cycle (0142)
+  
+detect intersection [1]
+  get intersection (0160)
+ 
+sort list [2]
+  insert sort (0147)
+  merge sort (0148)
+  
+//partition list into half half
+/*
+        if(head==NULL||head->next==NULL)return;
+        ListNode * p = head;
+        ListNode * q = head;
+        while(p!=NULL&&p->next!=NULL&&p->next->next!=NULL){
+            p=p->next->next;
+            q=q->next;
+        }
+*/
+//reverse list
+/*
+        ListNode dummy(0);
+        dummy.next=head;
+        ListNode * p = &dummy;
+        ListNode * cur=head, *nex = cur==NULL?NULL:cur->next;
+        while(cur!=NULL&&nex!=NULL){
+            cur->next = nex->next;
+            nex->next = p->next;
+            p->next=nex;
+            nex=cur->next;
+        }
+        return dummy.next;
+*/
