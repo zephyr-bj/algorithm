@@ -34,7 +34,11 @@ detect intersection [1]
 sort list [2]
   insert sort (0147)
   merge sort (0148)
-  
+// dummy fake head for all starting status
+/*
+        ListNode dummy(0);
+        dummy.next = head;
+*/
 //partition list into half half
 /*
         if(head==NULL||head->next==NULL)return;
