@@ -26,3 +26,7 @@
         }
         return ans;
     }
+/*
+The lower bound of the max gap is (ub-lb)/(n-1) <== divide the range evenly, max gap must between the buckets
+to guarantee measure the gap between two neighboring elements, we evaluate lbin[i]-ubin[pre]
+*/
