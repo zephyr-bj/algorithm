@@ -9,6 +9,11 @@ find elements
   find the missing number from range [0,n] (0268)
   find the duplicate number from range [1,n] (0287) 
   
+sort array
+  maximum gap (0164)
+  largest number (179) trick for compare rule
+  wiggle sort II (0324)
+  
 reverse array
   reverse every word in a string (0151)
   reverse string (0344)
@@ -46,6 +51,35 @@ int removeElement(vector<int>& nums, int val) {
         }
         return l;
 }
+// partition array
+    int partition(vector<int>&arr, int l, int r) { 
+        int x = arr[r], i = l; 
+        for (int j = l; j <= r - 1; j++) { 
+            if (arr[j] <= x) { 
+                swap(arr[i], arr[j]); 
+                i++; 
+            } 
+        } 
+        swap(arr[i], arr[r]); 
+        return i; 
+    } 
+    void partition3Way(vector<int>&arr, int l, int r, int& x, int&y) { 
+        int pivot = arr[r];
+        int i = l; int j=l; int k=r-1;
+        while(j<=k){
+            if(arr[j]<pivot){
+                swap(arr[i],arr[j]);
+                i++; j++;
+            }else if(arr[j]>pivot){
+                swap(arr[j],arr[k]);
+                k--;
+            }else{
+                j++; 
+            } 
+        } 
+        swap(arr[j],arr[r]);
+        x=i;y=j;
+    } 
 // find elements in range [1,n]
   int findDuplicate(vector<int>& nums) {
         int n=nums.size();
