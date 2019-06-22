@@ -1,6 +1,6 @@
 data stream as disjoint intervals
 count the ranges, whose element sum is within [lb, ub]
-find the longest Increasing sequence
+find the longest Increasing sequence (0300) (0352)
 design a structure, maintain the median of a data stream
 
 lower_bound
