@@ -69,10 +69,23 @@ int partition (arr[], low, high){
 */
 
 /*
-//use heap: 12ms
+//use max heap: 12ms
     int findKthLargest(vector<int>& nums, int k) {
         priority_queue<int>qu(nums.begin(), nums.end());
         for(int i=0; i<k-1; i++)qu.pop();
         return qu.top();
+    }
+//use min heap: 12ms
+    int findKthLargest(vector<int>& nums, int k) {
+        int n = nums.size();
+        priority_queue<int,vector<int>,greater<int>>bin;
+        int i=0; 
+        for(; i<k; i++)bin.push(nums[i]);
+        for(; i<n; i++){
+            if(bin.top()<nums[i]){
+                bin.pop(); bin.push(nums[i]);
+            }
+        }
+        return bin.top();
     }
 */
