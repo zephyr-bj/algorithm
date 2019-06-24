@@ -1,0 +1,122 @@
+linear search
+  container with most water (0011)
+  three sum (0015)
+  three summ closet (0016)
+  four sum (0018)
+  trap rain water (0042)
+  two sum II, for sorted array (0162)
+  search matrix II (0240) each row sorted, and each collomn sorted
+
+binary search
+  find median of two sorted array (0004)
+  search rotated sorted array (0033)
+  search range (0034)
+  search inserted index (0035)
+  find the square root (0069)
+  search Matrix (0074)
+  search rotated sorted array with duplicated elements (0081)
+  search min element in rotated sorted array (0153)
+  search min element in rotated sorted array with duplicated elements (0154)
+  find peak element (0162)
+  find H Index II (0275)
+  find the first bad version (0278)
+  check if a valid perfect square (0367)
+  find the peak index (0852)
+
+//*** two pointers moving towards each other (0011) (0015) (0016) (0018) (0042) (0162)
+      two dimension moving (0240)
+      moving window methods (0209)
+
+//*** basic algorithms, the basic algorithm is faster since the "==" case, but the leftmost algorithm more reliable
+  (0034) binary_search_leftmost + binary_search_rightmost
+  (0035) binary_search
+  (0069) binary_search
+  (0074) binary_search
+  (0275) binary_search_leftmost
+  (0278) binary_search_leftmost
+  (0367) binary_search
+  // binary search 
+  int binary_search(vector<int>& arr, int target){
+      int n = arr.size();
+      int x = 0; int y = n-1;
+      while(x<=y){
+          int mid = x+(y-x)/2;
+          if(arr[mid]==target) return mid;
+          else if(arr[mid]>target) x=mid+1;
+          else y=mid-1;
+      }
+      return -1;
+  }
+  // if the target doesn't exist, x stops at the insert index, y=x-1;
+  // binary search left most
+  int binary_search_leftmost(vector<int>& arr, int target){
+      int n = arr.size();
+      int x = 0; int y = n-1;
+      while(x<y){
+          int mid = x+(y-x)/2;
+          else if(arr[mid]>target) x=mid+1;
+          else y=mid;
+      }
+      return x;
+  }
+  // if the target doesn't exists, x stops at the insert index, y=x;
+  // binary search right most
+  int binary_search_leftmost(vector<int>& arr, int target){
+      int n = arr.size();
+      int x = 0; int y = n-1;
+      while(x<y){
+          int mid = x+(y-x)/2;
+          else if(arr[mid]>=target) x=mid+1;
+          else y=mid;
+      }
+      return x-1;
+  }
+  //if the target doesn't exists, x stops at the insert index minus one
+  
+//***search rotated sorted array (0033) (0081) (0153) (0154)
+  //Binary search in rotated sorted array
+  int search(vector<int>& arr, int target){
+      int n = arr.size();
+      int rot = findMin(arr);
+      int x = 0; int y = n-1;
+      while(x<=y){
+          int mid = x+(y-x)/2;
+          int realMid = (mid+rot)%n;
+          if(arr[realMid]==target) return mid;
+          else if(arr[realMid]>target) x=mid+1;
+          else y=mid-1;
+      }
+      return -1;
+  }
+  //find the rotation point: the index of minimum value
+  int findMin(vector<int>& arr){
+      int n = arr.size();
+      int x=0; int y=n-1;
+      while(x<y){
+          int mid=x+(y-x)/2;
+          if(arr[mid]>arr[y])i=mid+1;
+          else j=mid;
+      }
+      return i;
+  }
+  
+//***find the peak element (0162) (0852)
+  // for unsorted array
+  // for mountain array
+      int findPeakUtil(vector<int>& arr, int low, int high, int n){
+        int mid = low + (high - low)/2;  /* (low + high)/2 */
+  
+        if ((mid == 0 || arr[mid-1] <= arr[mid]) && 
+            (mid == n-1 || arr[mid+1] <= arr[mid])) 
+            return mid; 
+  
+        else if (mid > 0 && arr[mid-1] > arr[mid]) 
+            return findPeakUtil(arr, low, (mid -1), n); 
+  
+        else return findPeakUtil(arr, (mid + 1), high, n);         
+}
+
+//***find the kthe element in two sorted array (0004)
+ 
+  
+  
