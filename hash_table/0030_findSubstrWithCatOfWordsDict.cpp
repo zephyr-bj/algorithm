@@ -1,4 +1,4 @@
-    vector<int> findSubstring(string S, vector<string> &L) {
+   vector<int> findSubstring(string S, vector<string> &L) {
         vector<int> result;
         if(L.size()<1)return result;
         int L0 = L[0].size();
@@ -7,12 +7,11 @@
         if(L2<1)return result;
         if(L1>L2) return result;
         
-        map<string,int> toFind,hasFound;
+        unordered_map<string,int> toFind,hasFound;
         for(int i=0; i<L.size(); i++){
             if(toFind.find(L[i])==toFind.end()){
                 toFind[L[i]]=1;
-            }
-            else{
+            }else{
                 toFind[L[i]]++;
             }
         }
