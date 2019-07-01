@@ -8,4 +8,16 @@ upper_bound
 define a set with customized compare, say a stuct my_cmp, it should define a "operator ()"
     set<T,my_cmp>bin;
     set<int, greator<int>>bin;
-  
+    
+ordered_set or ordered_map are implemented by a self-balancing BST, or AVL tree (named after inventors Adelson-Velsky and Landis)
+1. the heights of the two child subtrees of any node differ by at most one; therefore, it is also said to be height-balanced.
+2. Lookup, insertion, and deletion all take O(log n) time in both the average and worst cases, where n is the number of nodes in the tree.
+3. Insertions and deletions may require the tree to be rebalanced by one or more tree rotations.
+Insertion:
+    1) After inserting a node, it is necessary to check each of the node's ancestors for consistency with the AVL rules.
+    2) For each node checked, if the balance factor remains 1, 0, or -1 then no rotations are necessary. Otherwise, it's unbalanced.
+    3) After each insertion, at most two tree rotations are needed to restore the entire tree.
+Deletion:
+    1) If a node is a leaf, remove it.
+    2) If the node is not a leaf, replace it with either the largest in its left subtree (rightmost) or the smallest in its right subtree (leftmost), and remove that node. The node that was found as replacement has at most one subtree.
+    3) After deletion, retrace the path from parent of the replacement to the root, adjusting the balance factors as needed.
