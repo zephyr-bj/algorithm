@@ -1,0 +1,28 @@
+two sum (0001)
+bulls and cows (0299)
+
+repeating
+  Longest Substring Without Repeating Characters (0003)
+  contains duplicate (0217)
+  contains nearby duplicate (0219)
+  contains nearby almost duplicate (220)
+
+statistic description
+  Substring with Concatenation of All Words (0030)
+  Group Anagrams (0049)
+  minimum window in S which will contain all the characters in T (0076)
+  is Anagram (0242)
+  word pattern (0290)
+
+search
+  Longest Consecutive Sequence (0128)
+  H Index (0274)
+  Palindrome Pair (0336)
+  Intersection of Two Arrays (0349)
+  Intersection of Two Arrays (0350)
+
+multi to multi
+  max points on a line (0149)
+
+fraction to decimal (0166)
+Repeated DNA Sequences (0187)
