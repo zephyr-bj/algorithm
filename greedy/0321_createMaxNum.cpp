@@ -1,9 +1,19 @@
-    vector<int> maxNumber(vector<int>& nums, int k){
+    /*vector<int> maxNumber(vector<int>& nums, int k){
         vector<int> ans;                
         for (int i = 0; i < nums.size(); ++i) {
             while (!ans.empty() && nums[i] > ans.back() 
                    && (ans.size()-1) + (nums.size() - i) >= k) ans.pop_back();
             if (ans.size() < k) ans.push_back(nums[i]);
+        }
+        return ans;
+    }*/
+    vector<int> maxNumber(vector<int>& nums, int k){
+        vector<int> ans(k,0);                
+        int j = 0;
+        for (int i = 0; i < nums.size(); ++i) {
+            while (j > 0 && nums[i] > ans[j - 1] 
+                   && nums.size() - i > k - j) --j;
+            if (j < k) ans[j++] = nums[i];
         }
         return ans;
     }
