@@ -1,4 +1,5 @@
-    vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
+//spend days to figure out a solution using stack, too complicated anyway.     
+vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
         multiset<pair<int,int>> s;
         // Nlog(N)
         for(auto& b:buildings){
