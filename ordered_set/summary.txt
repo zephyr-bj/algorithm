@@ -1,7 +1,11 @@
-data stream as disjoint intervals
-count the ranges, whose element sum is within [lb, ub]
-find the longest Increasing sequence (0300) (0352)
-design a structure, maintain the median of a data stream
+1. longest increasing sequence (LIS)
+    find the longest Increasing sequence (0300)
+    russian doll envelopes (354)
+2. slkyline problem (218)
+3. application of lower/upper bound
+    data stream as disjoint intervals (352)
+    count the ranges, whose element sum is within [lb, ub] (327)
+
 
 lower_bound
 upper_bound 
