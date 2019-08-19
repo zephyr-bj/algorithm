@@ -1,5 +1,6 @@
 //spend days to figure out a solution using stack, too complicated anyway.     
 vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
+        // we use multiset<pair<int,int>>, rather than multimap<int,int> to have the specific sort order as below
         multiset<pair<int,int>> s;
         // Nlog(N)
         for(auto& b:buildings){
