@@ -1,6 +1,5 @@
 repeating build a position record by hash table [the value is show up position]
-  Longest Substring Without Repeating Characters (0003)
-  find all repeated DNA Sequences (0187)
+  Longest Substring Without Repeating Characters (0003)  
   contains duplicate (0217)
   contains nearby duplicate (0219)
   contains nearby almost duplicate (0220)
@@ -8,6 +7,7 @@ repeating build a position record by hash table [the value is show up position]
 Anagram, build a distribution function by hash table [the value is show up frequency]
   Substring with Concatenation of All Words (0030)
   minimum window in S which will contain all the characters in T (0076)
+  find all repeated DNA substring with fixed length (0187)
   is Anagram (0242)
   bulls and cows (0299)
   Intersection of Two Arrays (0349)
