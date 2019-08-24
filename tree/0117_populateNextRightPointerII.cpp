@@ -18,3 +18,24 @@
     /*
     This BFS looks perfect
     */
+    Node* connect(Node* root) {
+        Node * cur = root;
+        while(cur!=NULL){
+            Node fakehead(0,NULL,NULL,NULL);
+            Node * x = &fakehead;
+            Node * t = cur;
+            while(t!=NULL){
+                if(t->left!=NULL){
+                    x->next = t->left;
+                    x = x->next;
+                }
+                if(t->right!=NULL){
+                    x->next = t->right;
+                    x = x->next;
+                }
+                t=t->next;
+            }
+            cur = fakehead.next;
+        }
+        return root;
+    }
