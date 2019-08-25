@@ -1,4 +1,57 @@
-inorder traversal (0094)
+tree iterative traversal
+    pre-order traversal (0144) iterative pre-order
+    post-order traversal (0145) iterative post-order
+    
+    in-order traversal (0094)
+    recovery node swapped tree (0099) iterative in order
+    BST iterator, which supports next() and hasNext() (0173) iterative in-order
+    
+    level order traversal (0102) BFS or recursive in-order, with additional parameter
+    zigzag level order traversal (0103) BFS
+    level order traversal bottom up (0107) BFS or recursive in-order, with additional parameter    
+
+pre-order traversal
+    right side view of a binary tree (0199) iterative level-order or recursive pre-order, with additional parameter level
+
+in-order traversal
+    is valid BST (0098) recursive in order, with additional parameter last element
+    recursive in order
+
+tree depth
+    max depth of a tree (0104) recursive post-order, with return value
+    is balanced tree (0110) recursive post-order, with return value
+    min depth of a tree (0111) 
+
+path in tree
+    is there a root-to-leaf path that has a given node sum (0112), recursive any order with return value
+    find all root-to-leaf path that has a given node sum (0113), recursive any order with candidate and collection bin
+    find a node-to-node path which has the largest sum (0124), recursive any order
+    calculate the sum of the root-to-leaf path numbers (0129), recursive any order
+    find all root-to-leaf path (0257), recursive any order with candidate and collection bin
+
+tree construction
+    build all unique trees by n elements II (0095), recursive method and iterative method with cloneTree
+    build all unique trees by n elements I (0096)
+    build a tree by its pre-order and in-order traversal (0105)
+    build a tree by its in-order and post-order traversal (0106)
+    build a balanced BST by a sorted array (0108) recursive pre-order
+    build a balanced BST by a sorted list (0109) recursive pre-order
+    serialize binary tree by pre-order traversal (0297), and de-serialize
+    Verify Preorder Serialization of a Binary Tree (0331) 
+
+tree modification
+    flatten tree to a linked list with right pointer (0114), recursive post-order 
+    Populating Next Right Pointers in Each Node (0116) BFS, using dummy head node for the next level
+    Populating Next Right Pointers in Each Node II (0117) BFS, using dummy head node for the next level
+    invert binary tree (0226) recursive any order
+    
+tree LAC
+    lowest common ancestor of BST (0235) iterative
+    lowest common ancestor of binary Tree(0236) iterative in-order, and recursive way good too
+    
+is same tree (0100) recursive any order
+is symmetricTree (0101) recursive any order, with additional parameter
+count nodes in a complete tree (0222) recursive post-order
 
 vector<int> inorderTraversal(TreeNode* root) {
     vector<int>ans;
@@ -15,4 +68,128 @@ vector<int> inorderTraversal(TreeNode* root) {
         }
     }
     return ans;
+}
+
+vector<int> preorderTraversal(TreeNode* root) {
+    vector<int>ans;
+    if(root==NULL)return ans;
+    vector<TreeNode*>bin;
+    bin.push_back(root);
+    while(!bin.empty()){
+        TreeNode * p=bin.back();
+        bin.pop_back();
+        ans.push_back(p->val);
+        if(p->right!=NULL)bin.push_back(p->right);
+        if(p->left!=NULL)bin.push_back(p->left);
+    }
+    return ans;
+}
+    
+vector<int> postorderTraversal(TreeNode* root) {
+    vector<TreeNode *>bin1;
+    vector<TreeNode *>bin2;
+    if(root!=NULL)bin1.push_back(root);
+    while(!bin1.empty()){
+        TreeNode *tmp=bin1.back();
+        bin1.pop_back();
+        bin2.push_back(tmp);
+        if(tmp->left!=NULL)bin1.push_back(tmp->left);
+        if(tmp->right!=NULL)bin1.push_back(tmp->right);
+    }
+    vector<int>ans;
+    while(!bin2.empty()){
+        ans.push_back(bin2.back()->val);
+        bin2.pop_back();
+    }
+    return ans;
+}
+
+TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {   
+    TreeNode* node = root;
+    while(node){
+        if(node->val > p->val && node->val > q->val)
+            node = node->left;
+        else if(node->val < p->val && node->val < q->val)
+            node = node->right;
+        else return node;
+    }
+    return NULL;
+}
+
+TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+// this way is faster, but the recursive way is is shorter, and classis too
+    TreeNode * x = root;
+    TreeNode * ans = NULL;
+    vector<TreeNode *>bin;
+    int level = -1;
+    int found = 0;
+    while(x!=NULL || !bin.empty()){
+        if(x!=NULL){
+            bin.push_back(x);
+            x=x->left;
+        }else{
+            x = bin.back();
+            bin.pop_back();
+            if(bin.size()<level){
+                level=bin.size();
+                ans=x;
+            }
+            if(x==p||x==q){
+                if(found == 0){
+                    level=bin.size();
+                    ans=x;
+                    found=1;
+                }else if(found == 1){
+                    return ans;
+                }
+            }
+            x=x->right;
+        }
+    }
+    return NULL;
+}
+
+// Decodes your pre-order serialization to tree.
+TreeNode* deserialize(string data) {
+    int n = data.size();
+    int j=0;
+    TreeNode dummy(0);
+    queue<TreeNode**>bin;
+    bin.push(&(dummy.right));
+    for(int i=0; i<=n; i++){
+        if(data[i]==','||i==n){
+            string ss = data.substr(j,i-j);
+            if(ss.compare("null")!=0){
+                TreeNode* node=new TreeNode(atoi(ss.c_str()));
+                *(bin.front())=node;
+                bin.push(&(node->left));
+                bin.push(&(node->right));
+            }
+            bin.pop();
+            j=i+1;
+        }
+    }
+    return dummy.right;
+}
+
+Node* connect(Node* root) {
+    Node * cur = root;
+    while(cur!=NULL){
+        Node dummy(0,NULL,NULL,NULL);
+        Node * x = &dummy;
+        Node * t = cur;
+        while(t!=NULL){
+            if(t->left!=NULL){
+                x->next = t->left;
+                x = x->next;
+            }
+            if(t->right!=NULL){
+                x->next = t->right;
+                x = x->next;
+            }
+            t=t->next;
+        }
+        cur = dummy.next;
+    }
+    return root;
 }
