@@ -25,36 +25,28 @@ public:
     }
 
     // Decodes your encoded data to tree.
-    TreeNode* deserialize(string data) {
-        int n = data.size();
-        int j=0;
-        TreeNode * root=NULL;
-        queue<TreeNode**>bin;
-        for(int i=0; i<=n; i++){
-            if(data[i]==','||i==n){
-                string ss = data.substr(j,i-j);
-                if(j==0){
-                    if(ss.compare("null")==0){
-                        return NULL;
-                    }else{
-                        root=new TreeNode(atoi(ss.c_str()));
-                        bin.push(&(root->left));
-                        bin.push(&(root->right));
-                    }
-                }else{
-                    if(ss.compare("null")!=0){
-                        TreeNode* node=new TreeNode(atoi(ss.c_str()));
-                        *(bin.front())=node;
-                        bin.push(&(node->left));
-                        bin.push(&(node->right));
-                    }
-                    bin.pop();
-                }
-                j=i+1;
+TreeNode* deserialize(string data) {
+    int n = data.size();
+    int j=0;
+    TreeNode dummy(0);
+    queue<TreeNode**>bin;
+    bin.push(&(dummy.right));
+    for(int i=0; i<=n; i++){
+        if(data[i]==','||i==n){
+            string ss = data.substr(j,i-j);
+            if(ss.compare("null")!=0){
+                TreeNode* node=new TreeNode(atoi(ss.c_str()));
+                *(bin.front())=node;
+                bin.push(&(node->left));
+                bin.push(&(node->right));
             }
+            bin.pop();
+            j=i+1;
         }
-        return root;
     }
+    return dummy.right;
+}
+    
 };
 /*
 BST, use queue, 
