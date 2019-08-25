@@ -1,21 +1,15 @@
-    int countNodes(TreeNode* root) {
+  int countNodes(TreeNode* root) {
         if(!root) return 0;
-        int ld = l_depth(root);
-        int rd = r_depth(root);
-        
-        if(ld == rd) return (pow(2, ld)-1);
-        return countNodes(root->left) + countNodes(root->right) + 1;        
-    }
-    
-    int l_depth(TreeNode* root) {
-        if(!root) return 0;
-        return l_depth(root->left) + 1;
-    }
-    
-    int r_depth(TreeNode* root) {
-        if(!root) return 0;
-        return r_depth(root->right) + 1;        
-    }    
+        int hl=0, hr=0;
+        TreeNode *l=root, *r=root;
+      
+        while(l) {hl++;l=l->left;}
+        while(r) {hr++;r=r->right;}
+
+        if(hl==hr) return pow(2,hl)-1;
+
+        return 1+countNodes(root->left)+countNodes(root->right);
+    } 
     /*
     // my iterative method
         int countNodes(TreeNode* root) {
