@@ -1,3 +1,5 @@
+36 problems in total
+
 tree iterative traversal
     pre-order traversal (0144) iterative pre-order
     post-order traversal (0145) iterative post-order
@@ -15,7 +17,7 @@ pre-order traversal
 
 in-order traversal
     is valid BST (0098) recursive in order, with additional parameter last element
-    recursive in order
+    find the k-th smallest in BST (230) recursive in order
 
 tree depth
     max depth of a tree (0104) recursive post-order, with return value
