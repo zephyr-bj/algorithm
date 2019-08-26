@@ -1,35 +1,38 @@
 ## bool 
-regular express
-wildcard express
-interleave srings
-word break
+regular express (0010)
+wildcard express (0044)
+interleave strings (0097)
+word break (0139)
 
 ## total number of paths (recursive method works NOT as efficient)
-unique paths
-unique paths with obstacles
-min path sum
-dungeon game
-climb stairs
-number of Docoding ways
-number of BSTs
+unique paths (0062)
+unique paths with obstacles (0063)
+min path sum (0064)
+dungeon game (0174)
+climb stairs (0070)
+number of Docoding ways (0091)
+number of BSTs (0096)
 
 ## extremum
-max continuous subarray sum
-min edit distance
-max rectangle area in matrix
-max number of subsequence
-min cut to form palindrome substring
-max product of numbers from sub array
-max stock profit IV
-max rob money
-max rob money II
-max square area in matrix
-max stock profit V
-max score by burst bulloons
-min number of coins combining to a mount of money
-max product of numbers from substring
-max sub matrix sum
-max (largest) divisible subset
+max continuous subarray sum (0053)
+min edit distance (0072)
+max rectangle area in matrix (0085)
+max number of subsequence （0115）
+max stock profit I (0121)
+max stock profit II (0122)
+max stock profit III (0123)
+min cut to form palindrome substring (0132)
+max product of numbers from sub array (0152)
+max stock profit IV (0188)
+max rob money (0198)
+max rob money II (0213)
+max square area in matrix (0221)
+max stock profit V (0309)
+max score by burst bulloons (0312)
+min number of coins combining to a mount of money (0322)
+max product of numbers from substring (0343)
+max sub matrix sum (0363)
+max (largest) divisible subset (0368)
 
 got local optimal solution with new comming element 
   local: for all the old elements 
@@ -38,3 +41,70 @@ got local optimal solution with new comming element
 transition rules from local optimal for a larger local optimal 
   define dp variables (max profit IV and V)
   solution is set (divisible subset / sub matrix sum)
+  
+/*******/  
+problem has two objects and requires a matrix for DP
+  regular express (0010)
+  wildcard express (0044)
+  edit distance (0072)
+  interleaving strings (0097)
+  distinct subsequences (0115)
+/*******/
+
+int maximalRectangle(vector<vector<char>>& matrix) {
+    int n=matrix.size();
+    if(n==0)return 0;
+    int m=matrix[0].size();
+    vector<vector<int>>bin(n,vector<int>(m,0));
+    int ans=0;
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            if(matrix[i][j]=='1'){
+                if(j==0)bin[i][j]=1;
+                else bin[i][j]=bin[i][j-1]+1;
+                int minL = bin[i][j];
+                int tmpA = bin[i][j];
+                for(int k=i-1; k>=0; k--){
+                    if(bin[k][j]==0)break;
+                    minL=min(minL,bin[k][j]);
+                    tmpA = max(tmpA,minL*(i-k+1));
+                }
+                ans=max(ans,tmpA);
+            }
+        }
+    }
+    return ans;
+}
+
+int minCut(string s) {
+    int n=s.size();
+    if(n<2)return 0;
+    vector<vector<bool>>plindr(n,vector<bool>(n,0));
+    vector<int>bin(1,-1);//element before 0, -1
+    int ans=n-1;
+    for(int i=0; i<n; i++){
+        int cut=i;
+        for(int j=0; j<=i; j++){
+            if(j==i||(s[j]==s[i]&&(j+1==i||plindr[j+1][i-1]))){
+                plindr[j][i]=1;
+                if(cut>bin[j]+1)cut=bin[j]+1;
+            }
+        }
+        bin.push_back(cut);
+    }
+    return bin.back();
+}
+
+int maxProfit(int k, vector<int>& prices) {
+    int n = prices.size();
+    vector<int> F(n);
+    for(int i=1;i<=min(k, n/2);i++) {
+        int tmp=F[0]-prices[0];                     //  init with negative assets
+        for(int j=1;j<n;j++){                       
+            int x = F[j];                           //  assets before buy
+            F[j] = max(tmp+prices[j], F[j-1]);      //  assets after sell, or not sell
+            tmp = max(x-prices[j], tmp);            //  assets after buy, or not buy
+        }
+    }
+    return !n ? 0 : F[n-1];
+}
