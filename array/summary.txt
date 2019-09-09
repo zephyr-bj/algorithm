@@ -11,7 +11,7 @@ find elements
   
 sort array
   maximum gap (0164)
-  largest number (0179) trick for compare rule
+  largest number string by non negative integers (0179) trick for compare rule
   Kth largest element (0215)
   wiggle sort II (0324)
   
