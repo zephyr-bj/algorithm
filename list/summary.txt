@@ -1,13 +1,15 @@
 remove element from list [5]
+  // any possible to delete the head, use a dummy head in front
   by position (0019)
-  delete duplicates (all of them) (0082)
+  * delete duplicates (all of them) (0082)
   delete duplicates (except the first one) (0083)
   remove elements by val (0203)
   delete element by pointer only (0237)
   
 merge lists [2]
+  // need a dummy head as well
   merge two lists (0021)
-  merge K lists (0023)
+  * merge K lists (0023)
   odd even list (0328) 
   
 reserver lists [4]
