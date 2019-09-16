@@ -1,4 +1,15 @@
-    bool isPalindrome(ListNode* head) {
+    bool isPalindrome(ListNode * head, ListNode ** head2){
+        if(head==NULL)return true;
+        bool ok = isPalindrome(head->next, head2) && ((*head2)->val == head->val);
+        *head2=(*head2)->next;
+        return ok;
+    }
+    bool isPalindromeRec(ListNode* head) {
+        ListNode ** head2 = &head;
+        return isPalindrome(head,head2);
+    }
+
+bool isPalindrome(ListNode* head) {
         if(head==NULL||head->next==NULL)return true;
         //find the center
         ListNode * m = head;
