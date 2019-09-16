@@ -1,21 +1,20 @@
     ListNode* partition(ListNode* head, int x) {
         ListNode dummy(0);
         dummy.next = head;
-        ListNode * p=&dummy;
-        while(p->next!=NULL&&p->next->val<x)
-            p=p->next;
-        ListNode * cur = p->next;//initialized as large head
-        ListNode * nex = cur==NULL?NULL:cur->next;
-        while(cur!=NULL&&nex!=NULL){
-            if(nex->val<x){
-                cur->next=nex->next;
-                nex->next=p->next;
-                p->next=nex;
-                p=p->next;
+        ListNode * back=&dummy;
+        while(back->next!=NULL&&back->next->val<x)
+            back=back->next;
+        ListNode * frnt = back->next;//initialized as large head
+        while(frnt!=NULL&&frnt->next!=NULL){
+            if(frnt->next->val<x){
+                ListNode * tmp = frnt->next;
+                frnt->next=frnt->next->next;
+                tmp->next=back->next;
+                back->next=tmp;
+                back=back->next;
             }else{
-                cur=cur->next;
+                frnt=frnt->next;
             }
-            nex=cur->next;
         }
         return dummy.next;
     }
