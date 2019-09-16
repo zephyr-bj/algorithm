@@ -6,10 +6,15 @@ remove element from list [5]
   remove elements by val (0203)
   delete element by pointer only (0237)
   
+insert element to list [2]
+  insert sort (0147)
+  partition list (0086)
+  
 merge lists [2]
   // need a dummy head as well
   merge two lists (0021)
   * merge K lists (0023)
+  * merge sort (0148)
   odd even list (0328) 
   
 reserver lists [4]
@@ -22,26 +27,25 @@ rotate lists [1]
   rotate right (0061)
   
 partition list [4] 
-  partition list (0086)
   reorder list (0143) partition+reverse+merge
-  is palindrome (0234) partition+reverse+cmp
+  is palindrome (0234) partition+reverse+cmp, and there is a recursive method
   
 detect cycle [2]
   has cycle ? (0141)
-  where is the cycle (0142)
+  where is the cycle (0142), the very simple equation leads to the solution
   
 detect intersection [1]
   get intersection (0160)
- 
-sort list [2]
-  insert sort (0147)
-  merge sort (0148)
+  
+  
 // dummy fake head for all starting status
 /*
         ListNode dummy(0);
         dummy.next = head;
 */
 //partition list into half half
+//even number of elements: slow stops at N/2 (the last of the first half), fast stops at N-1 (the second last of second half)
+//odd number of elements: slow stops at N/2+1 (the element in the center), fast stops at N (the last of second half)
 /*
         if(head==NULL||head->next==NULL)return;
         ListNode * p = head;
@@ -65,3 +69,34 @@ sort list [2]
         }
         return dummy.next;
 */
+/*
+        ListNode * newHead=head;
+        ListNode * p = head==NULL?NULL:cur->next;
+        newHead->next=NULL;
+        while(p!=NULL){
+            ListNode * tmpNewHead = newHead;
+            newHead=p;
+            p=p->next;
+            newHead->next = tmpNewHead;
+        }
+        return newHead;
+ */
+// merge List
+ListNode * mergeList (ListNode * p, ListNode * q){
+    ListNode dummy(0);
+    ListNode * t = &dummy;
+    while(q!=NULL&&p!=NULL){
+        if(q->val<p->val){
+            t->next=q;
+            q=q->next;
+        }else{
+            t->next=p;
+            p=p->next;
+        }
+        t=t->next;
+        t->next=NULL;
+    }
+    if(p!=NULL)t->next=p;
+    else t->next=q;
+    return dummy.next;
+}
