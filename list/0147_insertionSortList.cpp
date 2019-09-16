@@ -1,21 +1,23 @@
     ListNode* insertionSortList(ListNode* head) {
         ListNode dummy(0);
-        dummy.next=head;
-        ListNode * p = &dummy;
-        while(p!=NULL&&p->next!=NULL){
-            ListNode * q = &dummy;
-            while(q->next!=p->next&&p->next->val>=q->next->val){
-                q=q->next;
+        dummy.next = head;
+        ListNode * frnt = head;
+        while(frnt!=NULL&&frnt->next!=NULL){
+            ListNode * back = &dummy;
+            bool insert=false;
+            while(back!=frnt){
+                if(frnt->next->val<back->next->val){
+                    ListNode * tmp = frnt->next;
+                    frnt->next=frnt->next->next;
+                    tmp->next=back->next;
+                    back->next=tmp;
+                    insert=true;
+                    break;
+                }else{
+                    back=back->next;
+                }
             }
-            if(p!=q){
-                ListNode * tmp1 = p->next;
-                p->next=tmp1->next;
-                ListNode * tmp2 = q->next;
-                q->next=tmp1;
-                tmp1->next=tmp2;
-            }else{
-                p=p->next;
-            }
+            if(!insert)frnt=frnt->next;
         }
         return dummy.next;
     }
