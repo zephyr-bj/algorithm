@@ -1,25 +1,16 @@
-    void tool(TreeNode* root, vector<string>& ans, string& cs){
-        int p = cs.size();
-        if(!cs.empty())cs+="->";
-        cs+=to_string(root->val);
+    void BTPathsTool(TreeNode * root, string candi, vector<string>&ans){
+        if(root==NULL)return;
+        if(candi.size()!=0)candi+="->";
+        string path = candi+to_string(root->val);
         if(root->left==NULL&&root->right==NULL){
-            ans.push_back(cs);
-            cs.erase(p);
-            return;
+            ans.push_back(path);return;
         }
-        if(root->left!=NULL){
-            tool(root->left, ans, cs);
-        }
-        if(root->right!=NULL){
-            tool(root->right, ans, cs);
-        }
-        cs.erase(p);
+        BTPathsTool(root->left, path, ans);
+        BTPathsTool(root->right, path, ans);
     }
     vector<string> binaryTreePaths(TreeNode* root) {
         vector<string>ans;
-        if(root==NULL)return ans;
-        string cs;
-        tool(root,ans,cs);
+        BTPathsTool(root, "", ans);
         return ans;
     }
     /*
