@@ -1,28 +1,30 @@
 36 problems in total
+// BST, no duplicate element
+// a height-balanced binary tree: a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
 
 tree iterative traversal
-    pre-order traversal (0144) iterative pre-order
-    post-order traversal (0145) iterative post-order
+    * pre-order traversal (0144) iterative pre-order
+    * post-order traversal (0145) iterative post-order
     
-    in-order traversal (0094)
+    * in-order traversal (0094)
     recovery node swapped tree (0099) iterative in order
     BST iterator, which supports next() and hasNext() (0173) iterative in-order
     
-    level order traversal (0102) BFS or recursive in-order, with additional parameter
-    zigzag level order traversal (0103) BFS
-    level order traversal bottom up (0107) BFS or recursive in-order, with additional parameter    
+    * zigzag level order traversal (0103) BFS with list, faster than 100%. always keep the list int "left to right order".     
 
 pre-order traversal
-    right side view of a binary tree (0199) iterative level-order or recursive pre-order, with additional parameter level
+    * level order traversal (0102) BFS or recursive pre-order, with additional parameter depth
+    level order traversal bottom up (0107) BFS or recursive in-order, with additional parameter depth
+    * right side view of a binary tree (0199) BFS or recursive pre-order, with additional parameter depth
 
 in-order traversal
-    is valid BST (0098) recursive in order, with additional parameter last element
-    find the k-th smallest in BST (230) recursive in order
+    * is valid BST (0098) recursive in order, with additional parameter by reference
+    * find the k-th smallest in BST (230) recursive in order
 
-tree depth
-    max depth of a tree (0104) recursive post-order, with return value
-    is balanced tree (0110) recursive post-order, with return value
-    min depth of a tree (0111) 
+tree depth post-order traversal
+    * max depth of a tree (0104) recursive post-order, with return value 
+    is balanced tree (0110) recursive post-order, with aditional parameter depth
+    * min depth of a tree (0111) recursive post-order, with return value
 
 path in tree
     is there a root-to-leaf path that has a given node sum (0112), recursive any order with return value
