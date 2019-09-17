@@ -1,29 +1,27 @@
     vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
         vector<vector<int>>ans;
         if(root==NULL)return ans;
-        stack<TreeNode*>bin;
-        bin.push(root);
-        int order=1;
+        list<TreeNode*>bin;
+        bin.push_back(root);
         while(!bin.empty()){
-            queue<TreeNode*>tmp;
             vector<int>level;
-            while(!bin.empty()){
-                TreeNode * p = bin.top();
-                level.push_back(p->val);
-                if(order==1){
-                    if(p->left!=NULL)tmp.push(p->left);
-                    if(p->right!=NULL)tmp.push(p->right); 
-                }else{
-                    if(p->right!=NULL)tmp.push(p->right);
-                    if(p->left!=NULL)tmp.push(p->left); 
+            int n = bin.size();
+            if(ans.size()%2==0){
+                for(int i=0; i<n; i++){
+                    level.push_back(bin.front()->val);
+                    if(bin.front()->left)bin.push_back(bin.front()->left);
+                    if(bin.front()->right)bin.push_back(bin.front()->right);
+                    bin.pop_front();
                 }
-                bin.pop();
+            }else{
+                for(int i=0; i<n; i++){
+                    level.push_back(bin.back()->val);
+                    if(bin.back()->right)bin.push_front(bin.back()->right);
+                    if(bin.back()->left)bin.push_front(bin.back()->left);
+                    bin.pop_back();
+                }
             }
             ans.push_back(level);
-            while(!tmp.empty()){
-                bin.push(tmp.front());tmp.pop();
-            }
-            order^=1;
         }
         return ans;
     }
