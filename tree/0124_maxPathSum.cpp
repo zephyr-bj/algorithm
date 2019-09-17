@@ -1,3 +1,18 @@
+    int maxPathSum(TreeNode* root) {
+        int m = root!=NULL:root->val:0;
+        mp(root, m);
+        return m;
+    }
+    // the variable m above collect the max node-peak-node value
+    // This function returns the max branch or peak-node sum (with the current node, the peak)
+    int mp(TreeNode* node, int& m) {
+        if (!node) return 0;
+        int l = max(0, mp(node->left, m));
+        int r = max(0, mp(node->right, m));
+        m = max(m, l + r + node->val);
+        return max(l, r) + node->val;
+    }
+/*
     int maxBranch(TreeNode* root){
         if(root==NULL)return 0;
         int a=maxBranch(root->left);
@@ -33,3 +48,4 @@
         tool(root,r2,ans);
         return ans;
     }
+*/
