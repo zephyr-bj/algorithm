@@ -10,3 +10,17 @@ int numTrees(int n){
 	}
 	return sum;
 }
+
+// DP solution
+
+int numTrees(int n){
+    vector<int>bin(2,1);
+	for(int i=2; i<=n; i++){
+        int x = 0;
+		for(int j=1; j<=i; j++){
+            x+=bin[j-1]*bin[i-j];
+        }
+        bin.push_back(x);
+	}
+	return bin.back();
+}
