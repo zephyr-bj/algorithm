@@ -27,7 +27,7 @@ public:
         bin.push(&root);
         int x = 0; int y=0; int n = data.size();
         while(y<=n){
-            if(data[y]==','||y==n){
+            if(y==n||data[y]==','){
                 string str = data.substr(x,y-x);
                 if(str.compare("null")!=0){
                    TreeNode * node = new TreeNode(atoi(str.c_str()));
