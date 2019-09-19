@@ -40,22 +40,22 @@ tree construction
     build a tree by its in-order and post-order traversal (0106)
     build a balanced BST by a sorted array (0108) recursive pre-order
     build a balanced BST by a sorted list (0109) recursive pre-order
-    serialize binary tree by pre-order traversal (0297), and de-serialize
-    Verify Preorder Serialization of a Binary Tree (0331) 
+    * serialize binary tree by pre-order traversal (0297), and de-serialize
+    * Verify Preorder Serialization of a Binary Tree (0331) 
 
 tree modification
-    flatten tree to a linked list with right pointer (0114), recursive post-order 
+    * flatten tree to a linked list with right pointer (0114), recursive post-order 
     Populating Next Right Pointers in Each Node (0116) BFS, using dummy head node for the next level
-    Populating Next Right Pointers in Each Node II (0117) BFS, using dummy head node for the next level
+    * Populating Next Right Pointers in Each Node II (0117) BFS, using dummy head node for the next level
     invert binary tree (0226) recursive any order
     
 tree LAC
-    lowest common ancestor of BST (0235) iterative
-    lowest common ancestor of binary Tree(0236) iterative in-order, and recursive way good too
+    * lowest common ancestor of BST (0235) iterative
+    * lowest common ancestor of binary Tree(0236) iterative in-order, and recursive way good too
     
 is same tree (0100) recursive any order
-is symmetricTree (0101) recursive any order, with additional parameter
-count nodes in a complete tree (0222) recursive post-order
+is symmetricTree (0101) recursive any order
+* count nodes in a complete tree (0222) recursive post-order
 
 vector<int> inorderTraversal(TreeNode* root) {
     vector<int>ans;
