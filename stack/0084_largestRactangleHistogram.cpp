@@ -1,23 +1,17 @@
     int largestRectangleArea(vector<int>& heights) {
-        int L=heights.size();
-        vector<int>bin;
-        heights.push_back(0);
-        int ans=0;
-        int begin=0;
-        for(int i=0; i<=L; i++){
-            if(bin.empty()||heights[i]>=heights[bin.back()]){
-                bin.push_back(i);
-            }else{
-                int tmp=bin.back();
-                while(!bin.empty()&&heights[tmp]>heights[i]){
-                    bin.pop_back();
-                    int area=i*heights[tmp];
-                    if(!bin.empty()) area=(i-bin.back()-1)*heights[tmp];
-                    if(ans<area)ans=area;
-                    if(!bin.empty())tmp=bin.back();
-                }
-                bin.push_back(i);
+        stack<int>bin;
+        bin.push(-1);                   // keep a left limit
+        heights.push_back(0);           // add a check point at the end
+        int n = heights.size();
+        int ans = 0;
+        for(int i=0; i<n; i++){         // i iterates the righ limit
+            while(bin.size()>1&&heights[bin.top()]>heights[i]){
+                int idx = bin.top();
+                bin.pop();
+                int area = heights[idx]*(i-bin.top()-1);
+                ans=max(ans,area);
             }
+            bin.push(i);
         }
         return ans;
     }
