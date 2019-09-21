@@ -1,0 +1,22 @@
+basic trie with addSTR and searchSTR (0208)
+trie with RE search (0211)
+Matrix word search with Trie (0212)
+
+// struct using br array take 64ms for LC-0208, 88ms for LC-0211, 52ms for LC-212 
+struct TrieNode{
+    TrieNode* br[26];
+    bool isEnd;
+    TrieNode(){
+        isEnd = false;
+        for(int i=0; i<26; i++)br[i]=NULL;
+    }
+};
+// struct using br vector take 170ms for LC-0208, 168ms for LC-211, 132ms for LC-212
+struct TrieNode{
+    vector<TrieNode*>br;
+    bool isEnd;
+    TrieNode(){
+        isEnd = false;
+        for(int i=0; i<26; i++)br.push_back(NULL);
+    } 
+};
