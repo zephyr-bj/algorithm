@@ -56,47 +56,71 @@ public:
         return querySGT(0,0,n-1,i,j);
     }
 };
-/*
+
 // segment tree can be used for sum/max/min or ...?
 // also have an alternative using map
+// segment tree has 2*n-1 elements in total
+// the original array starts from n-1, so there are n elements from n-1 to 2n-2 
+// non-leaf nodes from 0 to n-2, n-1 in total
+// root at 0
+// size of array = (size of tree + 1)/2;
+// 2*p+1 for left subtree, 2*p+2 for right subtree
+// (l-1)/2 is parent, (r-2)/2 is parent
 class NumArray {
 public:
-    vector<int>sums;
-    vector<int>numv;
-    map<int,int>bin;
-    int n;
-    NumArray(vector<int> nums) {
-        n = nums.size();
-        if(n==0)return;
-        sums.push_back(nums[0]);
-        numv.push_back(nums[0]);
-        for(int i=1; i<n; i++){
-            sums.push_back(sums.back()+nums[i]);
-            numv.push_back(nums[i]);
+    NumArray(vector<int>& nums) {
+        if (nums.empty())
+            return;
+        
+        const int n = nums.size();
+        tree = vector<int>(2*n - 1, 0);
+        for (int i = n - 1, j = 0; i < 2*n - 1; i++, j++)
+            tree[i] = nums[j];
+        for (int i = n - 2; i >=0; i--) {
+            tree[i] = tree[2*i + 1] + tree[2*(i+1)];
         }
     }
     
     void update(int i, int val) {
-        bin[i]=val-numv[i];
+        int n = (tree.size() + 1) / 2;
+        int idx = n - 1 + i;
+        tree[idx] = val;
+        
+        int parent;
+        while (idx > 0) {
+            if (idx % 2 == 1) { // left
+                parent = (idx - 1) / 2;
+                tree[parent] = tree[idx] + tree[idx + 1];
+            } else {
+                parent = (idx - 2) / 2;
+                tree[parent] = tree[idx - 1] + tree[idx];
+            }
+            idx = parent;
+        }
     }
     
     int sumRange(int i, int j) {
-        map<int,int>::iterator it1 = bin.lower_bound(i);
-        map<int,int>::iterator it2 = bin.upper_bound(j);
-        map<int,int>::iterator it=it1;
-        while(it!=it2){
-            numv[it->first]+=it->second;
-            for(int k=it->first; k<n; k++)sums[k]+=it->second;
-            map<int,int>::iterator tmp=it;
-            it++;
-            bin.erase(tmp);
+        int n = (tree.size() + 1) / 2;
+        int l = n - 1 + i;
+        int r = n - 1 + j;
+        
+        int sum = 0;
+        while (l <= r) {
+            if (l % 2 == 0) {//if not left branch
+                sum += tree[l];
+                l++;
+            }
+            if (r % 2 == 1) {//if not right branch
+                sum += tree[r];
+                r--;
+            }
+            l = l / 2 ;
+            r = r / 2 - 1;
         }
-        if(j>=i){
-            if(i>0)return sums[j]-sums[i-1];
-            else return sums[j];
-        }else{
-            return 0;
-        }
+        return sum;
     }
+    
+private:
+    vector<int> tree;
 };
-*/
+
