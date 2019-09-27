@@ -1,11 +1,32 @@
-    unordered_map<int, Node* > visited;
-    Node* cloneGraph(Node* node) {
-        if (!node) return NULL;
-        Node * clone = new Node(node->val);
-        visited[node->val] = clone;
-        for (vector<Node*>::iterator it=node->neighbors.begin(); it!=node->neighbors.end(); it++){
-            if(visited.find((*it)->val)!=visited.end())clone->neighbors.push_back(visited[(*it)->val]);
-            else clone->neighbors.push_back(cloneGraph(*it));
-        }
-        return clone;
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+
+    Node() {}
+
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
     }
+};
+*/
+class Solution {
+public:
+    unordered_map<Node*,Node*>bin;
+    Node* cloneGraph(Node* node) {
+        if(node==NULL)return NULL;
+        if(bin.find(node)!=bin.end())return bin[node];
+        int n = node->neighbors.size();
+        vector<Node*>br(n,NULL);
+        Node * newnode = new Node(node->val, br);
+        bin[node]=newnode;
+
+        for(int i=0; i<n; i++){
+            if(node->neighbors[i]!=NULL)newnode->neighbors[i] = cloneGraph(node->neighbors[i]);
+        }
+        return newnode;
+    }
+};
