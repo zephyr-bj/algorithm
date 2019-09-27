@@ -1,42 +1,28 @@
 /*BFS*/
 class Solution {
 public:
-    vector<int> findOrder(int numCourses, vector<pair<int, int>>& prerequisites) {
-        unordered_map<int, vector<int>>depends;
-        vector<int>leadsto(numCourses, 0);
-        int n = prerequisites.size();
-        for(int i=0; i<n; i++){
-            int x = prerequisites[i].first;
-            int y = prerequisites[i].second;
-            if(depends.find(y)==depends.end()){
-                vector<int>tmp(1,x);
-                depends[y]=tmp;
-            }else{
-                depends[y].push_back(x);
-            }
-            leadsto[x]+=1;
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        unordered_set<int>learned;
+        for(int i=0; i<numCourses; i++)learned.insert(i);
+        vector<vector<int>>leadsto(numCourses,vector<int>({}));
+        vector<int>dependson(numCourses,0);
+        for(auto v: prerequisites){
+            leadsto[v[1]].push_back(v[0]);
+            dependson[v[0]]+=1;
+            learned.erase(v[0]);
         }
-        list<int>unlock;
-        vector<int>ans;
-        for(int i=0; i<numCourses; i++){
-            if(leadsto[i]==0)unlock.push_back(i);
-        }
-        while(!unlock.empty()){
-            int L = unlock.size();
-            for(int j=0; j<L; j++){
-                int y=unlock.front();
-                unlock.pop_front();
-                for(int i=0; i<depends[y].size(); i++){
-                    int x = depends[y][i];
-                    leadsto[x]-=1;
-                    if(leadsto[x]==0){
-                        unlock.push_back(x);
-                    }
+        vector<int>path;
+        while(!learned.empty()){
+            int x = *learned.begin();
+            learned.erase(learned.begin());
+            path.push_back(x);
+            for(auto y:leadsto[x]){
+                dependson[y]-=1;
+                if(dependson[y]==0){
+                    learned.insert(y);
                 }
-                ans.push_back(y);
             }
         }
-        vector<int>emptyans;
-        return (ans.size()==numCourses) ? ans : emptyans;
+        return path.size()==numCourses ? path : vector<int>({});
     }
 };
