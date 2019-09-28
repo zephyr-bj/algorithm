@@ -1,12 +1,11 @@
 dsf
 clone graph (0133)              (graph by nodes)    (visit once)            (edge list, pointer to nodes represents visited)
 copy random list (0138)         (graph by nodes)    (visit once)            (edge list, pointer to nodes represents visited)
-
 reconstruct itinerary (0332)    (graph by map)      (visit multiple times)  (edge list, integer represents visited)
-word break II (0140)
 
+dfs in matrix 
 longest increasing integer path in matrix (0329) (matrix)
-word search II (0212) (matrix)
+* word search II (0212) (matrix) we do not return at the special case
 number of isolated islands in matrix (200) (matrix)
 surrounded regions in matrix (0130) (matrix)
 word search (0079) (matrix)
@@ -23,4 +22,16 @@ edge lists are represented by map from "src" to "dst"
 visited recording could be array or map using the "dst" as key. 
     for the course schedule problem, visiting recording is vector of number;
     for the itinerary problem, visiting recording is map from "src to dst" pair to "visiting times"
+
+dfs in matrix
+1. usually defined as
+int dfs(vector<vector<int>>& matrix, int i, int j, struct matrix_dfs dfs_param){
+        if(i < 0 || i >= matrix.size() || j < 0 || j >= matrix[0].size() || isTerminateNode(dfs_param)) return 0;
+        ...
+}
+2. if we should never visited the node [i][j] again, modify it to invalid value so we know it is visited
+if we need to go back to the node [i][j] later and calculate the result here again, define a same size visited matrix for record
+3. recursively call the dfs 4 times towards 4 different directions
+4. backtracking
+
 
