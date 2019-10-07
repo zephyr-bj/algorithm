@@ -17,3 +17,23 @@
         }
         return map[m-1][n-1];
     }
+// use one dimension dp
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        int n = obstacleGrid.size();
+        if(n<1)return 0;
+        int m = obstacleGrid[0].size();
+        if(m<1)return 0;
+        vector<long>paths(m,0);
+        for(int j=0; j<m; j++){
+            if(obstacleGrid[0][j])break;
+            else paths[j]=1;
+        }
+        for(int i=1; i<n; i++){
+            if(obstacleGrid[i][0])paths[0]=0;
+            for(int j=1; j<m; j++){
+                if(obstacleGrid[i][j])paths[j]=0;
+                else paths[j]=paths[j]+paths[j-1];
+            }
+        }
+        return paths[m-1];
+    }
