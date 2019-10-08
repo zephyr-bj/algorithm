@@ -1,3 +1,4 @@
+// O(n^2) time, O(n) space     
     int numTrees(int n) {
         if(n<=0)return 0;
         vector<int>bin(n+1,0);
