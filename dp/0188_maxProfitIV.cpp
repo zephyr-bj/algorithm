@@ -1,3 +1,4 @@
+    // time O(nk) space O(n)
     int maxProfit(int k, vector<int>& prices) {
         int n = prices.size();
         vector<int> F(n);
@@ -11,37 +12,31 @@
         }
         return !n ? 0 : F[n-1];
     }
-    /*first figured out a method to use k*2 variables
-        int maxProfit(int k, vector<int>& prices) {
+    /*time O(nk), space O(k)
+    int maxProfit(int k, vector<int>& prices) {
         int n = prices.size();
-        if(n<2||k==0)return 0;
-        if(k>n/2)k=n/2;
-        vector<int>tmp;
-        vector<vector<int>>buy(k,tmp);
-        vector<vector<int>>sell(k,tmp);
-        buy[0].push_back(-prices[0]);
+        if(n<2)return 0;
+        if(k>=n/2){
+            int bb = -prices[0];
+            int bs = 0;
+            for(int i=1; i<n; i++){
+                int cbs = bs;
+                bs = max(bs, bb+prices[i]);
+                bb = max(bb, cbs-prices[i]);
+            }
+            return bs;
+        }
+        vector<int>bbuy(k,INT_MIN);
+        vector<int>bsel(k,0);
         int ans = 0;
-        for(int i=1; i<n; i++){
-            for(int j=k-1; j>=0; j--){
-                if(buy[j].size()>0){
-                    if(sell[j].size()>0){
-                        sell[j].push_back(max(sell[j].back(),buy[j].back()+prices[i]));
-                    }else{
-                        sell[j].push_back(buy[j].back()+prices[i]);
-                    }
-                    if(sell[j].back()>ans)ans=sell[j].back();
+        for(int i=0; i<n; i++){
+            for(int t=k; t>0; t--){
+                if(i>2*t-2&&bbuy[t-1]>INT_MIN)bsel[t-1]=max(bsel[t-1],bbuy[t-1]+prices[i]);
+                if(i>2*t-3){
+                    if(t<2)bbuy[t-1]=max(bbuy[t-1],-prices[i]);
+                    else if(bsel[t-2]>0)bbuy[t-1]=max(bbuy[t-1],bsel[t-2]-prices[i]);
                 }
-                if(j==0||sell[j-1].size()>0){
-                    if(j==0){
-                        buy[j].push_back(max(buy[j].back(),-prices[i]));
-                    }else{
-                        if(buy[j].size()>0){
-                            buy[j].push_back(max(sell[j-1].back()-prices[i], buy[j].back()));
-                        }else{
-                            buy[j].push_back(sell[j-1].back()-prices[i]);
-                        }
-                    }
-                }
+                ans = max(ans,bsel[t-1]);
             }
         }
         return ans;
