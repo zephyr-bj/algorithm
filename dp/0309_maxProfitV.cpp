@@ -11,3 +11,18 @@
         }
         return sell.back();
     }
+//time O(n), space O(1)
+    int maxProfitII(vector<int>& prices) {
+        int n = prices.size();
+        if(n<2)return 0;
+        int bbuy=-prices[0];
+        int bsel=0;
+        int bselcd=0;
+        for(int i=1; i<n; i++){                 
+            int p = bbuy+prices[i];            
+            bbuy=max(bbuy,bselcd-prices[i]); 
+            bselcd=max(bselcd,bsel);         
+            bsel=max(bsel,p); 
+        }
+        return bsel;
+    }
