@@ -28,10 +28,11 @@ max rob money (0198)
 max rob money II (0213)
 max square area in matrix (0221)
 max stock profit V (0309)
-max score by burst bulloons (0312)
+
+* max score by burst bulloons (0312)
 min number of coins combining to a mount of money (0322)
 max product of numbers from substring (0343)
-max sub matrix sum (0363)
+* max sub matrix sum (0363)
 max (largest) divisible subset (0368)
 
 got local optimal solution with new comming element 
