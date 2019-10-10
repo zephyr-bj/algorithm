@@ -1,33 +1,26 @@
+    // time O(n^2), space O(n^2)
+    // how to cut the branches: do not need to check every element in the array, just check the larget element. 
     vector<int> largestDivisibleSubset(vector<int>& nums) {
-        sort(nums.begin(),nums.end());
         int n = nums.size();
-        vector<int>ans;
-        if(n<1)return ans;
-        vector<int>tmp(1,1);
-        tmp.push_back(-1);//[0] for size, [1] for pointer
-        vector<vector<int>>bin(1,tmp);
-        int sz=1; int idx=0;
+        if(n<1)return vector<int>({});
+        sort(nums.begin(),nums.end());
+        vector<vector<int>>lds(n,vector<int>({}));
+        lds[0].push_back(nums[0]);
+        int ans = 0;
         for(int i=1; i<n; i++){
-            int l=1;
-            int k=-1;
-            for(int j=i-1; j>=0; j--){
-                if(nums[i]%nums[j]==0&&l<bin[j][0]+1){
-                    l=bin[j][0]+1;
-                    k=j;
+            int x = -1;
+            for(int j=0; j<i; j++){
+                if(nums[i]%lds[j].back()==0){
+                    if(x==-1||lds[j].size()>lds[x].size())x = j;
                 }
             }
-            vector<int>tmp(1,l);
-            tmp.push_back(k);
-            bin.push_back(tmp);
-            if(l>sz){
-                sz=l; idx=i;
+            if(x==-1){
+                lds[i].push_back(nums[i]);
+            }else{
+                lds[i]=lds[x];
+                lds[i].push_back(nums[i]);
             }
+            if(lds[i].size()>lds[ans].size())ans=i;
         }
-        int it=bin[idx][1];
-        ans.push_back(nums[idx]);
-        while(it!=-1){
-            ans.push_back(nums[it]);
-            it=bin[it][1];
-        }
-        return ans;
+        return lds[ans];
     }
