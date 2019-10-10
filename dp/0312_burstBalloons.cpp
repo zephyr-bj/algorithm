@@ -1,4 +1,6 @@
-    int maxCoins(vector<int>& nums) {
+//level orientated dp, find local maximum with an element set 
+// length starts from 3 to n+2
+int maxCoins(vector<int>& nums) {
         int n=nums.size();
         if(n==0)return 0;
         vector<int>balloons(1,1);
