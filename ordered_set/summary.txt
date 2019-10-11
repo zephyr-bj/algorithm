@@ -21,6 +21,7 @@
     };
 3. difference between   bin.erease(x);
                         bin.erease(bin.find(x));   for multiset
+4. int, string can be a key; vector, pair cannot be used as a key
     
 ordered_set or ordered_map are implemented by a self-balancing BST, or AVL tree (named after inventors Adelson-Velsky and Landis)
 1. the heights of the two child subtrees of any node differ by at most one; therefore, it is also said to be height-balanced.
