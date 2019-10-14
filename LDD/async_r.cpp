@@ -45,7 +45,12 @@ irqreturn_t short_interrupt(int irq, void *dev_id, struct pt_regs *regs){
 }
 
 /*      in the user space        */
+void input_handler(int signum){
+	// process the async data
+}
 void main () {
+  // kill_fasync will trigger the input_handler asynchoronously
+  signal(SIGIO, &input_handler);
   /*  start a thread to waiting for signal arriave */
   fcntl(STDIN_FILENO, F_SETOWN, getpid());
   oflags = fcntl(STDIN_FILENO, F_GETFL);
