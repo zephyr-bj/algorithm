@@ -2,7 +2,12 @@
 wait_queue_head_t wq;
 init_waitqueue_head(&wq);
 */
-
+/*
+ In the sample source, you can find a module called sleepy. It implements a device with simple behavior: 
+ any process that attempts to read from the device is put to sleep. 
+ Whenever a process writes to the device, all sleeping processes are awakened. 
+ This behavior is implemented with the following read and write methods:
+*/
 static DECLARE_WAIT_QUEUE_HEAD(wq);
 static int flag = 0;
 ssize_t sleepy_read (struct file *filp, char __user *buf, size_t count, loff_t *pos) {
