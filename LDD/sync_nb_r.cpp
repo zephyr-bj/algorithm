@@ -18,7 +18,12 @@ static unsigned int scull_p_poll(struct file *filp, poll_table *wait){
   return mask;
 }
 
-/* in the user code side */
+/* at the user code side, the example below has nothing to do the driver function above
+because the conventional programs available to a shell don’t perform nonblocking operations. 
+The misc-progs source directory contains the following simple program, called nbtest, for testing nonblocking operations. 
+All it does is copy its input to its output, using nonblocking I/O and delaying between retries. 
+The delay time is passed on the command line and is one second by default.
+*/
 
 int main(int argc, char **argv)
 {
