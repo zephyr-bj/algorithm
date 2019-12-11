@@ -20,5 +20,18 @@ others:
     sudoku solver (0037)
     check if string s is scramble string of string t (0087)
     find all string break ways, so that all words belongs to a provided word set (0140)
+    find longest substring with at leaset K repeating characters (0395)
     
-in total: 19
+Master theorem:
+
+T(n)=aT(n/b)+f(n)
+c_{crit}=log_{b}^{a}=cc
+(1)Work to split/recombine a problem is dwarfed by subproblems (f(n)=O(n^c),where c<cc) ==> T(n)=O(n^{cc})
+(2)Work to split/recombine a problem is comparable to subproblems (f(n)=O(n^{cc}log^{k}n), where k>0) ==> T(n)=O(n^{cc}log^{k+1}n)
+(3)Work to split/recombine a problem dominates subproblems (f(n)=Omega(n^c),where c>cc, and a(f(n/b))<kf(n), where k<1) ==> T(n)=O(f(n))
+extension to (2) when f(n)=O(n^{cc}log^{k}n)
+(21)k>-1, T(n)=O(n^{cc}log^{k+1}n)
+(22)k==-1, T(n)=O(n^{cc}loglogn)
+(23)k<-1, T(n)=O(n^{cc})
+
+in total: 20
