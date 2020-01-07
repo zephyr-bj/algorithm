@@ -1,18 +1,19 @@
     vector<vector<string>> groupAnagrams(vector<string>& strs) {
-        unordered_map<string, vector<string>> bin;
-        int n = strs.size();
-        for(int i=0; i<n; i++) {
-            string t = strs[i]; 
+        unordered_map<string,int>m;
+        vector<vector<string>>res;
+        for(auto str:strs){
+            string t = str;
             sort(t.begin(), t.end());
-            bin[t].push_back(strs[i]);
+            if(m.find(t)==m.end()){
+                m[t]=m.size();
+                res.push_back(vector<string>(1,str));
+            }else{
+                res[m[t]].push_back(str);
+            }
         }
-        vector<vector<string>> anagrams;
-        for(unordered_map<string, vector<string>>::iterator it=bin.begin(); it!=bin.end(); it++) { 
-            anagrams.push_back(it->second);
-        }
-        return anagrams;
+        return res;
     }
-// 24ms solution
+// the algorithm to collect result vectors comes from the solution below. 
     vector<vector<string>> groupAnagrams(vector<string>& strs) {
         int prime[26];
         int count=0;
