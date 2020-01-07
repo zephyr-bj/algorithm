@@ -1,29 +1,29 @@
-repeating build a position record by hash table [the value is show up position]
-  Longest Substring Without Repeating Characters (0003)  
+repeating char, hash table as position record [the value is show up position]
+  Longest Substring Without Repeating Characters (0003)
+  fraction to decimal (0166) search the repeated remainder
   contains duplicate (0217)
   contains nearby duplicate (0219)
   contains nearby almost duplicate (0220)
   
-Anagram, build a distribution function by hash table [the value is show up frequency]
+Anagram, hash table as distribution [the value is show up frequency]
   Substring with Concatenation of All Words (0030)
+  Group Anagrams (0049) ** excellent algorithm to collect result vectors
   minimum window in S which will contain all the characters in T (0076)
   find all repeated DNA substring with fixed length (0187)
   is Anagram (0242)
   bulls and cows (0299)
   Intersection of Two Arrays (0349)
   Intersection of Two Arrays (0350)
+  First Unique Character (0387)
   
-search build a set by hash table
-  two sum (0001)
-  Longest Consecutive Sequence (0128)
-  H Index (0274)
-  Palindrome Pair (0336)
+hash table for O(1) search 
+  two sum (0001) search two numbers sum to zero
+  Longest Consecutive Sequence (0128) search longest Consecutive Sequence
+  max points on a line (0149) search all points on common lines
+  H Index (0274) search the H index (not calculate)
+  Palindrome Pair (0336) search all the Palindrome Pairs
+  Four Sum II (0454) search four numbers sum to zero
   
-take advantage of hash table, choose a poper key
-  max points on a line (0149)
-  fraction to decimal (0166)
-  Group Anagrams (0049)
-
 back and forth mapping
   word pattern (0290)
 
