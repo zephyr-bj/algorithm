@@ -9,8 +9,9 @@ Anagram, hash table as distribution [the value is show up frequency]
   Substring with Concatenation of All Words (0030)
   Group Anagrams (0049) ** excellent algorithm to collect result vectors
   minimum window in S which will contain all the characters in T (0076)
-  find all repeated DNA substring with fixed length (0187)
+  find all repeated DNA substring with 10 characters (0187)
   is Anagram (0242)
+  word pattern (0290) back and forth mapping
   bulls and cows (0299)
   Intersection of Two Arrays (0349)
   Intersection of Two Arrays (0350)
@@ -24,12 +25,9 @@ hash table for O(1) search
   Palindrome Pair (0336) search all the Palindrome Pairs
   Four Sum II (0454) search four numbers sum to zero
   
-back and forth mapping
-  word pattern (0290)
-
+5+10+6
 1. hash table with the value of show up frequency
 2. hash table with the value of show up position
 3. know the key value ranges:
   H Index: can not exceeds the number of papers
   contains almost duplicate: compress the key value range
-4. search the related keys (0001) (0128)
