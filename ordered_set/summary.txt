@@ -1,15 +1,18 @@
-1. longest increasing sequence (LIS)
-    find the longest Increasing sequence (0300)
-    russian doll envelopes (354)
-2. slkyline problem (218)
-3. application of lower/upper bound
-    data stream as disjoint intervals (352)
-    count the ranges, whose element sum is within [lb, ub] (327)
+application of lower/upper bound
+  [1]LIS: find the longest Increasing sequence (0300), O(Nlog(N)) for the length, O(N^2) for the sequence by dp
+  [1]LIS: russian doll envelopes (354)
+  [2]data stream as disjoint intervals (352), process data one by one, different from (0128) LCS
+  [2]count the ranges, whose element sum is within [lb, ub] (327)
+application to use the top elements (rbegin())
+  [1]skyline problem (218)
 
 
-1.lower_bound
-  upper_bound 
-2. define a set with customized compare, say a stuct my_cmp, it should define a "operator ()"
+1. lower_bound: the found iterator has the key equal or larger than the target key, the previous iterator has smaller key
+   upper_bound: the found iterator has larger key than the target key, the previous iterator has equal or smaller key
+2. int, string and pair can be a key; vector cannot be used as a key
+    multiset<pair<int,int>>: both integers are considered for ordering
+    multimap<int,int>: only the first integer is considered for ordering
+3. define a set with customized compare, say a stuct my_cmp, it should define a "operator ()"
     set<T,my_cmp>bin;
     set<int, greator<int>>bin;
     a sample comparison object: always use key and return as const
@@ -19,9 +22,11 @@
             return a.first < b.first;
         }
     };
-3. difference between   bin.erease(x);
+    by default, the set use less<T>, which returns the same as applying the less-than operator (a<b).
+    in STD, there are also less_equal<T>, greater_equal<T>
+4. difference between   bin.erease(x);
                         bin.erease(bin.find(x));   for multiset
-4. int, string can be a key; vector, pair cannot be used as a key
+
     
 ordered_set or ordered_map are implemented by a self-balancing BST, or AVL tree (named after inventors Adelson-Velsky and Landis)
 1. the heights of the two child subtrees of any node differ by at most one; therefore, it is also said to be height-balanced.
