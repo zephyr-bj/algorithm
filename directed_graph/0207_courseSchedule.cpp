@@ -1,26 +1,26 @@
-    bool dfs(int x, vector<int>&visited, unordered_map<int,vector<int>>&bin){
-        if(bin.find(x)==bin.end())return true;
-        for(vector<int>::iterator it=bin[x].begin(); it!=bin[x].end(); it++){
-            visited[x]=1;
-            if(visited[*it]==1){visited[x]=0;return false;}
-            if(!dfs(*it,visited,bin)){visited[x]=0;return false;}
-        }
-        unordered_map<int,vector<int>>::iterator jt = bin.find(x);
-        if(jt!=bin.end())bin.erase(jt);
-        return true;
-    }
+// check if any node belongs to a cycle, if yes, can NOT finish
+// the recursive methods generally takes more space, and possiblly slower
+// prefer the BFS for now
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-        unordered_map<int,vector<int>>bin;
-        for(int i=0; i<prerequisites.size(); i++){
-            if(bin.find(prerequisites[i][0])!=bin.end())bin[prerequisites[i][0]].push_back(prerequisites[i][1]);
-            else bin[prerequisites[i][0]]=vector<int>(1,prerequisites[i][1]);
+        vector<vector<int>>graph(numCourses,vector<int>{});
+        for(vector<int>d:prerequisites){
+            graph[d[0]].push_back(d[1]);
         }
         for(int i=0; i<numCourses; i++){
-            vector<int>visited(numCourses,0);
-            int x = i;
-            if(!dfs(i,visited,bin))return false;
+            vector<int>v(numCourses,0);
+            if(isCycle(graph,v,i))return false;
         }
         return true;
+    }
+    bool isCycle(vector<vector<int>>&graph, vector<int>&v, int x){
+        if(v[x]==1)return true;
+        if(graph[x].empty())return false;
+        v[x]=1;
+        for(int i:graph[x]){
+            if(isCycle(graph,v,i))return true;
+        }
+        graph[x].clear();
+        return false;
     }
 /*
 //BFS
