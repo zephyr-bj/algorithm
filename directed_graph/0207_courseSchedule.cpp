@@ -1,25 +1,26 @@
 // check if any node belongs to a cycle, if yes, can NOT finish
-// the recursive methods generally takes more space, and possiblly slower
-// prefer the BFS for now
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
         vector<vector<int>>graph(numCourses,vector<int>{});
         for(vector<int>d:prerequisites){
             graph[d[0]].push_back(d[1]);
         }
+        vector<int>v(numCourses,0);
+        vector<int>s(numCourses,0);
         for(int i=0; i<numCourses; i++){
-            vector<int>v(numCourses,0);
-            if(isCycle(graph,v,i))return false;
+            if(isCycle(graph,v,s,i))return false;
         }
         return true;
     }
-    bool isCycle(vector<vector<int>>&graph, vector<int>&v, int x){
-        if(v[x]==1)return true;
-        if(graph[x].empty())return false;
-        v[x]=1;
-        for(int i:graph[x]){
-            if(isCycle(graph,v,i))return true;
+    bool isCycle(vector<vector<int>>&graph, vector<int>&v, vector<int>&s, int x){
+        if(!v[x]){
+            v[x]=1;
+            s[x]=1;
+            for(int i:graph[x]){
+                if(!v[i]&&isCycle(graph,v,s,i))return true;
+                else if(s[i])return true;
+            }
         }
-        graph[x].clear();
+        s[x]=0;
         return false;
     }
 /*
