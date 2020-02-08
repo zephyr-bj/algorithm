@@ -1,4 +1,4 @@
-    // time O(nk) space O(n)
+    // time O(nk) space O(n), over 500ms
     int maxProfit(int k, vector<int>& prices) {
         int n = prices.size();
         vector<int> F(n);
@@ -12,7 +12,27 @@
         }
         return !n ? 0 : F[n-1];
     }
-    /*time O(nk), space O(k)
+    // time O(nk) space O(k), over 500ms
+    int maxProfit(int k, vector<int>& prices) {
+        int n = prices.size();
+        if(n<2||k<1)return 0;
+        vector<int>A(min(n,2*k),0);
+        for(int x=0; x<A.size(); x+=2)A[x]=INT_MIN;
+        int ans = 0;
+        for(int i=0; i<n; i++){
+            for(int j=1; j<min(i+1,2*k); j++){
+                if(j%2){ //sell
+                    A[j]=max(A[j],A[j-1]+prices[i]);
+                    ans = max(ans,A[j]);
+                }else{   //buy
+                    A[j]=max(A[j],A[j-1]-prices[i]);
+                }
+            }
+            A[0]=max(A[0],-prices[i]);
+        }
+        return ans;
+    }
+    /*time O(nk), space O(k), 4ms: specail process for k>=n/2
     int maxProfit(int k, vector<int>& prices) {
         int n = prices.size();
         if(n<2)return 0;
