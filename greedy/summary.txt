@@ -1,0 +1,7 @@
+Jump GameII(0045)
+Jump Game  (0055) greedy choice, the position with current longest reach
+Gas Station(0134) greedy choice, the position with current positive gas volume
+Candy      (0135) greedy choice, 
+Rm Dup Letters (0316) greedy choice, the position with current min value, which satisfy the length requirement
+Create Max Num (0321) greedy choice, the position with current max digit, which satisfy the length requirement
+Paching Array  (0330) gready choice, insert the next missing number, when still smaller than the next available number
