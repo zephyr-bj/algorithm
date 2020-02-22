@@ -1,3 +1,32 @@
+    //method 1: DFS, use visted array, NO pass by value, NO local visited bin. 
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int>>jar;
+        vector<int>candy;
+        vector<int>visited(nums.size(),0);
+        PMTool(nums,visited,candy,jar);
+        return jar;
+    }
+    void PMTool(vector<int>&nums, vector<int>&visited, vector<int>&candy, vector<vector<int>>&jar){
+        int n = nums.size();
+        if(candy.size()==n){
+            jar.push_back(candy);
+            return;
+        }
+        for(int i=0; i<n; i++){
+            if(visited[i])continue;
+            //nums[i]==nums[i-1] says NOT place same number at the same position (or DFS level)
+            //!visited[i-1] says EXCEPT for nums[i-1] was visited at other position (visited in the same level have been cleared by back tracking)
+            if(i>0&&nums[i]==nums[i-1]&&(!visited[i-1]))continue;
+            visited[i]=1;
+            candy.push_back(nums[i]);
+            PMTool(nums,visited,candy,jar);
+            candy.pop_back();
+            visited[i]=0;
+        }
+    }
+
+
     //method 1: always keep the order, pass vector by values
     void PMTool(vector<int> nums, int p, vector<vector<int>>&ans){
         if(p==nums.size()-1){
