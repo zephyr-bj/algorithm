@@ -1,29 +1,20 @@
-    // skip the 0 case, no different numbers generates from a start of "0"
-    void IPTool(int k, int n, string &s, int p, string&ip, vector<string>&ans){
-        if(k==n){
-            ans.push_back(ip);return;
+    void ipTool(vector<string>&ans, string&ip, int n, int p){
+        if(ip.size()==n+4){
+            string s=ip.substr(0,ip.size()-1);
+            ans.push_back(s);return;
         }
-        for(int i=1; i<=3; i++){
-            if(p+i>s.size())break;
-            string seg=s.substr(p,i);
-            int segN = atoi(seg.c_str());
-            int leftc = s.size()-p-i;
-            if(segN>=0&&segN<=255&&leftc>=n-k-1&&leftc<=(n-k-1)*3){
-                int Lip = ip.size();
-                int L = i;
-                if(!ip.empty()){
-                    ip+="."; L+=1;
-                }
-                ip+=seg;
-                IPTool(k+1,n,s,p+i,ip,ans);
-                ip.erase(Lip,L);
+        for(int i=0; i<3&&p+i<ip.size(); i++){
+            if(ip.size()==n+3&&p+i<n+2)continue;//if already inserted tree points
+            int num = atoi(ip.substr(p,i+1).c_str());
+            if((i==0)||(i==1&&num>9&&num<100)||(i==2&&num>99&&num<256)){
+                ip.insert(p+i+1,".");
+                ipTool(ans,ip,n,p+i+2);
+                ip.erase(p+i+1,1);
             }
-            if(s[p]=='0')break;
         }
     }
     vector<string> restoreIpAddresses(string s) {
         vector<string>ans;
-        string ip;
-        IPTool(0,4,s,0,ip,ans);
+        ipTool(ans,s,s.size(),0);
         return ans;
     }
