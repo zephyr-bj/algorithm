@@ -1,7 +1,7 @@
 // [1]candidate string, [2]collection bin, [3]conditions to complete, [4]conditions to enter recursive call
 find all possible solution:
-    find all possible words from a phone number (0017)
-    find all valid string with n pair of parentheses (0022)
+    find all possible words from a phone number (0017) O(3^N), N is the digit counts of the phone number
+    find all valid string with n pair of parentheses (0022) O(2^N)
     find all combinations based on a set of number for a target sum value (0039), you can use each elements unlimited number of time
     find all combinations based on a set of number for a target sum value (0040), duplicate elements in set, use each once
     find all permutations of a set of number (0046)
@@ -13,14 +13,14 @@ find all possible solution:
     find all subsets of a set of n integers (0090) may contains duplicate integers
     find all possible IP Address out of a string of digits (0093)
     find all possible partions of a string, in which each parts is a parlindrome string (0131)
-    * find all different ways to add parentheses in an expressiong with '*', '+', '-' and integers, so results to a target integer (0241)
+    * find all different ways to add parentheses in an expressiong with '*', '+', '-' and integers (0241)
     * find all different ways to add '+', '-', '*' in a integer string, so the result expression calculates to be a target integer (0282)
     * find all different ways to remove invalid parentheses (0301)
 others:
     sudoku solver (0037)
     check if string s is scramble string of string t (0087)
     find all string break ways, so that all words belongs to a provided word set (0140)
-    find longest substring with at leaset K repeating characters (0395)
+    find longest substring with at least K repeating characters (0395)
     
 Master theorem:
 
@@ -35,3 +35,14 @@ extension to (2) when f(n)=O(n^{cc}log^{k}n)
 (23)k<-1, T(n)=O(n^{cc})
 
 in total: 20
+
+combination: 
+    combinationI(0039)+combinationII(0040)+Cnk(0077)+subset(0078)+subsetII(0090)
+Permutation:
+    permutation(0046)+permutationII(0047)
+Insert operators "+""-""*" in string:
+    (0282)
+Remove invalid parentheses:
+    (0301)
+Longest substring with at least K repeating characters
+    (0395)
