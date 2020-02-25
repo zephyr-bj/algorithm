@@ -72,6 +72,9 @@ int binary_search_rightmost(vector<int>& arr, int target){
     }
     return x-1;
 }
+//rightmost: find higher bound, leftmost: find lower bound
+//1. always x=m+1; y=m;
+//2. leftmost: include the "==" case for y=m; rightmost: include the "==" case for x=m+1;
 //if the target doesn't exists, x stops at the insert index minus one
   
 //***search rotated sorted array (0033) (0081) (0153) (0154)
