@@ -30,6 +30,7 @@ rotate array
   
   
 // remove methods: 
+// put the replacement in the end, and j=1;
 int removeDuplicates(vector<int>& nums) {
     int n = nums.size();
     if(n<2)return n;
@@ -42,6 +43,7 @@ int removeDuplicates(vector<int>& nums) {
     }
     return l;
 }
+// put the replacement in front, and j=0; 
 int removeElement(vector<int>& nums, int val) {
     int n = nums.size();
     if(n<1)return n;
