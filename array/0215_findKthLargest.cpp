@@ -10,7 +10,7 @@
                 }
             }
             swap(nums[i+1],nums[y]);//[x,i+1],[i+2,y];
-            if(y-i-1>=k){
+            if(y-i-1>=k){   // the == case need to be added for the x=i+2 case, then convergence can be guaranteed. 
                 x=i+2;
             }else{
                 k-=(y-i);y=i; 
