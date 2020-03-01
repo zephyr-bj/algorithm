@@ -21,12 +21,13 @@ reverse array
   reverse every word in a string (0151)
   reverse string (0344)
   reverse vowels (0345)
+  retate array by k (0189), consider the case in which n%k==0
   
 merge array
   merge two arrays (0088)
-    
-rotate array
-  retate array by k (0189), consider the case in which n%k==0
+  
+shuffle array
+  shuffle array (0384)
   
   
 // remove methods: 
@@ -56,7 +57,7 @@ int removeElement(vector<int>& nums, int val) {
     }
     return l;
 }
-// partition array
+// partition array + kthSmallest
 int partition(vector<int>&arr, int l, int r) { 
     int x = arr[r], i = l; 
     for (int j = l; j <= r - 1; j++) { 
@@ -67,6 +68,19 @@ int partition(vector<int>&arr, int l, int r) {
     } 
     swap(arr[i], arr[r]); 
     return i; 
+} 
+int kthSmallest(vector<int>&arr, int l, int r, int k){ 
+    if (k > 0 && k <= r - l + 1) { 
+        int pos = partition(arr, l, r); 
+        
+        if (pos-l+1 == k) 
+            return arr[pos]; 
+        if (pos-l+! > k)  
+            return kthSmallest(arr, l, pos-1, k); 
+        else
+            return kthSmallest(arr, pos+1, r, k-pos+l-1); 
+    } 
+    return INT_MAX; 
 } 
 void partition3Way(vector<int>&arr, int l, int r, int& x, int&y) { 
     int pivot = arr[r];
@@ -84,6 +98,19 @@ void partition3Way(vector<int>&arr, int l, int r, int& x, int&y) {
     } 
     swap(arr[j],arr[r]);
     x=i;y=j;
+}
+int kthSmallest3Way(vector<int>&arr, int l, int r, int k){ 
+    if (k > 0 && k <= r - l + 1) { 
+        int x; int y;
+        partition3Way(arr, l, r, x, y);
+        if (k>=x-l+1&&k<=y-l+1) 
+            return arr[y]; 
+        else if (k > y-l+1)  
+            return kthSmallest3Way(arr, y+1, r, k-(y-l+1)); 
+        else
+            return kthSmallest3Way(arr, l, x-1, k); 
+    } 
+    return INT_MAX; 
 } 
 // find elements in range [1,n]
 int findDuplicate(vector<int>& nums) {
@@ -113,16 +140,17 @@ int firstMissingPositive(vector<int>& nums) {
     return n+1;
 }
 // reverse vowels
+bool isVowel(char x) {
+    return (x=='a'||x=='e'||x=='i'||x=='o'||x=='u'||x=='A'||x=='E'||x=='I'||x=='O'||x=='U');
+}
 string reverseVowels(string s) {
     int L=s.size();
     int i=0; int j=L-1;
-    while((!isVowel(s[i]))&&i<L)i++;
-    while((!isVowel(s[j]))&&j>i)j--;
     while(i<j){
-        swap(s[i],s[j]);
-        i++;j--;
         while((!isVowel(s[i]))&&i<j)i++;
         while((!isVowel(s[j]))&&j>i)j--;
+        swap(s[i],s[j]);
+        i++;j--;
     }
     return s;
 }
