@@ -1,13 +1,14 @@
-linear search
+linear search [8]
   container with most water (0011)
   three sum (0015)
   three summ closet (0016)
   four sum (0018)
   trap rain water (0042)
   two sum II, for sorted array (0167)
+  shortest subarray with sum larger than a number (0209)
   search matrix II (0240) each row sorted, and each collomn sorted
 
-binary search
+binary search [14]
   find median of two sorted array (0004)
   search rotated sorted array (0033)
   search range (0034)
