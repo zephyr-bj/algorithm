@@ -9,6 +9,8 @@ modeled as a stack
 simplify directery path (0071)
 * longest valid parentheses, use a helper stack called level_sum (0032)
 is valid parentheses (0020)
+* calculator with "numbers, '+', '-', '(', ')'" (0224)
+* calculator II with "numbers, '+', "-', '(', ')'" (0227)
 
 stack tricks
 * implement a stack by queues (0225)
