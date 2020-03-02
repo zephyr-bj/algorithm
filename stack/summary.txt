@@ -1,17 +1,19 @@
 increasing/decreasing stack
-1. stack automatically maintain the position/time order
-2. inc/dec stack also maintain a value order
-* sliding window maximum, check position/time to decide pop (0239) descreasing stack
-* min stack,check value to decide pop (0155)
-* largest rectangle histogram, check value to pop (0084) increasing stack
+  1. stack automatically maintain the position/time order
+  2. inc/dec stack also maintain a value order
+* sliding window maximum (0239) descreasing stack "min (top) stack", check position/time to decide pop
+* min stack (0155) decreasing stack "min (top) stack",check value to decide pop
+* largest rectangle histogram (0084) increasing stack "max (top) stack", check value to pop 
 
 modeled as a stack
 simplify directery path (0071)
 * longest valid parentheses, use a helper stack called level_sum (0032)
 is valid parentheses (0020)
 * calculator with "numbers, '+', '-', '(', ')'" (0224)
-* calculator II with "numbers, '+', "-', '(', ')'" (0227)
+* calculator II with "numbers, '+', "-', '*', '/'" (0227)
 
 stack tricks
 * implement a stack by queues (0225)
 implement a queue by stacks (0232)
+
+3+5+2
