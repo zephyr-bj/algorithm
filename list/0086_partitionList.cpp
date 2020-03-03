@@ -18,35 +18,24 @@
         }
         return dummy.next;
     }
-// 31 lines sulotion
-/* ListNode* partition(ListNode* head, int x) {
-        if(head==NULL||head->next==NULL)return head;
-        ListNode * lh = NULL, * lt = NULL;
-        ListNode * uh = NULL, * ut = NULL;
-        while(head!=NULL){
-            ListNode * tmp=head;
-            head=head->next;
-            if(tmp->val<x){
-                if(lt==NULL){
-                    lt=tmp;
-                    lh=tmp;
-                }else{
-                    lt->next=tmp;
-                    lt=lt->next;
-                }
-                lt->next=NULL;
+
+    ListNode* partitionX(ListNode* head, int x) {
+        ListNode dummy(0);
+        dummy.next = head;
+        ListNode * p1 = &dummy;
+        ListNode d(0);
+        ListNode * p2=&d;
+        while(p1!=NULL&&p1->next!=NULL){
+            if(p1->next->val>=x){
+                p1=p1->next;
             }else{
-                if(ut==NULL){
-                    ut=tmp;
-                    uh=tmp;
-                }else{
-                    ut->next=tmp;
-                    ut=ut->next;
-                }
-                ut->next=NULL;
+                ListNode * tmp=p1->next;
+                p1->next=p1->next->next;
+                tmp->next=p2->next;
+                p2->next=tmp;
+                p2=p2->next;
             }
         }
-        if(lh==NULL)return uh;
-        lt->next=uh;
-        return lh;
-    }*/
+        p2->next=dummy.next;
+        return d.next;;
+    }
