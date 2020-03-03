@@ -1,13 +1,14 @@
+1. any possible to delete the head, use a dummy head in front
+2. if need to move any element, hold its previous pointer first
 remove element from list [5]
-  // any possible to delete the head, use a dummy head in front
-  by position (0019)
-  * delete duplicates (all of them) (0082)
-  delete duplicates (except the first one) (0083)
+  remove the Nth element from the end (0019) by position
+  * remove duplicates (all of them) (0082)
+  remove duplicates (except the first one) (0083)
   remove elements by val (0203)
-  delete element by pointer only (0237)
+  remove element by pointer only (0237) can be a O(1) operation
   
 insert element to list [2]
-  insert sort (0147)
+  insert sort (0147) 1. know the insert operation 2. search insert position only if needed
   partition list (0086)
   
 merge lists [2]
