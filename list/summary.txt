@@ -11,7 +11,7 @@ insert element to list [2]
   insert sort (0147) 1. know the insert operation 2. search insert position only if needed
   partition list (0086)
   
-merge lists [2]
+merge lists [4]
   // need a dummy head as well
   merge two lists (0021)
   * merge K lists (0023)
@@ -25,11 +25,11 @@ reserver lists [4]
   reverse List (0206)
   
 rotate lists [1]
-  rotate right (0061)
+  * rotate right (0061) 4 steps:
   
-partition list [4] 
+partition list [2] 
   reorder list (0143) partition+reverse+merge
-  is palindrome (0234) partition+reverse+cmp, and there is a recursive method
+  is palindrome (0234) partition+reverse+cmp, and ** there is a recursive method
   
 detect cycle [2]
   has cycle ? (0141)
