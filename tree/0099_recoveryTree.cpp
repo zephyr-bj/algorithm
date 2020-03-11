@@ -1,22 +1,24 @@
-    void get(TreeNode * root, TreeNode * & prev, pair<TreeNode*, TreeNode*> & nodes){ // inorder traversal
-        if(!root)return;
-        get(root -> left, prev, nodes);
-        if(prev && prev -> val > root -> val){
-            if(!nodes.first){ // we are encountering the out of order sequence for the first time
-               nodes = {prev, root}; // it might be two consecutive nodes
+    void recoverTreeTool(TreeNode* root, TreeNode** pre, TreeNode ** first, TreeNode ** second){
+        if(root==NULL)return;
+        recoverTreeTool(root->left,pre,first,second);
+        if((*pre)!=NULL&&(*pre)->val>root->val){
+            if((*first)!=NULL){
+                *second=*first;
+                *first=root;
             }else{
-               nodes.second = root; // the nodes were not consecutive hence update the second node
-               return;
+                *first=*pre;
+                *second=root;
             }
         }
-        prev = root; // mark the prev as root
-        get(root -> right, prev, nodes);
+        *pre=root;
+        recoverTreeTool(root->right,pre,first,second);
     }
     void recoverTree(TreeNode* root) {
-        TreeNode * prev = NULL;
-        pair<TreeNode*, TreeNode*> nodes(NULL, NULL);
-        get(root, prev, nodes);
-        swap(nodes.first -> val, nodes.second -> val); // swap the nodes' values, we can also swap the nodes easily as we have both the nodes in our pair with another inorder traversal but lol I am lazy
+        TreeNode * pre=NULL;
+        TreeNode * first=NULL;
+        TreeNode * second=NULL;
+        recoverTreeTool(root,&pre,&first,&second);
+        swap(first->val,second->val);
     }
     /*
     void recoverTree(TreeNode* root) {
