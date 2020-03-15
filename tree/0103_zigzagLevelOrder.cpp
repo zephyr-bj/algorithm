@@ -1,3 +1,27 @@
+    //shorter solution using Array Index
+    vector<vector<int>> zigzagLevelOrder_X(TreeNode* root) {
+        vector<vector<int>>ans;
+        if(root==NULL)return ans;
+        queue<TreeNode*>bin;
+        bin.push(root);
+        while(!bin.empty()){
+            int n = bin.size();
+            vector<int>level(n,0);
+            int x=0; int y=1;
+            if(ans.size()%2){
+                x=n-1; y=-1;
+            }
+            for(int i=0; i<n; i++){
+                level[x+y*i]=(bin.front()->val);
+                if(bin.front()->left)bin.push(bin.front()->left);
+                if(bin.front()->right)bin.push(bin.front()->right);
+                bin.pop();
+            }
+            ans.push_back(level);
+        }
+        return ans;
+    } 
+
     vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
         vector<vector<int>>ans;
         if(root==NULL)return ans;
