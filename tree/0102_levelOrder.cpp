@@ -1,3 +1,17 @@
+    //pre order
+    void tool(TreeNode * root, vector<vector<int>>&ans, int level){
+        if(root==NULL)return;
+        if(level>=ans.size())ans.push_back(vector<int>(0,0));
+        ans[level].push_back(root->val);
+        tool(root->left, ans, level+1);
+        tool(root->right, ans, level+1);
+    }
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>>ans;
+        tool(root,ans,0);
+        return ans;
+    }
+    //in order
     void tool(vector<vector<int>>&bin, TreeNode * root, int level){
         if(root==NULL)return;
         tool(bin,root->left,level+1);
