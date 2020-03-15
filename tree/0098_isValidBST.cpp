@@ -1,13 +1,37 @@
-    bool validTool(TreeNode * root, int & x){
+    bool validBSTUtil(TreeNode * root, TreeNode* &pre){
+        if(root==NULL)return true;
+        if(!validBSTUtil(root->left,pre))return false;
+        if(pre!=NULL&&root->val<=pre->val)return false;
+        pre=root;
+        if(!validBSTUtil(root->right,pre))return false;
+        return true;
+    }
+    bool isValidBST(TreeNode* root) {
+        TreeNode* pre = NULL;
+        return validBSTUtil(root,pre);
+    }    
+    bool validBSTUtil(TreeNode * root, TreeNode** pre){
+        if(root==NULL)return true;
+        if(!validBSTUtil(root->left,pre))return false;
+        if((*pre)!=NULL&&root->val<=(*pre)->val)return false;
+        (*pre)=root;
+        if(!validBSTUtil(root->right,pre))return false;
+        return true;
+    }
+    bool isValidBST(TreeNode* root) {
+        TreeNode* pre = NULL;
+        return validBSTUtil(root,&pre);
+    }
+    bool validTool(TreeNode * root, long long & x){
         if(root==NULL)return true;
         if(!validTool(root->left, x))return false;
         if(x>=root->val)return false;
         else x=root->val;
-        if(!validTool(root->right, root->val))return false;
+        if(!validTool(root->right, x))return false;
         return true;
     }
     bool isValidBST(TreeNode* root) {
-        int x = INT_MIN;
+        long long x = 0x8000000000000000;
         return validTool(root,x);
     }
     /*
