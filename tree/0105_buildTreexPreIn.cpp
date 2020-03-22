@@ -17,3 +17,18 @@
     /*
     good recursive, DFS
     */
+    // use hash to get rid of the while loop
+    TreeNode* buildTree(vector<int>&preorder, vector<int>& inorder, unordered_map<int,int>&bin,
+                        int a, int b, int c, int d){
+        if(a>b)return NULL;
+        int x = bin[preorder[a]];
+        TreeNode*node = new TreeNode(preorder[a]);//left length: x-c
+        node->left = buildTree(preorder, inorder, bin, a+1,a+(x-c),c,x-1);
+        node->right = buildTree(preorder, inorder, bin, a+(x-c)+1, b, x+1, d);
+        return node;
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        unordered_map<int,int>bin;
+        for(int i=0; i<inorder.size(); i++)bin[inorder[i]]=i;
+        return buildTree(preorder,inorder,bin,0,preorder.size()-1,0,inorder.size()-1);
+    }
