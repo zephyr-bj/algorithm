@@ -17,22 +17,19 @@
         return bin.empty();
     }
     /*
-    //another way without a stack
-        bool isValidSerialization(string preorder) {
-        int cnt=1;
-        int n = preorder.size();
-        int j = 0; 
-        for(int i=0; cnt>0&&i<=n; i++){
-            if(preorder[i]==','||i==n){
-                string s = preorder.substr(j, i-j);
-                if(s.compare("#")==0){
-                    cnt--;
-                }else{
-                    cnt++;
-                }
-                j=i+1;
+    //actually do not need a real stack
+    bool isValidSerialization(string preorder) {
+        int x = 0;
+        int stk=1;
+        for(int y=0; y<=preorder.size(); y++){
+            if(preorder[y]==','||y==preorder.size()){
+                string s = preorder.substr(x,y-x);
+                stk--;
+                if(stk<0)return false;
+                if(s.compare("#")!=0)stk+=2;
+                x=y+1;
             }
         }
-        return cnt==0&&j==n+1;
+        return stk==0;
     }
     */
