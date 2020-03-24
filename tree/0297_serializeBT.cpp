@@ -48,3 +48,40 @@ public:
 BST, use queue, 
 construct a tree, use the address of pointer "TreeNode**"
 */
+// recursive method, 3 times slower, and 20 times more space
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        if(root==NULL)return "#";
+        string ans = to_string(root->val)+",";
+        ans+=serialize(root->left)+",";
+        ans+=serialize(root->right);
+        return ans;
+    }
+    
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        return deserializeUtil(data);
+    }
+    
+    TreeNode* deserializeUtil(string & data){
+        if(data[0]=='#'){
+            cut(data);
+            return NULL;
+        }else{
+            TreeNode* root = new TreeNode(cut(data));
+            root->left = deserializeUtil(data);
+            root->right = deserializeUtil(data);
+            return root;
+        }
+    }
+    
+    int cut(string & data){
+        int p = data.find(',');
+        int ans = data[0]=='#'? 0:stoi(data.substr(0,p));
+        data=data.substr(p+1);
+        return ans;
+    }
+}
