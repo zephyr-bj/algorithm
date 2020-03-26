@@ -11,32 +11,30 @@
         return 1+countNodes(root->left)+countNodes(root->right);
     } 
     /*
-    // my iterative method
-        int countNodes(TreeNode* root) {
-        TreeNode * tmp = root;
-        int h=0; int ans=0;
-        while(tmp!=NULL){
-            tmp=tmp->left;
-            h++;
-            if(h>1)ans+=(1<<(h-2));
+    // iterative method
+    int countNodes(TreeNode* root) {
+        if(root==NULL)return 0;
+        int l=0;
+        TreeNode* x = root;
+        while(x!=NULL){
+            l++;x=x->left;
         }
-        TreeNode * p = root;
-        int l=1;
-        int n=0;
-        while(p!=NULL){
-            int ll=l;
-            TreeNode * t=p->left;
-            while(t!=NULL){
-                t=t->right; ll+=1;
+        x = root;
+        int ans = 1;
+        while(--l){
+            ans<<=1;
+            int r = 0;
+            TreeNode *p=x->right;
+            while(p!=NULL){
+                r++;p=p->left;
             }
-            if(h>l)n<<=1;
-            if(ll==h){ 
-                n+=1;p=p->right;
+            if(r==l){
+                ans|=1;
+                x=x->right;
             }else{
-                p=p->left;
+                x=x->left;
             }
-            l++;
         }
-        return ans+n;
+        return ans;
     }
     */
