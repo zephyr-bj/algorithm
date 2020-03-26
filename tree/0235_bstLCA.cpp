@@ -1,3 +1,4 @@
+    //反证法：contradiction可以说明这二个算法
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {   
         TreeNode* node = root;
         while(node){
