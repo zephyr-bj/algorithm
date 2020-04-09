@@ -14,7 +14,7 @@ tree iterative traversal
 
 pre-order traversal
     * level order traversal (0102) BFS or recursive pre-order, with additional parameter depth
-    level order traversal bottom up (0107) BFS or recursive in-order, with additional parameter depth
+    level order traversal bottom up (0107) BFS or recursive post-order, with additional parameter depth
     * right side view of a binary tree (0199) BFS or recursive pre-order, with additional parameter depth
 
 in-order traversal
