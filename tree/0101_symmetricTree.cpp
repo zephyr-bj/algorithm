@@ -1,16 +1,15 @@
-    bool symTool(TreeNode * root1, TreeNode * root2){
-        if(root1==NULL&&root2!=NULL)return false;
-        if(root1!=NULL&&root2==NULL)return false;
-        if(root1==NULL&&root2==NULL)return true;
-        if(!symTool(root1->left,root2->right))return false;
-        if(root1->val!=root2->val)return false;
-        if(!symTool(root1->right,root2->left))return false;
-        return true;
-    }
-    bool isSymmetric(TreeNode *root) {
-        if(root==NULL)return true;
-        return symTool(root->left, root->right);
-    }
+bool isSymmetric(TreeNode* x, TreeNode* y){
+    if(x==NULL&&y==NULL)return true;
+    if(x==NULL||y==NULL)return false;
+    if(x->val!=y->val)return false;
+    if(!isSymmetric(x->left,y->right))return false;
+    if(!isSymmetric(x->right,y->left))return false;
+    return true;
+}
+bool isSymmetric(TreeNode* root) {
+    if(root==NULL)return true;
+    return isSymmetric(root->left, root->right);
+}
     /*
     bool isSymmetric(TreeNode *root) {
     TreeNode *left, *right;
