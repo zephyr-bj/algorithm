@@ -4,28 +4,17 @@
 //But this kind of case is not going to happenm, since 1 and 3 will fall in the same bucket and return true, so we do not need 5
 
 // the "getBucketId" function deal with the negative cases. 
-long long getBucketId(long long i, long long w) {
-    return i < 0 ? (i + 1) / w - 1 : i / w;
-}
 bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
     int n = nums.size();
-    if (n < 2 || k < 1 || t < 0){
-        return false;
-    }
-    unordered_map<long long, long long> buckets;
-    long long width = (long long)t + 1;
-    for (int i = 0; i < n; i++){
-        long long id = getBucketId(nums[i], width);
-        if (buckets.find(id) != buckets.end()){
-            return true;
-        }
-        if ((buckets.find(id - 1) != buckets.end() && nums[i] - buckets[id - 1] < width)) return true;
-        if ((buckets.find(id + 1) != buckets.end() && buckets[id + 1] - nums[i] < width)) return true;
-
-        buckets[id] = nums[i];
-        if (i >= k){
-            buckets.erase(getBucketId(nums[i - k], width));
-        }
+    if(n<2||k<1||t<0)return false;
+    long long w = (long long)(t)+1;
+    unordered_map<long long,int>bin;
+    for(int i=0; i<n; i++){
+        long long x = (long long)(nums[i]);
+        if(bin.find(x/w)!=bin.end()&&i-bin[x/w]<=k&&abs(x-nums[bin[x/w]])<=t)return true;
+        if(bin.find(x/w-1)!=bin.end()&&i-bin[x/w-1]<=k&&x-nums[bin[x/w-1]]<=t)return true;
+        if(bin.find(x/w+1)!=bin.end()&&i-bin[x/w+1]<=k&&nums[bin[x/w+1]]-x<=t)return true;
+        bin[x/w]=i;
     }
     return false;
 }
