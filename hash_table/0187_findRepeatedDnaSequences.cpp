@@ -23,3 +23,19 @@
         }
         return ans;
     }
+
+    vector<string> findRepeatedDnaSequences(string s) {
+        int n = s.size();
+        unordered_map<string, int>bin;
+        vector<string>ans;
+        for(int i=0; i<n-9; i++){
+            string x = s.substr(i,10);
+            if(bin.find(x)==bin.end()){
+                bin[x]=1;
+            }else{
+                bin[x]+=1;
+            }
+            if(bin[x]==2)ans.push_back(x);
+        }
+        return ans;
+    }
