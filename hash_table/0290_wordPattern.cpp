@@ -23,3 +23,27 @@
         }
         return x==n;
     }
+
+    bool wordPattern(string pattern, string str) {
+        int n = pattern.size();
+        int m = str.size();
+        int i = 0;
+        int x = 0;
+        vector<string>m1(256,"");
+        unordered_map<string,char>m2;
+        for(int y=0; y<=m; y++){
+            if(y==m||str[y]==' '){
+                string s = str.substr(x,y-x);
+                if(i>=n)return false;
+                char c = pattern[i++];
+                x=y+1;
+                if(m1[c].size()==0 ^ m2.find(s)==m2.end())return false;
+                else if(m1[c].size()==0){
+                    m1[c]=s; m2[s]=c;
+                }else{
+                    if(m1[c]!=s || m2[s]!=c)return false;
+                }
+            }
+        }
+        return i==n;
+    }
