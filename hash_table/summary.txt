@@ -9,9 +9,9 @@ repeating char, hash table as position record [the value is show up position]
 Anagram, hash table as distribution [the value is show up frequency]
   [1]Substring with Concatenation of All Words (0030)
   [1]minimum window in S which will contain all the characters in T (0076)
-  [2]Group Anagrams (0049) ** excellent algorithm to collect result vectors
-  [2]max points on a line (0149) search all points on common lines
-  [2]find all repeated DNA substring with 10 characters (0187)
+  [2] ** Group Anagrams (0049) excellent algorithm to collect result vectors
+  [2]max points on a line (0149) search all points on common lines 
+  [2] ** find all repeated DNA substring with 10 characters (0187) good algorithm only take repeated key once
   [3]is Anagram (0242)
   [3]word pattern (0290) back and forth mapping
   [3]bulls and cows (0299)
