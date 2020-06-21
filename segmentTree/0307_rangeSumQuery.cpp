@@ -64,7 +64,8 @@ public:
 // non-leaf nodes from 0 to n-2, n-1 in total
 // root at 0
 // size of array = (size of tree + 1)/2;
-// 2*p+1 for left subtree, 2*p+2 for right subtree
+// 2*p+1 for left subtree, covers elements from l to m;
+// 2*p+2 for right subtree, covers elements from m+1 to h;
 // (l-1)/2 is parent, (r-2)/2 is parent
 class NumArray {
 public:
