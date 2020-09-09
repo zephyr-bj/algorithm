@@ -1,20 +1,24 @@
+hash_table(21)
+ordered_set(5)
+heap(3)
+Segment ree (1)
+graph(12)
+trie(3) = 45
+
+
+
 dp(30)
 search(22)
-recursion(19)
-greedy(2)
+recursion(20)
+greedy(7) = 79
 
-array(17)
+array(19)
 stack(10)
-hash_table(19)
 list(21)
-graph(12)
-tree(37)
-heap(3)
-ordered_set(5)
-segment_tree(1)
-trie(3)
+tree(37) = 87
 
+         = 211
+         
 system_design(2)
 math(1)
-
 misc(4)
