@@ -1,17 +1,16 @@
 
     int countRangeSum(vector<int>& nums, int lower, int upper) {
-        multiset<long long>bin;
+        multiset<long>bin;
         bin.insert(0);
-        long long sum=0;
+        long sum=0;
         int ans=0;
-        int n = nums.size();
-        for(int i=0; i<n; i++){
-            sum+=nums[i];
-            multiset<long long>::iterator left = bin.lower_bound(sum-(long long)(upper));
+        for(int i=0; i<nums.size(); i++){
+            sum+=nums[i];//sum-x < upper; sum-x > lower; x represents a element in bin
+                         //==> sum-upper < x < sum-lower
+            multiset<long>::iterator ilow = bin.lower_bound(sum-upper); 
             //use upper_bound here, since we do not want to touch it in the loop
-            multiset<long long>::iterator right = bin.upper_bound(sum-(long long)(lower));
-            for(multiset<long long>::iterator it=left; it!=bin.end()&&it!=right; it++)
-                if(*it<=sum-lower && *it>=sum-upper)ans++;
+            multiset<long>::iterator ihigh = bin.upper_bound(sum-lower);
+            for(multiset<long>::iterator it=ilow; it!=ihigh; it++)ans++;
             bin.insert(sum);
         }
         return ans;
