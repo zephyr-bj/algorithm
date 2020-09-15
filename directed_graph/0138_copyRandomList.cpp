@@ -13,51 +13,19 @@
         if(head->random!=NULL)res->random=copyRandomList(head->random);
         return res;
     }
-/*
-// Definition for a Node. and BFS solution
-class Node {
-public:
-    int val;
-    Node* next;
-    Node* random;
-
-    Node() {}
-
-    Node(int _val, Node* _next, Node* _random) {
-        val = _val;
-        next = _next;
-        random = _random;
-    }
-};
-
-class Solution {
-public:
+/* faster, and less memory */
+    unordered_map<Node*, Node*>proj;
     Node* copyRandomList(Node* head) {
-        if(head==NULL)return NULL;
-        unordered_map<Node*,Node*>bin;
-        Node dummy(0,NULL,NULL);
-        Node * p = &dummy;
-        while(head!=NULL){
-            if(bin.find(head)==bin.end()){
-                Node * tmp= new Node(head->val,NULL,NULL);
-                p->next=tmp;
-                bin[head]=tmp;
-            }else{
-                p->next=bin[head];
-            }
-            p=p->next;
-            if(head->random!=NULL){
-                if(bin.find(head->random)==bin.end()){
-                    Node * tmp2 = new Node(head->random->val,NULL,NULL);
-                    p->random=tmp2;
-                    bin[head->random]=tmp2;
-                }else{
-                    p->random=bin[head->random];
-                }
-            }
-            head=head->next;
+        Node*np=head;
+        while(np!=NULL){
+            proj[np]=new Node(np->val);
+            np=np->next;
         }
-        return dummy.next;
+        np=head;
+        while(np!=NULL){
+            if(np->next!=NULL)proj[np]->next=proj[np->next];
+            if(np->random!=NULL)proj[np]->random=proj[np->random];
+            np=np->next;
+        }
+        return proj[head];
     }
-};
-*/
