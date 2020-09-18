@@ -25,15 +25,15 @@
     int numDecodings(string s) {
         int n = s.size();
         if(n<1)return 0;
-        int b2 = 1;
-        int b1 = s[0]=='0'?0:1;
+        int x1 = 1; //empty string decoded to empty string
+        int x2 = s[0]=='0' ? 0 : 1;
         for(int i=1; i<n; i++){
             int dg2 = 0;
-            if(s[i-1]=='1'&&s[i]>='0'&&s[i]<='9')dg2=b2;
-            if(s[i-1]=='2'&&s[i]>='0'&&s[i]<='6')dg2=b2;
-            int dg1 = s[i]=='0'?0:b1;
-            b2=b1;
-            b1=dg2+dg1;
+            if(s[i-1]=='1')dg2=x1;
+            else if(s[i-1]=='2'&&s[i]<='6')dg2=x1;
+            int dg1 = s[i]=='0'?0:x2;
+            x1=x2;
+            x2=dg1+dg2;
         }
-        return b1;
+        return x2;
     }
