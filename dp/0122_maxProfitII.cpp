@@ -1,3 +1,14 @@
+    /*solution1*/
+    int maxProfit(vector<int>& prices) {
+        int n = prices.size();
+        if(n<2)return 0;
+        int ans = 0;
+        for(int i=1; i<n; i++){
+            ans += max(prices[i]-prices[i-1],0);
+        }
+        return ans;
+    }
+    /*solution2*/
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
         if(n<2)return 0;
