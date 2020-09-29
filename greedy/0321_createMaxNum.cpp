@@ -1,3 +1,4 @@
+    //
     vector<int>maxNumber(vector<int>&nums, int k){
         int n = nums.size();
         int i = 0; int l = k;
@@ -10,6 +11,18 @@
         }
         return ans;
     }
+    //remember this
+    bool maxNumberCompare(vector<int>&nums1, int i, vector<int>& nums2, int j){
+        int n = nums1.size();
+        int m = nums2.size();
+        while(i<n && j<m && nums1[i]==nums2[j]){
+            i++; j++;
+        }
+        if(i==n)return false;
+        else if(j==m)return true;
+        else return nums1[i]>nums2[j];
+    }
+    // remember this too
     vector<int> maxNumberMerge(vector<int>&nums1, vector<int>&nums2){
         int n = nums1.size();
         int m = nums2.size();
@@ -23,16 +36,6 @@
             }
         }
         return ans;
-    }
-    bool maxNumberCompare(vector<int>&nums1, int i, vector<int>& nums2, int j){
-        int n = nums1.size();
-        int m = nums2.size();
-        while(i<n && j<m && nums1[i]==nums2[j]){
-            i++; j++;
-        }
-        if(i==n)return false;
-        else if(j==m)return true;
-        else return nums1[i]>nums2[j];
     }
     vector<int> maxNumber(vector<int>& nums1, vector<int>& nums2, int k) {
         int n = nums1.size();
