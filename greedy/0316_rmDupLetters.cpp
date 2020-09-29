@@ -1,25 +1,18 @@
-// gready    
+// gready : find one character in one recursive call   
     string removeDuplicateLetters(string s) {
-        vector<int> alphabetCount( 26, 0 );
-        int index, pos = 0; 
-
-        for( index = 0; index < s.length( ); index++ ){
-            alphabetCount[ s[ index ] - 'a' ]++; 
+        if(s.empty())return s;
+        vector<int>bin(26,0);
+        for(auto c:s)bin[c-'a']++;
+        int pos=0;
+        for(int i=0; i<s.size(); i++){
+            if(s[i]<s[pos])pos=i;
+            bin[s[i]-'a']--;
+            if(bin[s[i]-'a']==0)break;
         }
-        for( index = 0; index < s.length( ); index++ ){
-            if( s[ index ] < s[ pos ] )pos = index; 
-            alphabetCount[ s[ index ] - 'a' ]--; 
-            if( alphabetCount[ s[ index ] - 'a' ] == 0 )break;
-        }
-        
-        if( s.empty( ) ){
-            return "";
-        }else{
-            string buffer = s.substr( pos + 1 );
-            buffer.erase( remove( buffer.begin( ), buffer.end( ), s[ pos ] ), buffer.end( ) );
-            
-            return s[ pos ] + removeDuplicateLetters( buffer );
-        }
+        string sub=s.substr(pos+1);
+        for(int i=sub.size()-1; i>=0; i--)
+            if(sub[i]==s[pos])sub.erase(i,1);
+        return s.substr(pos,1)+removeDuplicateLetters(sub);
     }
 // stack solution    
     string removeDuplicateLetters(string s) {
