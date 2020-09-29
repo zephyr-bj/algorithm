@@ -30,3 +30,32 @@
 The lower bound of the max gap is (ub-lb)/(n-1) <== divide the range evenly, max gap must between the buckets
 to guarantee measure the gap between two neighboring elements, we evaluate lbin[i]-ubin[pre]
 */
+// similarly
+    int maximumGap(vector<int>& nums) {
+        int n = nums.size();
+        if(n<2)return 0;
+        int a = nums[0];
+        int b = nums[0];
+        for(auto x:nums){
+            if(x<a)a=x;
+            if(x>b)b=x;
+        }
+        int span = (b-a)/(n-1)+1;//+1: to prevent the b fall out of the highest bin
+                                 //    to prevent span turn out to be zero, when b close to a.
+        vector<int>A(n-1,INT_MAX);
+        vector<int>B(n-1,INT_MIN);
+        for(int i=0; i<n; i++){
+            int idx = (nums[i]-a)/span;
+            if(nums[i]<A[idx])A[idx]=nums[i];
+            if(nums[i]>B[idx])B[idx]=nums[i];
+        }
+        int ans = min(abs(nums[0]-nums[1]),B[0]-A[0]);
+        int last = B[0];
+        for(int i=1; i<n-1; i++){
+            if(B[i]==INT_MIN)continue;
+            ans = max(ans,B[i]-A[i]);
+            ans = max(ans,A[i]-last);
+            last = B[i];
+        }
+        return ans;
+    }
