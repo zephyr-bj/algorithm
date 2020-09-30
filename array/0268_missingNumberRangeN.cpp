@@ -1,3 +1,11 @@
+    //formula solution
+    int missingNumber(vector<int>& nums) {
+        int n = nums.size();
+        int x = (0+n)*(n+1)/2;
+        int y = 0;
+        for(auto a:nums)y+=a;
+        return x-y;
+    }
     int missingNumber(vector<int>& nums) {
         int n = nums.size();
         nums.push_back(n);
