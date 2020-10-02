@@ -1,3 +1,4 @@
+//deque<int> is tested little faster than list<int>
 vector<int> maxSlidingWindow(vector<int>& nums, int k) {
     list<int>bin;
     int n = nums.size();
