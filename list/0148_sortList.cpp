@@ -1,3 +1,6 @@
+    //use q = sortList(q); p = sortList(p);
+    // sortList(q); sortList(p) not work
+
     ListNode* sortList(ListNode* head) {
         if(head==NULL||head->next==NULL)return head;
         ListNode * p = head;
