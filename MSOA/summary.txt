@@ -1,0 +1,32 @@
+greedy
+    [04] *min adjacent swaps to make palindrome string
+    [06] lexicographically smallest string
+    [07] min deletion to make frequency of each letter unique
+    [10] min steps to make equal heights
+array
+    [02] min move to make string without 3 identical consecutive letters
+    [05] longest substring without 3 contiguous occurrences letters
+    [08] remove duplicate II (without 3 identical consecutive letters)
+    [09]/[05] longest semi alternating substring
+    [12] Max insertiong to make string without 3 consecutive 'a's
+    [15] min swaps to grop red balls
+    [19] particle velocity
+    [20] Partition array into N subsets with balanced sum
+    +[21]+ widest path without trees
+    
+hash table
+    [03] max net ranks
+    [13]/[16] *longest concatenated string with unique characters
+    [14] largest K such that both K and -K exist in array
+    
+recursieve
+    [01] all N digits number with digit sum equal to S
+    
+DP
+    [18] *min deletion to make right format
+    
+graph
+    +[22]+ jump game III
+    
+    [11] day of week
+    [17] unique integers sum up to 0
