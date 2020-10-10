@@ -1,4 +1,4 @@
-string longestStr(vector<string>&A){
+int longestStr(vector<string>&A){
     vector<unsigned>bin(1,0);
     vector<unsigned>cntv(1,0);
     int ans = 0;
