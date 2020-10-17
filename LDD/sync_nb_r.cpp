@@ -1,11 +1,6 @@
 static unsigned int scull_p_poll(struct file *filp, poll_table *wait){
   struct scull_pipe *dev = filp->private_data;
   unsigned int mask = 0;
-  /*
-   * The buffer is circular; it is considered full
-   * if "wp" is right behind "rp" and empty if the
-   * two are equal.
-   */
   down(&dev->sem);
   poll_wait(filp, &dev->inq,  wait);/* readable */
   poll_wait(filp, &dev->outq, wait);/* writable */
@@ -18,31 +13,42 @@ static unsigned int scull_p_poll(struct file *filp, poll_table *wait){
   return mask;
 }
 
-/* at the user code side, the example below has nothing to do the driver function above
-because the conventional programs available to a shell don’t perform nonblocking operations. 
-The misc-progs source directory contains the following simple program, called nbtest, for testing nonblocking operations. 
-All it does is copy its input to its output, using nonblocking I/O and delaying between retries. 
-The delay time is passed on the command line and is one second by default.
-*/
+/* at the user code side */
 
-int main(int argc, char **argv)
+#include <sys/time.h> 
+#include <sys/types.h> 
+#include <unistd.h>
+
+int main(void)
 {
-  int delay = 1, n, m = 0;
+    struct timeval tv;
+    fd_set readfds;
+    fd_set master;
+    tv.tv_sec = 2; 
+    tv.tv_usec = 500000;
+  
+    int fd = open(/dev/scullpipe, O_RDWR);
+    if(fd < 0) {
+        printf("Can not open the device file\n");
+        exit(1);
+    }
+    FD_ZERO(&readfds); 
+    FD_ZERO(&master); 
+    FD_SET(fd, &master);
+  
+    char buffer[1024];
+    int length = 1024;
+    int sz;
 
-  if (argc > 1)
-  delay=atoi(argv[1]);
-
-  fcntl(0, F_SETFL, fcntl(0,F_GETFL) | O_NONBLOCK); /* stdin */
-  fcntl(1, F_SETFL, fcntl(1,F_GETFL) | O_NONBLOCK); /* stdout */
-
-  while (1) {
-    n = read(0, buffer, 4096);
-    if (n >= 0)
-      m = write(1, buffer, n);
-    if ((n < 0 || m < 0) && (errno != EAGAIN))
-      break;
-    sleep(delay);
-  }
-  perror(n < 0 ? "stdin" : "stdout");
-  exit(1);
-}    
+    for(;;) {
+        read_fds = master; // copy it
+        if (select(fd+1, &read_fds, NULL, NULL, tv) == -1) {
+            perror("select");
+            exit(4); 
+        }
+        if (FD_ISSET(fd, &read_fds)) { 
+            sz = read(fd, buffer, length);
+        }
+    }
+    return 0; 
+}
