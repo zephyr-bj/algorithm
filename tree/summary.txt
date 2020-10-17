@@ -2,12 +2,11 @@
 // BST, no duplicate element
 // a height-balanced binary tree: a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
 
-tree iterative traversal
+tree iterative traversal [7]
     * pre-order traversal (0144) iterative pre-order
     * post-order traversal (0145) iterative post-order
     
     * in-order traversal (0094)
-    recovery node swapped tree (0099) iterative in order
     BST iterator, which supports next() and hasNext() (0173) iterative in-order
     
     * zigzag level order traversal (0103) BFS with list, faster than 100%. always keep the list int "left to right order".  
@@ -15,22 +14,9 @@ tree iterative traversal
     Populating Next Right Pointers in Each Node (0116) BFS, using dummy head node for the next level
     * Populating Next Right Pointers in Each Node II (0117) BFS, using dummy head node for the next level
     
-    * lowest common ancestor of BST (0235) Binary search
-
-in-order traversal
-    * is valid BST (0098) recursive in order, with additional parameter by reference
-    * find the k-th smallest in BST (230) recursive in order
-
-pre-order traversal [3]
-    * level order traversal (0102) BFS or recursive pre-order, with additional parameter depth
-    * level order traversal bottom up (0107) BFS or recursive pre+post-order, with additional parameter depth
-    * right side view of a binary tree (0199) BFS or recursive pre-order, with additional parameter depth
-pre-order, two trees [2]
-    is same tree (0100) recursive any order, pre-order faster (when root not good, no more recursive call)
-    is symmetricTree (0101) recursive any order, pre-order faster
-pre-order, complete tree [1]
-    * count nodes in a complete tree (0222) recursive pre-order
-pre-order, tree construction [8]
+    * Verify Preorder Serialization of a Binary Tree (0331) recursive pre-order
+    
+pre-order, tree construction [7]
     build all unique trees by n elements II (0095), recursive pre-order or DP with cloneTree (pre-order for clone)
     build all unique trees by n elements I (0096), recursive pre-order or DP
     build a tree by its pre-order and in-order traversal (0105) recursive pre-order
@@ -38,24 +24,40 @@ pre-order, tree construction [8]
     build a balanced BST by a sorted array (0108) recursive pre-order
     build a balanced BST by a sorted list (0109) recursive pre-order
     * serialize and de-serialize binary tree by pre-order traversal (0297) recursive pre-order, or iterative level order 
-    * Verify Preorder Serialization of a Binary Tree (0331) recursive pre-order
     
-post-order, depth [3]
-    * max depth of a tree (0104) recursive post-order, with return value 
-    is balanced tree (0110) recursive post-order, with aditional parameter depth
-    * min depth of a tree (0111) recursive post-order, with return value
 post-order, path in tree [5]
     is there a root-to-leaf path that has a given node sum (0112), recursive post-order with return value
     find all root-to-leaf path that has a given node sum (0113), recursive post-order with candidate and collection bin arg
     * find a node-to-node path which has the largest sum (0124), recursive post-order, with node sum arg and return branch sum
     * calculate the sum of the root-to-leaf path numbers (0129), recursive post-order, with upper level sum arg
     find all root-to-leaf path (0257), recursive post order with candidate and-collection bin
-post-order, flatten tree [1]
+ 
+level-order traversal [3]
+    * level order traversal (0102) BFS or recursive pre-order, with additional parameter depth
+    * level order traversal bottom up (0107) BFS or recursive pre+post-order, with additional parameter depth
+    * right side view of a binary tree (0199) BFS or recursive pre-order, with additional parameter depth
+in-order traversal [3]
+    * is valid BST (0098) recursive in order, with additional parameter by reference
+    recovery node swapped BST (0099) iterative in order
+    * find the k-th smallest in BST (230) recursive in order
+pre-order, two trees [2]
+    is same tree (0100) recursive any order, pre-order faster (when root not good, no more recursive call)
+    is symmetricTree (0101) recursive any order, pre-order faster
+pre-order, complete tree [1]
+    * count nodes in a complete tree (0222) recursive pre-order   
+post-order, depth [3]
+    * max depth of a tree (0104) recursive post-order, with return value 
+    is balanced tree (0110) recursive post-order, with aditional parameter depth
+    * min depth of a tree (0111) recursive post-order, with return value
+post-order, tree LAC [2]
+    * lowest common ancestor of BST (0235) Binary search
+    * lowest common ancestor of binary Tree(0236) iterative in-order, of recursive post order 
+post-order, rob III [1]
+    * rob in a tree like neighborhood (0337)
+Modify, flatten tree [1]
     * flatten tree to a linked list with right pointer (0114), iterative or recursive post-order with "pre pointer"
-post-order, invert tree [1]
+Modify, invert tree [1]
     invert binary tree (0226) recursive post order
-post-order, tree LAC [1]
-    * lowest common ancestor of binary Tree(0236) iterative in-order, of recursive post order
     
 
 vector<int> inorderTraversal(TreeNode* root) {
