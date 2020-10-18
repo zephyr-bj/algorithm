@@ -49,11 +49,16 @@ void input_handler(int signum){
 	// process the async data
 }
 void main () {
-  // kill_fasync will trigger the input_handler asynchoronously
-  signal(SIGIO, &input_handler);
-  /*  start a thread to waiting for signal arriave */
-  fcntl(STDIN_FILENO, F_SETOWN, getpid());
-  oflags = fcntl(STDIN_FILENO, F_GETFL);
-  fcntl(STDIN_FILENO, F_SETFL, oflags | FASYNC);
-  /*  do what you want to do  */
+    int fd = open(/dev/scullpipe, O_RDWR);
+    if(fd < 0) {
+        printf("Can not open the device file\n");
+        exit(1);
+    }
+    // kill_fasync will trigger the input_handler asynchoronously
+    signal(SIGIO, &input_handler);
+    /*  start a thread to waiting for signal arriave */
+    fcntl(fd, F_SETOWN, getpid());
+    oflags = fcntl(fd, F_GETFL);
+    fcntl(fd, F_SETFL, oflags | FASYNC);
+    /*  do what you want to do  */
 }
