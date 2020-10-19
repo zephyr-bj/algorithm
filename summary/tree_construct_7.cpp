@@ -13,6 +13,8 @@
             for(int i=a; i<=b; i++){
                 vector<TreeNode*>left = treeTool(a,i-1);
                 vector<TreeNode*>right = treeTool(i+1,b);
+                //not use the "a>b" case to push a NULL pointer, but use this
+                //for the n = 0 case;
                 if(left.empty())left.push_back(NULL);
                 if(right.empty())right.push_back(NULL);
                 for(auto l:left){
