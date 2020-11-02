@@ -90,6 +90,17 @@
         }
         return path[n-1];
     }
+    int uniquePaths(int m, int n) {
+        int N = m+n-2; //total number of steps
+        int k = n-1;   //total number of left steps
+        //so total number of paths is C(N,k)=N!/(k!(N-k)!)
+        // C(N,k) = ((N-k+1)*(N-k+2)*...*N)/k!
+        double res = 1;
+        for(int i=1; i<=k; i++){
+            res = res*(N-k+i)/i;
+        }
+        return (int)res;
+    }
  // unique paths with obstacles (0063)              time O(nm), memory O(m) or O(n)
      int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
         int n = obstacleGrid.size();
