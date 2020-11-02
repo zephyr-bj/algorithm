@@ -1,5 +1,6 @@
-/* stock (121) stock I (0122) stock II (0123) stock III (0188) stock IV (0309) stock V
- * rob 
+/* stock[5]: (121) stock I (0122) stock II (0123) stock III (0188) stock IV (0309) stock V
+ * rob[2]: (0198) max rob money (0213) max rob money 
+ */
 //  max stock profit I (0121)                       time O(n),  memory O(1)
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
