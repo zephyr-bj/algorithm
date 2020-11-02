@@ -1,0 +1,17 @@
+dp_matrix_7.cpp
+/* matrix area [3] (0085*) rectangle area (0211) square (0363*) sub matrix sum
+ * matrix paths [4] unique paths (0062) unique paths with obstacles (0063) min path sum (0064)  dungeon game (0174) 
+ */
+dp_stock_rob_7.cpp 
+/* stock[5]: (121) stock I (0122) stock II (0123) stock III (0188) stock IV (0309) stock V
+ * rob[2]: (0198) max rob money (0213) max rob money 
+ */
+dp_2str_maxsub_7.cpp 
+/* two strings[5]: (0010) regular express (0044) wildcard express (0072) min edit distance (0097) interleave strings (0115) max number of subsequence 
+ * max sub array[2]: //(0053)max continuous subarray sum  (0152)max product of numbers from sub array 
+ */
+dp_misc_8.cpp 
+/* O(1) depending[4]: (0139) word break time (0322) min number of coins combining to a mount of money (0070) climb stairs (0091) number of Docoding ways
+ * O(n) depending[2]: (0343) max product from integer break  (0368) max (largest) divisible subset
+ * O(nn) depending[2]: (0132) min cut to form palindrome substring (0312) max score by burst bulloons
+ */
