@@ -95,41 +95,33 @@
 // max rob money (0198)                            time O(n),  memory O(1)
     int rob(vector<int>& nums) {
         int n = nums.size();
-        if(n<1)return 0;
-        int b2 = nums[0];
-        if(n<2)return b2;
-        int b1 = max(b2,nums[1]);
-        for(int i=2; i<n; i++){
-            int x = nums[i]+b2;
-            b2 = max(b2,b1);
-            b1 = max(b1,x);
+        int cur = 0;
+        int pre = 0;
+        for(int i=0; i<n; i++){
+            int x = max(pre+nums[i],cur);
+            pre=cur;
+            cur=x;
         }
-        return b1;
+        return cur;
     }
 // max rob money II (0213)                         time O(n),  memory O(1)
+class Solution {
+public:
     int rob(vector<int>& nums) {
         int n = nums.size();
         if(n<1)return 0;
-        //for sure rob the first house
-        int b2 = nums[0];
-        if(n<2)return b2;
-        int b1 = 0;
-        int ans1 = b2;
-        for(int i=2; i<n-1; i++){
-            int x = nums[i]+b2;
-            ans1=max(ans1,x);
-            b2 = max(b2,b1);
-            b1 = max(b1,x);
-        }
-        //for sure do not rob the first house
-        b2 = 0; 
-        b1 = nums[1];
-        int ans2 = b1;
-        for(int i=2; i<n; i++){
-            int x = nums[i]+b2;
-            ans2=max(ans2,x);
-            b2 = max(b2,b1);
-            b1 = max(b1, x);
-        }
-        return max(ans1,ans2);
+        if(n<2)return nums[0];
+        return max(rob(nums,0,n-2), rob(nums,1,n-1));
     }
+private:
+    int rob(vector<int>& nums, int a, int b){
+        int pre = 0; 
+        int cur = 0;
+        for(int i=a; i<=b; i++){
+            int tmp = max(pre+nums[i],cur);
+            pre=cur;
+            cur=tmp;
+        }
+        return cur;
+    }
+};
