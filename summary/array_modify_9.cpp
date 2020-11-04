@@ -1,7 +1,7 @@
-/* sort array [4] bucket sort (0164) quick sort (0215) wiggle sort II (0324) largest number string (0179)
+/* sort array [4] (0164) bucket sort (0215) quick sort (0324) wiggle sort II (0179) largest number string 
                   partition (*) 3-way partition (*)
- * reverse array[4] reverse words in sentence (0151) reverse string (0344) reverse vowels (0345)
- * retate array [1] (0189)
+ * reverse array[2] (0344) reverse string (0345) reverse vowels 
+ * rotate array [1] (0189)
  * merge array [1] (0088)
  * shuffle array [1] (0384)
  */
@@ -16,7 +16,9 @@
             if(nums[i]<lb)lb=nums[i];
         }
         if(lb==ub)return 0;
+        // when value range is too narrow, take 1
         int wide = max((ub-lb)/(n-1),1);
+        // recalculate sz based on bin wide
         int sz = (ub-lb)/wide+1;
         vector<int>lbin(sz,INT_MAX);
         vector<int>ubin(sz,INT_MIN);
@@ -40,6 +42,7 @@
     }
     string largestNumber(vector<int>& nums) {
         sort(nums.begin(), nums.end(), my_cmp);
+        /** no string starting with zero **/
         if(nums.empty()||nums[0]==0)return string("0");
         string ans;
         for(auto x:nums)ans+=to_string(x);
@@ -48,20 +51,19 @@
 //Kth largest element (0215)
     // we need the partition function
     int findKthLargest(vector<int>& nums, int k) {
+        int n = nums.size();
         int left = 0, right = nums.size() - 1;
         while (true) {
             int idx = partition(nums, left, right);
-            if (idx == k - 1) {
-                kth = nums[idx];
+            if (idx == n-k) {
                 break;
-            }
-            if (idx < k - 1) {
+            }else if (idx < n-k) {
                 left = idx + 1;
             } else {
                 right = idx - 1;
             }
         }
-        return kth;
+        return nums[n-k];
     }
 //wiggle sort II (0324)
 void wiggleSort(vector<int>& nums) {
@@ -110,38 +112,6 @@ void partition3Way(vector<int>&arr, int l, int r, int& x, int&y) {
     swap(arr[j],arr[r]);
     x=i;y=j;
 }
-//reverse every word in a string (0151)
-    string reverseWords(string s) {
-        int n = s.size();
-        int i=0; 
-        int l = n; 
-        for(int j=0; j<n; j++){
-            s[i]=s[j];
-            if(s[j]==' '&&(j==0||s[j-1]==' '))l--;
-            else i++;
-        }
-        if(s[l-1]==' ')l--;
-        s.erase(l);
-        
-        int x=0; int y=l-1;
-        while(x<y){
-            swap(s[x],s[y]);
-            x++;y--;
-        }
-        
-        i=0;
-        for(int j=0; j<=l; j++){
-            if(s[j]==' '||j==l){
-                int x = i; int y=j-1;
-                while(x<y){
-                    swap(s[x],s[y]);
-                    x++;y--;
-                }
-                i=j+1;
-            }
-        }
-        return s;
-    }
 //reverse string (0344)
     void reverseString(vector<char>& s) {
         int L = s.size();
@@ -192,6 +162,15 @@ string reverseVowels(string s) {
             k--;
         }
     }  
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int i=m-1;
+        int j=n-1;
+        int p=m+n-1;
+        while(p>=0){
+            if(j<0||(i>=0&&nums1[i]>=nums2[j]))swap(nums1[i--],nums1[p--]);
+            else swap(nums2[j--],nums1[p--]);
+        }
+    }
 //shuffle array (0384)
     vector<int> shuffle() {
         vector<int>res=setx;
