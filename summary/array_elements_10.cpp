@@ -1,6 +1,6 @@
-/* remove elements[4] 
+/* remove elements[5] 
  * remove duplicates (0026) remove duplicates II (0080)
- * remove by value (0027) remove zeros (0283)
+ * remove by value (0027) remove zeros (0283) reverse words (0151)
  */
 //remove duplicate in sorted arrary (0026)
     int removeDuplicates(vector<int>& nums) {
@@ -44,6 +44,34 @@
         while(i<nums.size()){
             nums[i++]=0;
         }
+    }
+//reverse every word in a string (0151)
+    void str_reverse(string & s, int a, int b){
+        while(a<b){
+            swap(s[a++],s[b--]);
+        }
+    }
+    string reverseWords(string s) {
+        int n = s.size();
+        int i=0; 
+        int l = n; 
+        for(int j=0; j<n; j++){
+            s[i]=s[j];
+            if(s[j]==' '&&(i==0||s[i-1]==' '))l--;
+            else i++;
+        }
+        if(s[l-1]==' ')l--;
+        s.erase(l);
+        
+        str_reverse(s,0,l-1);
+        int x = 0;
+        for(int y=0; y<=l; y++){
+            if(y==l||s[y]==' '){
+                str_reverse(s,x,y-1);
+                x=y+1;
+            }
+        }
+        return s;
     }
 /* find elements [5]
  * missing positive (0041) (0268) (0287)
