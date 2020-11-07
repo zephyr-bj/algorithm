@@ -1,22 +1,22 @@
     vector<int> searchRange(vector<int>& nums, int target) {
+        int n = nums.size();
         vector<int>ans(2,-1);
-        int L=nums.size();
-        if(L==0)return ans;
-        int x=0; int y=L-1;
-        while(x<y){
-            int k=(x+y)>>1;
-            if(target-0.5>nums[k])x=k+1;
-            else y=k-1;
+        int a = 0; int b = n;
+        while(a<b){
+            int m = a+(b-a)/2;
+            if(nums[m]<target)a=m+1;
+            else b=m;
         }
-        if(nums[x]==target)ans[0]=x;
-        else if(x<L-1&&nums[x+1]==target)ans[0]=x+1;
-        x=0; y=L-1;
-        while(x<y){
-            int k=(x+y)>>1;
-            if(target+0.5>nums[k])x=k+1;
-            else y=k-1;
+        if(a>=n || nums[a] != target)return ans;
+        ans[0]=a;
+        
+        a = 0; b=n;
+        while(a<b){
+            int m = a+(b-a)/2;
+            if(nums[m]<=target)a=m+1;
+            else b=m;
         }
-        if(nums[x]==target)ans[1]=x;
-        else if(x>=1&&nums[x-1]==target)ans[1]=x-1;
+        ans[1]=a-1;
+
         return ans;
     }
