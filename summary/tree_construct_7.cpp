@@ -1,8 +1,11 @@
 /*
- *(5) string to tree
- *(1) list to tree
- *(1) string to tree
+ *array to tree [5]: (0095) build all unique trees by n elements II (0096) build all unique trees by n elements I
+                     (0105) build a tree by its pre-order and in-order traversal (0106) build a tree by its in-order and post-order traversal
+                     (0108) build a balanced BST by a sorted array
+ *list to tree  [1]: (0109) build a balanced BST by a sorted list
+ *string to tree[1]: serialize and de-serialize binary tree by pre-order traversal (0297)
  */
+
 // build all unique trees by n elements
     vector<TreeNode*> treeTool(int a, int b){
         vector<TreeNode*>res;
