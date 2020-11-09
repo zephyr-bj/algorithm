@@ -210,7 +210,7 @@ int mask2nz(int a){
 int add_no_arithm(int a, int b) {
 	if (b == 0) return a;
 	int sum = a ^ b; // add without carrying
-	int carry = (a & b) << 1; // carry, but don’t add
+	int carry = (a & b) << 1; // carry, but donâ€™t add
 	return add_no_arithm(sum, carry); // recurse
 }
 /*given a 32 bit number N and 2 numbers(A & B) that determine 2 different bit positions of N how do you make all the bits between A and B 
