@@ -1,7 +1,7 @@
-/* traversal: inorder(0094), preorder(0114), postorder(0115), level-order-zigzag(0103)
- * bst iterater (0173)
- * populate next right pointer (0116) (0117) 
- * valid serialization (0331)
+/* traversal[4]: (0094) (stack) inorder, (0103) (queue) level-order-zigzag, (0144) (stack) preorder, (0145) (stack) postorder
+ * bst iterater[1]: (0173) (stack)
+ * populate next right pointer[2]: (0116) complete (0117) non-complete 
+ * valid serialization [1]: (0331) (stack->integer)
  */
 // (0094) in-order traversal
     vector<int> inorderTraversal(TreeNode* root) {
@@ -159,20 +159,19 @@ public:
     }
 // (0331) valid serialization
     bool isValidSerialization(string preorder) {
-        stack<int>bin;
-        bin.push(INT_MIN);
-        int x = 0; int n = preorder.size();
-        for(int y=0; y<=n; y++){
-            if(y==n||preorder[y]==','){
-                string str=preorder.substr(x,y-x);
-                if(bin.empty())return false;
-                bin.pop();
-                if(str.compare("#")!=NULL){
-                    bin.push(atoi(str.c_str()));
-                    bin.push(atoi(str.c_str()));
+        int nodes = 1;//used to replace a stack
+        int i=0;
+        int n=preorder.size();
+        for(int j=0; j<=n; j++){
+            if(j==n || preorder[j]==','){
+                string ss = preorder.substr(i,j-i);
+                if(nodes<1)return false;
+                nodes--;
+                if(ss.compare("#")!=0){
+                    nodes+=2;
                 }
-                x=y+1;
+                i=j+1;
             }
         }
-        return bin.empty();
+        return nodes==0;
     }
