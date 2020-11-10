@@ -1,3 +1,10 @@
+/*
+ * path  [5]: (0112) find a root-to-leaf path that has a given node sum (0113) find all root-to-leaf path that has a given node sum 
+ *            (0124) find a node-to-node path which has the largest sum
+ *            (0129) calculate the sum of the root-to-leaf path numbers
+ *            (0257) find all root-to-leaf path
+ * depth [3]: post order: (0104) max depth (0110) balanced tree (0111) min depth
+ */
 // (0112) has path sum
     bool hasPathSum(TreeNode* root, int sum) {
         if(root==NULL)return false;
@@ -66,4 +73,44 @@
         vector<string>ans;
         BTPathsTool(root, "", ans);
         return ans;
+    }
+
+
+
+//  * max depth of a tree (0104) recursive post-order, with return value 
+    int maxDepth(TreeNode* root) {
+        if(root==NULL)return 0;
+        if(root->left==NULL&&root->right==NULL)return 1;
+        int l=maxDepth(root->left);
+        int r=maxDepth(root->right);
+        return 1+max(l,r);
+    }
+//  is balanced tree (0110) recursive post-order, with aditional parameter depth                                                                                                                                                                                                                                                                                                                                                                                                                                   
+    bool isBalanced(TreeNode* root) {
+        if(depth(root)==-1) return false;
+        return true;
+    }
+    int depth(TreeNode* node){
+        if(!node) return 0;
+        
+        int left = depth(node->left);
+        if(left==-1) return -1;
+        
+        int right = depth(node->right);
+        if(right==-1) return -1;
+        
+        int diff = abs(left - right);
+        if(diff>1) return -1;
+        
+        return max(left, right) + 1;
+    }
+//  * min depth of a tree (0111) recursive post-order, with return value
+   int minDepth(TreeNode* root) {
+        if(root==NULL)return 0;
+        int l = minDepth(root->left);
+        int r = minDepth(root->right);
+        if(l==0&&r==0)return 1;
+        else if(l==0)return r+1;
+        else if(r==0)return l+1;
+        else return 1+min(r,l);
     }
