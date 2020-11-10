@@ -1,8 +1,8 @@
 /* level-order traversal [3] (0102) level-order (0107) level-order-bottom-up (0199) right side view
  * in-order traversal [3] (0098) valid BST (0099) swapped BST (0230) k-th node in BST
  * pre-order traversal: two trees [2] (0100) same tree (0101) symmetric tree
+ *
  * pre-order, complete tree [1] (0222)
- * post-order, depth [3] (0104) max depth (0110) balanced tree (0111) min depth
  * post-order, tree LAC [2] (0235) LCA of BST (0236) LCA of BT
  * post-order, rob III [1] (0337)
  * modify a tree [2] (0114) flatten tree (0226) invert tree
@@ -21,21 +21,10 @@
         tool(root,ans,0);
         return ans;
     }
-//  * level order traversal bottom up (0107) BFS or recursive pre+post-order, with additional parameter depth
-    void tool(TreeNode * root, vector<vector<int>>&bin, int l){
-        if(root==NULL)return;
-        tool(root->left,bin,l+1);
-        while(bin.size()<l+1){
-            vector<int>tmp;
-            bin.push_back(tmp);
-        }
-        bin[l].push_back(root->val);
-        tool(root->right,bin,l+1);
-    }
+//  * level order traversal bottom up (0107) 
     vector<vector<int>> levelOrderBottom(TreeNode* root) {
         vector<vector<int>>bin;
-        int level=0;
-        tool(root, bin, level);
+        tool(root,ans,0);
         reverse(bin.begin(), bin.end());
         return ans;
     }
@@ -87,8 +76,9 @@
         TreeNode * second=NULL;
         recoverTreeTool(root,&pre,&first,&second);
         swap(first->val,second->val);
+    }
 //  * find the k-th smallest in BST (230) recursive in order
-   void trv(TreeNode * root, int & k, int &ans){
+    void trv(TreeNode * root, int & k, int &ans){
         if(root->left!=NULL)trv(root->left, k, ans);
         k--;
         if(k==0)ans=root->val;
@@ -135,43 +125,7 @@ bool isSymmetric(TreeNode* root) {
 
         return 1+countNodes(root->left)+countNodes(root->right);
     } 
-//  * max depth of a tree (0104) recursive post-order, with return value 
-    int maxDepth(TreeNode* root) {
-        if(root==NULL)return 0;
-        if(root->left==NULL&&root->right==NULL)return 1;
-        int l=maxDepth(root->left);
-        int r=maxDepth(root->right);
-        return 1+max(l,r);
-    }
-//  is balanced tree (0110) recursive post-order, with aditional parameter depth                                                                                                                                                                                                                                                                                                                                                                                                                                   
-    bool isBalanced(TreeNode* root) {
-        if(depth(root)==-1) return false;
-        return true;
-    }
-    int depth(TreeNode* node){
-        if(!node) return 0;
-        
-        int left = depth(node->left);
-        if(left==-1) return -1;
-        
-        int right = depth(node->right);
-        if(right==-1) return -1;
-        
-        int diff = abs(left - right);
-        if(diff>1) return -1;
-        
-        return max(left, right) + 1;
-    }
-//  * min depth of a tree (0111) recursive post-order, with return value
-   int minDepth(TreeNode* root) {
-        if(root==NULL)return 0;
-        int l = minDepth(root->left);
-        int r = minDepth(root->right);
-        if(l==0&&r==0)return 1;
-        else if(l==0)return r+1;
-        else if(r==0)return l+1;
-        else return 1+min(r,l);
-    }
+
 //  * lowest common ancestor of BST (0235) Binary search
    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {   
         TreeNode* node = root;
