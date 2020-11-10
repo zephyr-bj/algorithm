@@ -31,3 +31,47 @@ array_modify_11.cpp
  * merge array [1] (0088)
  * shuffle array [1] (0384)
  */
+search_binary_14.cpp
+/*search rotated sorted array [4]: (0033) search rotated sorted array (0081) search with duplicates (0153) search min rotated sorted array (0154) search min with duplicates
+ *search sorted array [3]: (0034) search range (0035) search inserted index (0074) search Matrix
+ *square root [2]: (0069) find square root (0367) check if a valid perfect square
+ *find peak [2]: (0162) find peak element (0852) find the peak index
+ *find median [1]: (0004) find median of two sorted array
+ *others [2]: (0275) find H Index II  (0278) find the first bad version
+ */
+search_linear_8.cpp
+/*sum [4]: (0015) three sum (0016) three summ closet (0018) four sum  (0167) two sum II, for sorted array
+ *water [2]:  (0011) container with most water (0042) trap rain water
+ *[1]:(0209) shortest subarray with sum larger than a number 
+ *[1]:(0240) search matrix II, each row sorted, and each collomn sorted
+ */ 
+tree_construct_7.cpp
+ /*array to tree [5]: (0095) build all unique trees by n elements II (0096) build all unique trees by n elements I
+                      (0105) build a tree by its pre-order and in-order traversal (0106) build a tree by its in-order and post-order traversal
+                      (0108) build a balanced BST by a sorted array
+  *list to tree  [1]: (0109) build a balanced BST by a sorted list
+  *string to tree[1]: serialize and de-serialize binary tree by pre-order traversal (0297)
+  */
+tree_iterative_8.cpp
+/* traversal[4]: (0094) (stack) inorder, (0103) (queue) level-order-zigzag, (0144) (stack) preorder, (0145) (stack) postorder
+ * bst iterater[1]: (0173) (stack)
+ * populate next right pointer[2]: (0116) complete (0117) non-complete 
+ * valid serialization [1]: (0331) (stack->integer)
+ */
+tree_path_depth_8.cpp
+/* path  [5]: (0112) find a root-to-leaf path that has a given node sum (0113) find all root-to-leaf path that has a given node sum 
+ *            (0124) find a node-to-node path which has the largest sum
+ *            (0129) calculate the sum of the root-to-leaf path numbers
+ *            (0257) find all root-to-leaf path
+ * depth [3]: post order: (0104) max depth (0110) balanced tree (0111) min depth
+ */
+tree_misc_14.cpp
+/* level-order traversal [3] (0102) level-order (0107) level-order-bottom-up (0199) right side view
+ * in-order traversal [3] (0098) valid BST (0099) swapped BST (0230) k-th node in BST
+ * pre-order traversal: two trees [2] (0100) same tree (0101) symmetric tree
+ *
+ * pre-order, complete tree [1] (0222)
+ * post-order, tree LAC [2] (0235) LCA of BST (0236) LCA of BT
+ * post-order, rob III [1] (0337)
+ * modify a tree [2] (0114) flatten tree (0226) invert tree
+ */
