@@ -4,20 +4,18 @@
 //But this kind of case is not going to happenm, since 1 and 3 will fall in the same bucket and return true, so we do not need 5
 
 // the "getBucketId" function deal with the negative cases. 
-bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
-    int n = nums.size();
-    if(n<2||k<1||t<0)return false;
-    long long w = (long long)(t)+1;
-    unordered_map<long long,int>bin;
-    for(int i=0; i<n; i++){
-        long long x = (long long)(nums[i]);
-        if(bin.find(x/w)!=bin.end()&&i-bin[x/w]<=k&&abs(x-nums[bin[x/w]])<=t)return true;
-        if(bin.find(x/w-1)!=bin.end()&&i-bin[x/w-1]<=k&&x-nums[bin[x/w-1]]<=t)return true;
-        if(bin.find(x/w+1)!=bin.end()&&i-bin[x/w+1]<=k&&nums[bin[x/w+1]]-x<=t)return true;
-        bin[x/w]=i;
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+        unordered_map<long,int>bin;
+        int n = nums.size();
+        for(int i=0; i<n; i++){
+            long key = t>0 ? (long)(nums[i])/((long)(t)) : (long)(nums[i]);
+            for(long j=-1; j<2; j++){
+                if(bin.find(key+j)!=bin.end() && i-bin[key+j]<=k && abs((long)(nums[i])-(long)(nums[bin[key+j]]))<=t)return true;
+            }
+            bin[key]=i;
+        }
+        return false;
     }
-    return false;
-}
 // set solution
 bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
     set<int> window; 
