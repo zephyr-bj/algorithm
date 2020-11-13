@@ -145,18 +145,6 @@ public:
         return root;
     }
     
-    //LCA of BST
-        TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {   
-        TreeNode* node = root;
-        while(node){
-            if(node->val > p->val && node->val > q->val)
-                node = node->left;
-            else if(node->val < p->val && node->val < q->val)
-                node = node->right;
-            else return node;
-        }
-        return NULL;
-    }
 // (0331) valid serialization
     bool isValidSerialization(string preorder) {
         int nodes = 1;//used to replace a stack
