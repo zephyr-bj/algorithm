@@ -38,12 +38,11 @@
 //(0035) search inserted index 
     int searchInsert(vector<int>& nums, int target) {
         int n = nums.size();
-        int a = 0; int b = n-1;
-        while(a<=b){
+        int a = 0; int b = n;
+        while(a<b){
             int m = a+(b-a)/2;
-            if(nums[m]==target)return m;  // still works without this
-            else if(nums[m]<target)a=m+1;
-            else b=m-1;
+            if(nums[m]<target)a=m+1;
+            else b=m;
         }
         return a;
     }
@@ -90,21 +89,7 @@
         }
         return false;
     }
-    
-    
-//(0033) search rotated sorted array 
-        int p = findMin(nums);
-        int n = nums.size();
-        int a = 0; int b = n-1;
-        while(a<=b){
-            int m = (a+b)/2;
-            int realm = ((a+b)/2+p)%n;
-            if(nums[realm]==target)return realm;
-            else if(nums[realm]>target)b=m-1;
-            else a = m+1;
-        }
-        return -1;
-    }
+
 //(0034) search range 
     vector<int> searchRange(vector<int>& nums, int target) {
         int n = nums.size();
