@@ -75,3 +75,21 @@ tree_misc_14.cpp
  * post-order, rob III [1] (0337)
  * modify a tree [2] (0114) flatten tree (0226) invert tree
  */
+hash_match_10.cpp 
+/*distribution match [2] (0030) Substring with Concatenation of All Words (0076) minimum window in S which will contain all the characters in T
+ *string match [2] (0049) Group Anagrams (0187) find all repeated DNA substring with 10 characters 
+ *gradient match [1] (0149) max points on a line 
+ *no match [5] (0242) is Anagram (0290) word pattern (0299) bulls and cows (0349) Intersection of Two Arrays (0350) Intersection of Two Arrays II
+ */
+hash_search_11.cpp
+/* search duplicates char[6], hash table as position record [the value is show up position]
+ * (0217)if contains duplicate (0219) contains nearby duplicate (0220) contains nearby almost duplicate 
+ * (0003)Longest Substring Without Repeating Characters 
+ * (0166)fraction to decimal 
+ * (0387)First Unique Character  
+ *
+ * hash table for O(1) search  [5]
+ * (0001)two sum  (0454)Four Sum II search four numbers sum to zero
+ * (0128)search longest Consecutive Sequence (0274)search the H index (not calculate)
+ * (0336)search all the Palindrome Pairs
+ */
