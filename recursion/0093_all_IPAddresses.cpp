@@ -1,20 +1,27 @@
-    void ipTool(vector<string>&ans, string&ip, int n, int p){
-        if(ip.size()==n+4){
-            string s=ip.substr(0,ip.size()-1);
-            ans.push_back(s);return;
+class Solution {
+private:
+    void getIP(string s, int p, vector<string>&jar, string & candy){
+        if(p==s.size() && s.size()+3 == candy.size()){
+            jar.push_back(candy);return;
         }
-        for(int i=0; i<3&&p+i<ip.size(); i++){
-            if(ip.size()==n+3&&p+i<n+2)continue;//if already inserted tree points
-            int num = atoi(ip.substr(p,i+1).c_str());
-            if((i==0)||(i==1&&num>9&&num<100)||(i==2&&num>99&&num<256)){
-                ip.insert(p+i+1,".");
-                ipTool(ans,ip,n,p+i+2);
-                ip.erase(p+i+1,1);
+        int l = candy.size();
+        for(int i=0; i<3 && p+i<s.size(); i++){
+            string sub = s.substr(p,i+1);
+            int x = stoi(sub);
+            if(i==0 || i==1 && x>9 && x<100 || i==2 && x>99 && x<256){
+                if(!candy.empty())candy+=".";
+                candy+=sub;
+                getIP(s,p+i+1,jar,candy);
+                candy.erase(l);
             }
         }
     }
+public:
     vector<string> restoreIpAddresses(string s) {
-        vector<string>ans;
-        ipTool(ans,s,s.size(),0);
-        return ans;
+        vector<string>jar;
+        if(s.size()>12)return jar;
+        string candy;
+        getIP(s,0,jar,candy);
+        return jar;
     }
+};
