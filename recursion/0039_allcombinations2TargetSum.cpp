@@ -1,23 +1,19 @@
-    void tool(vector<vector<int>>&ans, vector<int>&tmp, vector<int>&candidates, int p, int num, int target){
-        if(target==num){
-            ans.push_back(tmp);
+    void combSum(vector<vector<int>>&ans, vector<int>&cand, vector<int>&candidates, int k, int target){
+        if(target<0)return;
+        if(target==0){
+            ans.push_back(cand);
             return;
         }
-        if(p==candidates.size())return;
-        int i=0;
-        while(target>=num){
-            tool(ans,tmp,candidates,p+1,num,target);
-            i++;
-            num+=candidates[p];
-            tmp.push_back(candidates[p]);
-        }
-        while(i>0){
-            tmp.pop_back();i--;
+        for(int i=k; i<candidates.size(); i++){
+            cand.push_back(candidates[i]);
+            combSum(ans,cand,candidates,i,target-candidates[i]);
+            cand.pop_back();
         }
     }
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
         vector<vector<int>>ans;
-        vector<int>tmp;
-        tool(ans,tmp,candidates,0,0,target);
+        vector<int>cand;
+        combSum(ans,cand,candidates,0,target);
         return ans;
     }
