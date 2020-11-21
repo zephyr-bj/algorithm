@@ -93,3 +93,27 @@ hash_search_11.cpp
  * (0128)search longest Consecutive Sequence (0274)search the H index (not calculate)
  * (0336)search all the Palindrome Pairs
  */
+recurse_misc_3.cpp
+/* (0037)sudoku solver 
+ * (0087)check if string s is scramble string of string t 
+ * (0395)find longest substring with at least K repeating characters 
+ */
+recurse_collect_17.cpp
+/*find all possible solution:
+    math[7]
+    (0039)combination I (0040)combination II (0046)permutation I (0047)permutation II (0078)subset I  (0090)subset II
+    (0077)find all comobinations of k elements out of a set of n elements
+    queue[2]
+    (0051)find the number of solutions for the N-Queen problem (0052)find all solutions for the N-Queen problem 
+    expression[2]
+    *^(0241)find all different ways to add parentheses in an expressiong with '*', '+', '-' and integers 
+    *(0282)find all different ways to add '+', '-', '*' in a integer string, so the result expression calculates to be a target integer 
+    parentheses[2]
+    (0022)find all valid string with n pair of parentheses  O(2^N)
+    *(0301)find all different ways to remove invalid parentheses 
+    misc[4]
+    (0017)find all possible words from a phone number, O(3^N), N is the digit counts of the phone number
+    (0093)find all possible IP Address out of a string of digits 
+    (0131)find all possible palindrome partions of a string
+    *^(0140)find all string break ways, so that all words belongs to a provided word set
+ */  
