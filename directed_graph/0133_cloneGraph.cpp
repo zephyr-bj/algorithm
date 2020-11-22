@@ -15,18 +15,15 @@ public:
 */
 class Solution {
 public:
-    unordered_map<Node*,Node*>bin;
+    unordered_map<Node*,Node*>visited;
     Node* cloneGraph(Node* node) {
         if(node==NULL)return NULL;
-        if(bin.find(node)!=bin.end())return bin[node];
-        int n = node->neighbors.size();
-        vector<Node*>br(n,NULL);
-        Node * newnode = new Node(node->val, br);
-        bin[node]=newnode;
-
-        for(int i=0; i<n; i++){
-            if(node->neighbors[i]!=NULL)newnode->neighbors[i] = cloneGraph(node->neighbors[i]);
+        if(visited.find(node)!=visited.end())return visited[node];
+        Node* x = new Node(node->val);
+        visited[node]=x;
+        for(auto nn:node->neighbors){
+            x->neighbors.push_back(cloneGraph(nn));
         }
-        return newnode;
+        return x;
     }
 };
