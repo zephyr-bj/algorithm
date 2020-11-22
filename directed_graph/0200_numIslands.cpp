@@ -1,20 +1,22 @@
-    void dfs(vector<vector<char>>& grid, int n, int m, int x, int y){
-        grid[x][y]=0;
-        if(x>0&&grid[x-1][y]=='1')dfs(grid, n,m,x-1,y);
-        if(x<n-1&&grid[x+1][y]=='1')dfs(grid, n,m,x+1,y);
-        if(y>0&&grid[x][y-1]=='1')dfs(grid, n,m,x,y-1);
-        if(y<m-1&&grid[x][y+1]=='1')dfs(grid, n,m,x,y+1);   
+    void numIslands(vector<vector<char>>&grid, int i, int j, int n, int m){
+        if(i<0||j<0||i>=n||j>=m||grid[i][j]!='1')return;
+        grid[i][j]='*';
+        numIslands(grid,i-1,j,n,m);
+        numIslands(grid,i+1,j,n,m);
+        numIslands(grid,i,j-1,n,m);
+        numIslands(grid,i,j+1,n,m);
     }
     int numIslands(vector<vector<char>>& grid) {
-        int n=grid.size();
-        if(n==0)return 0;
-        int m=grid[0].size();
-        int ans=0;
+        int n = grid.size();
+        if(n<1)return 0;
+        int m = grid[0].size();
+        if(m<1)return 0;
+        int ans = 0;
         for(int i=0; i<n; i++){
             for(int j=0; j<m; j++){
-                if(grid[i][j]=='1'){//new island
+                if(grid[i][j]=='1'){
                     ans++;
-                    dfs(grid, n,m,i,j);
+                    numIslands(grid,i,j,n,m);
                 }
             }
         }
