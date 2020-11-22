@@ -1,24 +1,24 @@
-    bool dfs(vector<vector<char>>&board, int i, int j, int n, int m,
-             string &word, int k, int l){
-        if(k==l)return true;
+    bool findWord(vector<vector<char>>&board, int i, int j, int n, int m, string&word, int p){
+        if(p==word.size())return true;
+        if(i<0||j<0||i>=n||j>=m||board[i][j]!=word[p])return false;
         board[i][j]='*';
-        if(i>0&&board[i-1][j]==word[k]&&dfs(board,i-1,j,n,m,word,k+1,l))return true;
-        if(i<n-1&&board[i+1][j]==word[k]&&dfs(board,i+1,j,n,m,word,k+1,l))return true;
-        if(j>0&&board[i][j-1]==word[k]&&dfs(board,i,j-1,n,m,word,k+1,l))return true;
-        if(j<m-1&&board[i][j+1]==word[k]&&dfs(board,i,j+1,n,m,word,k+1,l))return true;
-        board[i][j]=word[k-1];
+        if(findWord(board,i-1,j,n,m,word,p+1))return true;
+        if(findWord(board,i+1,j,n,m,word,p+1))return true;
+        if(findWord(board,i,j-1,n,m,word,p+1))return true;
+        if(findWord(board,i,j+1,n,m,word,p+1))return true;
+        board[i][j]=word[p];
         return false;
     }
     bool exist(vector<vector<char>>& board, string word) {
-        int n=board.size();
+        int n = board.size();
         if(n<1)return false;
         int m = board[0].size();
         if(m<1)return false;
-        int l = word.size();
-        if(l<1)return false;
         for(int i=0; i<n; i++){
             for(int j=0; j<m; j++){
-                if(board[i][j]==word[0]&&dfs(board,i,j,n,m,word,1,l))return true;
+                if(board[i][j]==word[0]){
+                    if(findWord(board,i,j,n,m,word,0))return true;
+                }
             }
         }
         return false;
