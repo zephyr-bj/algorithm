@@ -1,17 +1,13 @@
 /* DFS */
-    unordered_map<Node*,Node*>bin;
+    unordered_map<Node*,Node*>visited;
     Node* copyRandomList(Node* head) {
         if(head==NULL)return NULL;
-        Node * res=NULL;
-        if(bin.find(head)==bin.end()){
-            res = new Node(head->val, NULL, NULL);
-            bin[head]=res;
-        }else{
-            return bin[head];
-        }
-        if(head->next!=NULL)res->next=copyRandomList(head->next);
-        if(head->random!=NULL)res->random=copyRandomList(head->random);
-        return res;
+        if(visited.find(head)!=visited.end())return visited[head];
+        Node * nn = new Node(head->val);
+        visited[head]=nn;
+        nn->next = copyRandomList(head->next);
+        nn->random = copyRandomList(head->random);
+        return nn;
     }
 /* faster, and less memory */
     unordered_map<Node*, Node*>proj;
