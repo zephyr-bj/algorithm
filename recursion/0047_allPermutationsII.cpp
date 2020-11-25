@@ -1,4 +1,24 @@
-    //method 1: DFS, use visted array, NO pass by value, NO local visited bin. 
+//method 0: 
+    void perm(vector<int>&nums, int p, vector<vector<int>>&ans){
+        if(p==nums.size()-1){
+            ans.push_back(nums); return;
+        }
+        for(int i=p; i<nums.size(); i++){
+            if(i>p && nums[i] == nums[p])continue;
+            swap(nums[p],nums[i]);
+            perm(nums,p+1,ans);
+        }
+        for(int i=nums.size()-1; i>=p; i--){
+            swap(nums[p],nums[i]);
+        }
+    }
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int>>ans;
+        perm(nums,0,ans);
+        return ans;
+    }
+//method 2: DFS, use visted array, NO pass by value, NO local visited bin. 
     vector<vector<int>> permuteUnique(vector<int>& nums) {
         sort(nums.begin(), nums.end());
         vector<vector<int>>jar;
@@ -27,7 +47,7 @@
     }
 
 
-    //method 1: always keep the order, pass vector by values
+    //method 3: always keep the order, pass vector by values
     void PMTool(vector<int> nums, int p, vector<vector<int>>&ans){
         if(p==nums.size()-1){
             ans.push_back(nums); return;
@@ -45,7 +65,7 @@
         return ans;
     }
 
-    //method 2: do not keep order, only swap unswapped elements, pass vector by reference
+    //method 4: do not keep order, only swap unswapped elements, pass vector by reference
     void PMTool2(vector<int> &nums, int p, vector<vector<int>>&ans){
         if(p==nums.size()-1){
             ans.push_back(nums); return;
