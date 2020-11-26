@@ -81,28 +81,24 @@
         return ans;
     }
 //(0047) find all permutations of a set of number, duplicate elements in set
-   vector<vector<int>> permuteUnique(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        vector<vector<int>>jar;
-        vector<int>candy;
-        vector<int>visited(nums.size(),0);
-        PMTool(nums,visited,candy,jar);
-        return jar;
+    void perm(vector<int>&nums, int p, vector<vector<int>>&ans){
+        if(p==nums.size()-1){
+            ans.push_back(nums); return;
+        }
+        for(int i=p; i<nums.size(); i++){
+            if(i>p && nums[i] == nums[p])continue;
+            swap(nums[p],nums[i]);
+            perm(nums,p+1,ans);
+        }
+        for(int i=nums.size()-1; i>=p; i--){
+            swap(nums[p],nums[i]);
+        }
     }
-    void PMTool(vector<int>&nums, vector<int>&visited, vector<int>&candy, vector<vector<int>>&jar){
-        int n = nums.size();
-        if(candy.size()==n){
-            jar.push_back(candy);
-            return;
-        }
-        for(int i=0; i<n; i++){
-            if(i>0&&nums[i]==nums[i-1]&&(!visited[i-1]))continue;
-            visited[i]=1;
-            candy.push_back(nums[i]);
-            PMTool(nums,visited,candy,jar);
-            candy.pop_back();
-            visited[i]=0;
-        }
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int>>ans;
+        perm(nums,0,ans);
+        return ans;
     }
 //(0078)find all subsets of a set of n distinct integers 
    void SSTool(int p, int n, vector<int>&nums, vector<int>&path, vector<vector<int>>&ans){
