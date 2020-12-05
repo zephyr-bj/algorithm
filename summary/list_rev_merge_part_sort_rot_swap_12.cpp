@@ -253,18 +253,20 @@ ListNode* insertionSortList(ListNode* head) {
 
 // (0061) rotate right
     ListNode* rotateRight(ListNode* head, int k) {
-        if(k==0)return head;
+        if(k==0||head==NULL||head->next==NULL)return head;
         ListNode * p = head;
-        ListNode * q = head;
-        int t = k;
-        while(p!=NULL&&p->next!=NULL){
-            if(t<=0)q=q->next;
+        int sz = 1;
+        while(p->next!=NULL){
             p=p->next;
-            t--;
+            sz++;
         }
-        if(t>0)return rotateRight(head,k%(k-t+1));
-        ListNode * newhead = q->next;
-        q->next=NULL;
+        k=k%sz;
+        if(k==0)return head;
+        
         p->next = head;
-        return newhead;
+        for(int i=0; i<sz-k; i++)p=p->next;
+        ListNode *rotHead = p->next;
+        p->next=NULL;
+
+        return rotHead;
     }
