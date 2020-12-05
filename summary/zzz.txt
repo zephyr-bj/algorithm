@@ -117,3 +117,30 @@ recurse_collect_17.cpp
     (0131)find all possible palindrome partions of a string
     *^(0140)find all string break ways, so that all words belongs to a provided word set
  */  
+ graph_11.cpp
+ /*
+ *DFS
+ *(0133) clone graph (0138) copy random list (0332) reconstruct itinerary
+ *DFS in matrix 
+ *(0079)word search in matrix
+ *(0130)surrounded regions in matrix 
+ *(0200)number of isolated islands in matrix 
+ *(0329)longest increasing integer path in matrix
+ *BFS
+ *(0126)word ladder II (0127)word ladder length
+ *(0207) course schedule (0210)course schedule II 
+ */
+list_rev_merge_part_sort_rot_swap_12.cpp 
+// reverse : (0025) reverse K group (0092) reverse list between (0206) reverse List
+// merge : (0021) merge 2 lists (0023) merge K lists
+// partition : (0328) Odd Even List (0086) partition List
+//             (0143) reorder List : partition + reverse + merge
+// sort : (0147) insertion sort (0148) merge sort
+// (0061) rotate right
+// (0024) swap pairs
+list_rm_loop_ints_palin_9.cpp
+// remove : (0019) remove n-th node from End (0203) remove nodes by value (0237) delete node by pointer
+//          (0082) delete duplicate II (0083) delete duplicate
+// loop : (0141) cycle test (0142) find cycle entry node
+// (0160) intersection of two lists
+// (0234) is Palindrome List
