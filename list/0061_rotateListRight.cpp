@@ -1,22 +1,16 @@
-   ListNode* rotateRight(ListNode* head, int k) {
-        if(!head) return head;
-        
-        int len=1; // number of nodes
-        ListNode *newH, *tail;
-        newH=tail=head;
-        
-        while(tail->next)  // get the number of nodes in the list
-        {
-            tail = tail->next;
-            len++;
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(k==0)return head;
+        ListNode * p = head;
+        ListNode * q = head;
+        int t = k;
+        while(p!=NULL&&p->next!=NULL){
+            if(t<=0)q=q->next;
+            p=p->next;
+            t--;
         }
-        tail->next = head; // circle the link
-
-        if(k %= len) 
-        {
-            for(auto i=0; i<len-k; i++) tail = tail->next; // the tail node is the (len-k)-th node (1st node is head)
-        }
-        newH = tail->next; 
-        tail->next = NULL;
-        return newH;
+        if(t>0)return rotateRight(head,k%(k-t+1));
+        ListNode * newhead = q->next;
+        q->next=NULL;
+        p->next = head;
+        return newhead;
     }
