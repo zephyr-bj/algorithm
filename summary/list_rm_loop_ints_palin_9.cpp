@@ -7,22 +7,25 @@
 /* remove node */    
 // (0019) remove n-th node from End
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        if(head==NULL)return NULL;
-        ListNode dummy(0);
-        dummy.next=head;
-        ListNode * p1 = head;
-        ListNode * p2 = &dummy;
-        while(p1!=NULL){
-            if(n<=0)p2=p2->next;
-            p1=p1->next;
-            n--;
+        ListNode dumb(0);
+        dumb.next=head;
+        ListNode * fast = &dumb;
+        ListNode * slow = &dumb;
+        
+        for(int i=0; i<n; i++)
+            if(fast!=NULL)fast = fast->next;
+        if(fast==NULL)return head;
+        
+        while(fast->next!=NULL){
+            fast=fast->next;
+            slow=slow->next;
         }
-        if(n<=0){
-            ListNode * tmp = p2->next;
-            p2->next=p2->next->next;
-            delete tmp;
-        }
-        return dummy.next;
+        
+        ListNode * tmp=slow->next;
+        slow->next=slow->next->next;
+        delete tmp;
+        
+        return dumb.next;
     }
 // (0203) remove nodes by value
     ListNode* removeElements(ListNode* head, int val) {
