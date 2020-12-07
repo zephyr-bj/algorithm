@@ -2,6 +2,7 @@
  * Single-Number.cpp
  *
  *  Created on: May 9, 2017
+ *  Updated on: Dec 6, 2020
  *      Author: Zephyr
  */
 #include<vector>
