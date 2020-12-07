@@ -1,3 +1,13 @@
+arithmetic_13.cpp
+/* reverse integer [2] : (0007) reverse integer (0009) palindrome number
+ * add integers [3] : (0067) add binary (0066) Plus One (0371) add integers
+ * divide integers [1] :  (0027) divide two integers
+ * multiply strings [1] : (0043) multiply strings
+ * power of double [1] : (0050) power of double float
+ * roman [2] : (0012) integer to Roman (0013) Roman to Integer
+ * single number [2] : (0136) single number (0137) single number ii
+ * bezout's identity [1] : (0365) the water jug problem
+ */
 dp_matrix_7.cpp
 /* matrix area [3] (0085*) rectangle area (0221) square area (0363*) sub matrix sum
  * matrix paths [4] unique paths (0062) unique paths with obstacles (0063) min path sum (0064)  dungeon game (0174) 
