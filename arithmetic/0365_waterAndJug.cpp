@@ -5,10 +5,12 @@ public:
     }
 private:
     int gcd(int x, int y) {
-        if (x < y) {
-            return gcd(y, x);
+        while(y!=0){
+            int r = x%y;
+            x = y;
+            y = r;
         }
-        return y == 0 ? x : gcd(y, x % y);
+        return x;
     }
 };
 
