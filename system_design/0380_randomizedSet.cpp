@@ -3,43 +3,33 @@ public:
     /** Initialize your data structure here. */
     unordered_map<int,int>setr;
     vector<int>vr;
-    int n;
     RandomizedSet() {
-        n=0;
     }
     
     /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
     bool insert(int val) {
-        if(setr.find(val)==setr.end()){
-            setr[val]=n;
-            vr.push_back(val);
-            n++;
-            return true;
-        }
-        return false;
+        if(setr.find(val)!=setr.end())return false;
+        setr[val]=vr.size();
+        vr.push_back(val);
+        return true;
     }
     
     /** Removes a value from the set. Returns true if the set contained the specified element. */
     bool remove(int val) {
-        if(setr.find(val)!=setr.end()){
-            n--;
-            if(setr[val]==n){
-                vr.pop_back();
-                setr.erase(val);
-            }else{
-                vr[setr[val]]=vr[n];
-                setr[vr[n]]=setr[val];
-                vr.pop_back();
-                setr.erase(val);
-            }
-            return true;
+        if(setr.find(val)==setr.end())return false;
+        int idx = vr.size()-1;
+        if(setr[val]!=idx){
+            vr[setr[val]]=vr[idx];
+            setr[vr[idx]]=setr[val];
         }
-        return false;
+        vr.pop_back();
+        setr.erase(val);
+        return true;
     }
     
     /** Get a random element from the set. */
     int getRandom() {
-        int x = rand() % n;
+        int x = rand() % vr.size();
         return vr[x];
     }
 };
