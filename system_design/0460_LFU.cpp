@@ -1,4 +1,17 @@
 class LFUCache {
+    /*
+     * 1 frequency lists table; 1 dict from key to value-freq pair ; 1 dict from key to list pointer
+     * get 1: remove from the old freq list 
+     *     2: increase the key frequency
+     *     3: push in the new freq list
+     *     4: save the pointer to the new freq list
+     *     5: increase the minFreq if the current minFreq list empty
+     * put 1: call get
+     *     2: reset the value if key found
+     *     3: in case not found and overflow, remove one key from the minFreq list
+     *     4: in case not found, save the new value, push to freq=1 list, save the pointer
+     *     5: minFreq = 1; increase size. 
+    */
     int cap;
     int size;
     int minFreq;
