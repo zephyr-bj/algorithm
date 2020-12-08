@@ -126,10 +126,14 @@ recurse_collect_17.cpp
     (0093)find all possible IP Address out of a string of digits 
     (0131)find all possible palindrome partions of a string
     *^(0140)find all string break ways, so that all words belongs to a provided word set
- */  
- graph_11.cpp
- /*
- *DFS
+ */
+ordered_set_map_5.cpp
+/* lower bound [4] : (0300) LIS; (0354) LIS: russian doll envelopes 
+ *                   (0352) data stream to disjoint intervals VS (0128) LCS; (0327) count the ranges, whose element sum is within [lb, ub]
+ * application to use the top elements (rbegin()) [1] : (0218) skyline problem 
+ */
+graph_11.cpp
+/*DFS
  *(0133) clone graph (0138) copy random list (0332) reconstruct itinerary
  *DFS in matrix 
  *(0079)word search in matrix
@@ -157,4 +161,9 @@ list_rm_loop_ints_palin_9.cpp
 concurrency_5.cpp
 /* print in order [4] : (1114) print in order (1115) print alternatively (1116) print zero even odd (1195) print fizz buzz
  * group action [1] : (1117) build H2O
+ */
+system_design_5.cpp
+/* cache [2] : (0146) LRU cache (0460) LFU cache
+ * radomized set [2] : (0380) randomized set (0381) randomized collection
+ * tweeter [1] : (0355) tweeter
  */
