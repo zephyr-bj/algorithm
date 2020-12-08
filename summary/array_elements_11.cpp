@@ -1,6 +1,10 @@
 /* remove elements[5] 
  * remove duplicates (0026) remove duplicates II (0080)
  * remove by value (0027) remove zeros (0283) reverse words (0151)
+ * find elements [5]
+ * missing positive (0041) (0268) (0287)
+ * find majority (0169) (0229)
+ * super ugly number [1] : (0313) super ugly number 
  */
 //remove duplicate in sorted arrary (0026)
     int removeDuplicates(vector<int>& nums) {
@@ -73,10 +77,7 @@
         }
         return s;
     }
-/* find elements [5]
- * missing positive (0041) (0268) (0287)
- * find majority (0169) (0229)
- */
+
 //find first missing positive in a unsorted array (0041)
    int firstMissingPositive(vector<int>& nums) {
         int n = nums.size();
@@ -151,4 +152,30 @@
         if(cnt1>nums.size()/3)ans.push_back(a);
         if(cnt2>nums.size()/3)ans.push_back(b);
         return ans;
+    }
+
+// (0313) super ugly number
+    int nthSuperUglyNumber(int n, vector<int>& primes) {
+        int k = primes.size();
+        if(n<1||k<1)return 0;
+        if(n==1)return 1;
+        vector<int>index(k,0);
+        vector<int>result(1,1);
+        while(result.size()<n){
+            int tmp = INT_MAX;
+            int idx = -1;
+            for(int i=0; i<k; i++){
+                int x = primes[i]*result[index[i]];
+                if(tmp>x){
+                    idx = i; 
+                    tmp=x;
+                }
+            }
+            index[idx]+=1;
+            result.push_back(tmp);
+            for(int i=idx+1; i<k; i++){
+                if(tmp==primes[i]*result[index[i]])index[i]+=1;
+            }
+        }
+        return result[n-1];
     }
