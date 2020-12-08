@@ -1,3 +1,12 @@
+/* 1 list of key and value pairs; 1 dict from key to list pointer
+ * get: 1. push the fetched pair to list head
+ *      2. remove the existing fetched pair
+ *      3. update the list pointer
+ * put: 1. remove the existing fetched pair
+ *      2. push the a new pair to list head
+ *      3. update the list pointer
+ *      4. if size overflow, pop the list end
+ */
 class LRUCache {
 public:
     list<pair<int,int>>cache;
