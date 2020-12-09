@@ -1,18 +1,13 @@
-    int jump(vector<int>& nums) {
-        int n = nums.size();
-        int i = 0;
-        int ans=0;
-        while(i<n-1){
-            int x=0;
-            int s=0;
-            if(i+nums[i]>=n-1)return ans+1;
-            for(int t=1; i+t<n&&t<=nums[i]; t++){
-                if(t+nums[i+t]>s){
-                    s=t+nums[i+t];x=t;
-                }
+    int jumpII(vector<int>& nums) {
+        int steps = 0;
+        int near = 0;
+        int far = 0;
+        for (int i = 0; i < nums.size(); ++i) {
+            if (i > near) {
+                ++steps;
+                near = far;
             }
-            ans++;
-            i+=x;
+            far = max(far, i + nums[i]);      
         }
-        return ans;
+        return steps;
     }
