@@ -25,6 +25,15 @@ dp_misc_8.cpp
  * O(n) depending[2]: (0343) max product from integer break  (0368) max (largest) divisible subset
  * O(nn) depending[2]: (0132) min cut to form palindrome substring (0312) max score by burst bulloons
  */
+greey_7.cpp
+/*Jump GameII(0045)
+ *Jump Game  (0055) greedy choice, the position with current longest reach
+ *Gas Station(0134) greedy choice, the position with current positive gas volume
+ *Candy      (0135) greedy choice, 
+ *Rm Dup Letters (0316) greedy choice, the position with current min value, which satisfy the length requirement
+ *Create Max Num (0321) greedy choice, the position with current max digit, which satisfy the length requirement
+ *Paching Array  (0330) gready choice, insert
+ */
 array_elements_9.cpp
 /* remove elements[4]: 
  * (0026) remove duplicates (0080) remove duplicates II 
@@ -85,6 +94,14 @@ tree_misc_14.cpp
  * post-order, rob III [1] (0337)
  * modify a tree [2] (0114) flatten tree (0226) invert tree
  */
+segment_tree_1.cpp
+/* (0307) range sum query
+ */
+trie_3.cpp
+/*(0208) basic trie with addSTR and searchSTR
+ *(0211) trie with RE search 
+ *(0212) Matrix word search with Trie 
+ */
 hash_match_10.cpp 
 /*distribution match [2] (0030) Substring with Concatenation of All Words (0076) minimum window in S which will contain all the characters in T
  *string match [2] (0049) Group Anagrams (0187) find all repeated DNA substring with 10 characters 
@@ -132,6 +149,11 @@ ordered_set_map_5.cpp
  *                   (0352) data stream to disjoint intervals VS (0128) LCS; (0327) count the ranges, whose element sum is within [lb, ub]
  * application to use the top elements (rbegin()) [1] : (0218) skyline problem 
  */
+heap_3.cpp
+/* (0378) find kth smallest in sorted matrix
+ * (0347) find top k frequent element
+ * (0295) find the median of data stream
+ */
 graph_11.cpp
 /*DFS
  *(0133) clone graph (0138) copy random list (0332) reconstruct itinerary
@@ -143,6 +165,13 @@ graph_11.cpp
  *BFS
  *(0126)word ladder II (0127)word ladder length
  *(0207) course schedule (0210)course schedule II 
+ */
+stack_10.cpp
+/* increasing/decreasing stack [3] : (0239) sliding window maximum (0155) min stack (0084) largest rectangle histogram
+ * modeled as a stack [5] : (0071) simplify directery path 
+ *                          (0032) longest valid parentheses (0020) is valid parentheses 
+ *                          (0224) calculator with "numbers, '+', '-', '(', ')'" (0227) calculator II with "numbers, '+', "-', '*', '/'" 
+ * stack and queue [2] : (0225) implement a stack by queues (0232) implement a queue by stacks 
  */
 list_rev_merge_part_sort_rot_swap_12.cpp 
 // reverse : (0025) reverse K group (0092) reverse list between (0206) reverse List
