@@ -1,6 +1,6 @@
 /* increasing/decreasing stack [3] : (0239) sliding window maximum (0155) min stack (0084) largest rectangle histogram
  * modeled as a stack [5] : (0071) simplify directery path 
- *                          (0032) longest valid parentheses (0020) is valid parentheses 
+ *                          (0032) longest valid parentheses (0020) is valid parentheses (1190) Reverse Substrings Between Each Pair of Parentheses
  *                          (0224) calculator with "numbers, '+', '-', '(', ')'" (0227) calculator II with "numbers, '+', "-', '*', '/'" 
  * stack and queue [2] : (0225) implement a stack by queues (0232) implement a queue by stacks 
  */
@@ -127,6 +127,25 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k) {
             }
         }
         return left.empty();
+    }
+//(1190) Reverse Substrings Between Each Pair of Parentheses
+    string reverseParentheses(string s) {
+        stack<int>left;
+        int n = s.size();
+        for(int i=0; i<n; i++){
+            if(s[i]=='('){
+                left.push(i);
+            }else if(s[i]==')'){
+                int x = left.top();
+                left.pop();
+                reverse(s.begin()+x,s.begin()+i);
+            }
+        }
+        string ans;
+        for(auto x:s){
+            if(x!='('&&x!=')')ans.push_back(x);
+        }
+        return ans;
     }
 //(0224) calculator with "numbers, '+', '-', '(', ')'" 
     int calculate(string s) {
