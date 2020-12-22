@@ -1,3 +1,6 @@
+/************************************************************************************************************************************************************************/ 
+/*misc [1]***************************************************************************************************************************************************************/
+/************************************************************************************************************************************************************************/ 
 arithmetic_13.cpp
 /* reverse integer [2] : (0007) reverse integer (0009) palindrome number
  * add integers [3] : (0067) add binary (0066) Plus One (0371) add integers
@@ -9,7 +12,49 @@ arithmetic_13.cpp
  * bezout's identity [1] : (0365) the water jug problem
  */
 /************************************************************************************************************************************************************************/ 
-/*algorithm 3************************************************************************************************************************************************************/
+/*linear data structures/sequence container [3]:2+1+2=5******************************************************************************************************************/
+/************************************************************************************************************************************************************************/ 
+array_elements_9.cpp
+/* remove elements[4]: 
+ * (0026) remove duplicates (0080) remove duplicates II 
+ * (0027) remove by value (0283) remove zeros 
+ * find elements [5]:
+ * missing positive (0041) first missing positive in a unsorted array (0268) the missing number from range [0,n] (0287) the duplicate number from range [1,n-1]
+ * find majority (0169) majority element : more than 1/2 (0229) majority element : more than 1/3
+ */
+array_modify_11.cpp 
+/* sort array [4] (0164) bucket sort (0215) quick sort (0324) wiggle sort II (0179) largest number string 
+                  partition (*) 3-way partition (*)
+ * reverse array[4] (0151) reverse words in sentence (0344) reverse string (0345) reverse vowels
+ * retate array [1] (0189)
+ * merge array [1] (0088)
+ * shuffle array [1] (0384)
+ */
+ stack_10.cpp
+/* increasing/decreasing stack [3] : (0239) sliding window maximum (0155) min stack (0084) largest rectangle histogram
+ * modeled as a stack [5] : (0071) simplify directery path 
+ *                          (0032) longest valid parentheses (0020) is valid parentheses 
+ *                          (0224) calculator with "numbers, '+', '-', '(', ')'" (0227) calculator II with "numbers, '+', "-', '*', '/'" 
+ * stack and queue [2] : (0225) implement a stack by queues (0232) implement a queue by stacks 
+ */
+list_rev_merge_part_sort_rot_swap_12.cpp 
+/* reverse : (0025) reverse K group (0092) reverse list between (0206) reverse List
+ * merge : (0021) merge 2 lists (0023) merge K lists
+ * partition : (0328) Odd Even List (0086) partition List
+ *             (0143) reorder List : partition + reverse + merge
+ * sort : (0147) insertion sort (0148) merge sort
+ * (0061) rotate right
+/* (0024) swap pairs
+*/
+list_rm_loop_ints_palin_9.cpp
+/* remove : (0019) remove n-th node from End (0203) remove nodes by value (0237) delete node by pointer
+ *          (0082) delete duplicate II (0083) delete duplicate
+ * loop : (0141) cycle test (0142) find cycle entry node
+ * (0160) intersection of two lists
+/* (0234) is Palindrome List
+*/
+/************************************************************************************************************************************************************************/ 
+/*algorithm [4]:4+1+2+2=9************************************************************************************************************************************************/
 /************************************************************************************************************************************************************************/ 
 dp_matrix_7.cpp
 /* matrix area [3] (0085*) rectangle area (0221) square area (0363*) sub matrix sum
@@ -61,26 +106,7 @@ recurse_collect_17.cpp
     (0131)find all possible palindrome partions of a string
     *^(0140)find all string break ways, so that all words belongs to a provided word set
  */ 
-/************************************************************************************************************************************************************************/ 
-/*linear data structures 3***********************************************************************************************************************************************/
-/************************************************************************************************************************************************************************/ 
-array_elements_9.cpp
-/* remove elements[4]: 
- * (0026) remove duplicates (0080) remove duplicates II 
- * (0027) remove by value (0283) remove zeros 
- * find elements [5]:
- * missing positive (0041) first missing positive in a unsorted array (0268) the missing number from range [0,n] (0287) the duplicate number from range [1,n-1]
- * find majority (0169) majority element : more than 1/2 (0229) majority element : more than 1/3
- */
-array_modify_11.cpp 
-/* sort array [4] (0164) bucket sort (0215) quick sort (0324) wiggle sort II (0179) largest number string 
-                  partition (*) 3-way partition (*)
- * reverse array[4] (0151) reverse words in sentence (0344) reverse string (0345) reverse vowels
- * retate array [1] (0189)
- * merge array [1] (0088)
- * shuffle array [1] (0384)
- */
-search_binary_14.cpp
+ search_binary_14.cpp
 /*search rotated sorted array [4]: (0033) search rotated sorted array (0081) search with duplicates (0153) search min rotated sorted array (0154) search min with duplicates
  *search sorted array [3]: (0034) search range (0035) search inserted index (0074) search Matrix
  *square root [2]: (0069) find square root (0367) check if a valid perfect square
@@ -94,29 +120,8 @@ search_linear_8.cpp
  *[1]:(0209) shortest subarray with sum larger than a number 
  *[1]:(0240) search matrix II, each row sorted, and each collomn sorted
  */ 
- stack_10.cpp
-/* increasing/decreasing stack [3] : (0239) sliding window maximum (0155) min stack (0084) largest rectangle histogram
- * modeled as a stack [5] : (0071) simplify directery path 
- *                          (0032) longest valid parentheses (0020) is valid parentheses 
- *                          (0224) calculator with "numbers, '+', '-', '(', ')'" (0227) calculator II with "numbers, '+', "-', '*', '/'" 
- * stack and queue [2] : (0225) implement a stack by queues (0232) implement a queue by stacks 
- */
-list_rev_merge_part_sort_rot_swap_12.cpp 
-// reverse : (0025) reverse K group (0092) reverse list between (0206) reverse List
-// merge : (0021) merge 2 lists (0023) merge K lists
-// partition : (0328) Odd Even List (0086) partition List
-//             (0143) reorder List : partition + reverse + merge
-// sort : (0147) insertion sort (0148) merge sort
-// (0061) rotate right
-// (0024) swap pairs
-list_rm_loop_ints_palin_9.cpp
-// remove : (0019) remove n-th node from End (0203) remove nodes by value (0237) delete node by pointer
-//          (0082) delete duplicate II (0083) delete duplicate
-// loop : (0141) cycle test (0142) find cycle entry node
-// (0160) intersection of two lists
-// (0234) is Palindrome List
 /************************************************************************************************************************************************************************/ 
-/*nonlinear data structures 7 *******************************************************************************************************************************************/
+/*nonlinear data structures/associative container [7]:4+1+1+1+1+1+2=11***************************************************************************************************/
 /************************************************************************************************************************************************************************/ 
 tree_construct_7.cpp
  /*array to tree [5]: (0095) build all unique trees by n elements II (0096) build all unique trees by n elements I
@@ -166,7 +171,19 @@ heap_3.cpp
  * (0347) find top k frequent element
  * (0295) find the median of data stream
  */
-hash_match_10.cpp 
+graph_11.cpp
+/*DFS
+ *(0133) clone graph (0138) copy random list (0332) reconstruct itinerary
+ *DFS in matrix 
+ *(0079)word search in matrix
+ *(0130)surrounded regions in matrix 
+ *(0200)number of isolated islands in matrix 
+ *(0329)longest increasing integer path in matrix
+ *BFS
+ *(0126)word ladder II (0127)word ladder length
+ *(0207) course schedule (0210)course schedule II 
+ */
+ hash_match_10.cpp 
 /*distribution match [2] (0030) Substring with Concatenation of All Words (0076) minimum window in S which will contain all the characters in T
  *string match [2] (0049) Group Anagrams (0187) find all repeated DNA substring with 10 characters 
  *gradient match [1] (0149) max points on a line 
@@ -184,24 +201,14 @@ hash_search_11.cpp
  * (0128)search longest Consecutive Sequence (0274)search the H index (not calculate)
  * (0336)search all the Palindrome Pairs
  */
-graph_11.cpp
-/*DFS
- *(0133) clone graph (0138) copy random list (0332) reconstruct itinerary
- *DFS in matrix 
- *(0079)word search in matrix
- *(0130)surrounded regions in matrix 
- *(0200)number of isolated islands in matrix 
- *(0329)longest increasing integer path in matrix
- *BFS
- *(0126)word ladder II (0127)word ladder length
- *(0207) course schedule (0210)course schedule II 
- */
 /************************************************************************************************************************************************************************/ 
-/*design 3***************************************************************************************************************************************************************/
+/*design [2]:1+1=2*******************************************************************************************************************************************************/
 /************************************************************************************************************************************************************************/ 
 concurrency_5.cpp
 /* print in order [4] : (1114) print in order (1115) print alternatively (1116) print zero even odd (1195) print fizz buzz
  * group action [1] : (1117) build H2O
+ * interrupt based synchoronous read
+ * thread pool
  */
 system_design_5.cpp
 /* cache [2] : (0146) LRU cache (0460) LFU cache
