@@ -67,21 +67,34 @@
     }
 //wiggle sort II (0324)
 void wiggleSort(vector<int>& nums) {
-    # define A(i) nums[((1+i*2)%(n|1))]
-    auto midptr = nums.begin() + n / 2;
-    nth_element(nums.begin(), midptr, nums.end());
-    int pivot = *midptr;
-    int i=0; int j=0; int k=n-1;
-    while(j<=k){
-        if(A(j)<pivot){
-            swap(A(j),A(k--));
-        }else if(A(j)>pivot){
-            swap(A(j++),A(i++));
-        }else{
-            j++;
+    sort(nums.begin(), nums.end());
+    int n = nums.size();
+    int j = (n + 1) / 2, k = n;
+    vector<int> cp(nums);
+    for (int i = 0; i < n; ++i) {
+        if (i % 2 == 0) {
+            nums[i] = cp[--j];
+        } else {
+            nums[i] = cp[--k];
         }
     }
 }
+    void wiggleSort(vector<int>& nums) {
+        #define idx(j) (j*2+1)%(n|1)//virtue index
+        int n = nums.size();
+        nth_element(nums.begin(),nums.begin()+n/2,nums.end());
+        int pivot = *(nums.begin()+n/2);
+        int i=0, j=0, k=n-1;
+        while(j<=k){
+            if(nums[idx(j)]<pivot){
+            }else if(nums[idx(j)]>pivot){
+                swap(nums[idx(j++)],nums[idx(i++)]);
+            }else{
+                j++;
+            }
+        }
+    }
+
 // partition
 int partition(vector<int>&arr, int l, int r) { 
     int x = arr[r], i = l; 
