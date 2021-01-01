@@ -1,11 +1,34 @@
 /* increasing/decreasing stack [3] : (0239) sliding window maximum (0155) min stack (0084) largest rectangle histogram
- * modeled as a stack [5] : (0071) simplify directery path 
+ * modeled as a stack [6] : (0071) simplify directery path 
  *                          (0032) longest valid parentheses (0020) is valid parentheses (1190) Reverse Substrings Between Each Pair of Parentheses
  *                          (0224) calculator with "numbers, '+', '-', '(', ')'" (0227) calculator II with "numbers, '+', "-', '*', '/'" 
  * stack and queue [2] : (0225) implement a stack by queues (0232) implement a queue by stacks 
  */
 
+//(0239) sliding window maximum
+/*
+ * we can easily find the Max of the first window
+ * when the window moves one step, we want the new coming number kick out all the older and smaller values in the window
+ * so when the Max is evicted, the second Max is available immediately.
+ */
+vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+    list<int>bin;
+    int n = nums.size();
+    vector<int>ans;
+    for(int i=0; i<n; i++){
+        while(!bin.empty()&&nums[bin.back()]<nums[i])bin.pop_back();
+        bin.push_back(i);
+        if(i>=k&&bin.front()<=i-k)bin.pop_front();
+        if(i>=k-1)ans.push_back(nums[bin.front()]);
+    }
+    return ans;
+}
 //(0084) largest rectangle histogram
+/* 
+ * for each bar, we check the largest rectangle taking this bar for its right boarder
+ * to find the largest rectangle, we need to know how many neibhoring bars on the left side higher or equal to the current
+ * to check this within O(1) time, we keep the index of the left bar who is shorter than the current bar
+ */
     int largestRectangleArea(vector<int>& heights) {
         stack<int>bin;
         bin.push(-1);                   // keep a left limit
@@ -50,19 +73,6 @@ public:
         return min.top();
     }
 };
-//(0239) sliding window maximum
-vector<int> maxSlidingWindow(vector<int>& nums, int k) {
-    list<int>bin;
-    int n = nums.size();
-    vector<int>ans;
-    for(int i=0; i<n; i++){
-        while(!bin.empty()&&nums[bin.back()]<nums[i])bin.pop_back();
-        bin.push_back(i);
-        if(i>=k&&bin.front()<=i-k)bin.pop_front();
-        if(i>=k-1)ans.push_back(nums[bin.front()]);
-    }
-    return ans;
-}
 
 //(0071) simplify directery path 
     string simplifyPath(string path) {
@@ -88,26 +98,6 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k) {
         }
         return ans;
     }
-//(0032) longest valid parentheses 
-    int longestValidParentheses(string s) {
-        stack<int>left;
-        stack<int>levelsum;
-        int l = s.size();
-        int ans=0;
-        for(int i=0; i<l; i++){
-            if(s[i]=='('){
-                left.push(i);
-                if(levelsum.size()<left.size())levelsum.push(0);
-            }else{
-                if(left.size()<levelsum.size())levelsum.pop();
-                if(left.empty())continue;
-                levelsum.top()+=i-left.top()+1;
-                if(ans<levelsum.top())ans=levelsum.top();
-                left.pop();
-            }
-        }
-        return ans;
-    }
 //(0020) is valid parentheses 
    bool isValid(string s) {
         int l = s.size();
@@ -127,6 +117,26 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k) {
             }
         }
         return left.empty();
+    }
+//(0032) longest valid parentheses 
+    int longestValidParentheses(string s) {
+        stack<int>left;
+        stack<int>levelsum;
+        int l = s.size();
+        int ans=0;
+        for(int i=0; i<l; i++){
+            if(s[i]=='('){
+                left.push(i);
+                if(levelsum.size()<left.size())levelsum.push(0);
+            }else{
+                if(left.size()<levelsum.size())levelsum.pop();
+                if(left.empty())continue;
+                levelsum.top()+=i-left.top()+1;
+                if(ans<levelsum.top())ans=levelsum.top();
+                left.pop();
+            }
+        }
+        return ans;
     }
 //(1190) Reverse Substrings Between Each Pair of Parentheses
     string reverseParentheses(string s) {
