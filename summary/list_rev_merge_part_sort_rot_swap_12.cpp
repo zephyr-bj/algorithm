@@ -1,10 +1,10 @@
-// reverse : (0025) reverse K group (0092) reverse list between (0206) reverse List
-// merge : (0021) merge 2 lists (0023) merge K lists
-// partition : (0328) Odd Even List (0086) partition List
+// reverse [3]: (0025) reverse K group (0092) reverse list between (0206) reverse List
+// merge [2]: (0021) merge 2 lists (0023) merge K lists
+// partition [3]: (0328) Odd Even List (0086) partition List
 //             (0143) reorder List : partition + reverse + merge
-// sort : (0147) insertion sort (0148) merge sort
-// (0061) rotate right
-// (0024) swap pairs
+// sort [2]: (0147) insertion sort (0148) merge sort
+// rotate [1]: (0061) rotate right
+// swap [1]: (0024) swap pairs
 
 /* reverse */
 // (0025) reverse K group
@@ -89,31 +89,31 @@
         return dummy.next;
     }
 // (0023) merge K lists
-    struct cmp{
-        bool operator() (ListNode* f1, ListNode* f2) {
-		        return f1->val > f2->val; 
-        }
-    };
-
-    ListNode* mergeKLists(vector<ListNode*>& lists) {
-        priority_queue<ListNode*, vector<ListNode*> , cmp > q; 
-        ListNode dummy(0);
-        for( int i=0; i<lists.size(); i++ ){
-            if(lists[i]!=NULL)
-                q.push(lists[i]);
-        }
-        ListNode* tmp = &dummy;
-        while( !q.empty() ){
-            ListNode* t = q.top();
-            ListNode* node = new ListNode(t->val);
-            tmp->next = node;
-            tmp = tmp->next;
-            q.pop();
-            if( t->next != NULL ) q.push(t->next);  
-        }
-        
-        return dummy->next;
+struct my_cmp {
+    bool operator()(ListNode* a, ListNode* b){
+        return a->val > b->val;
     }
+};
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        priority_queue<ListNode*,vector<ListNode*>,my_cmp>bin;
+        for(auto x:lists)
+            if(x!=NULL)bin.push(x);
+        ListNode dumb(0);
+        ListNode * p = &dumb;
+        while(!bin.empty()){
+            ListNode * front = bin.top();
+            bin.pop();
+            p->next = front;
+            front=front->next;
+            p=p->next;
+            p->next=NULL;
+            if(front!=NULL)bin.push(front);
+        }
+        return dumb.next;
+    }
+};
 // solution II, with no heap
 ListNode *mergeKLists(vector<ListNode *> &lists) {
     if(lists.empty()){
