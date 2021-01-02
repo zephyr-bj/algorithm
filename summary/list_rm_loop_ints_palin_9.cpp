@@ -1,8 +1,8 @@
-// remove : (0019) remove n-th node from End (0203) remove nodes by value (0237) delete node by pointer
+// remove [5]: (0019) remove n-th node from End (0203) remove nodes by value (0237) delete node by pointer
 //          (0082) delete duplicate II (0083) delete duplicate
-// loop : (0141) cycle test (0142) find cycle entry node
-// (0160) intersection of two lists
-// (0234) is Palindrome List
+// loop [2]: (0141) cycle test (0142) find cycle entry node
+// (0160) [1]: intersection of two lists
+// (0234) [1]: is Palindrome List
 
 /* remove node */    
 // (0019) remove n-th node from End
