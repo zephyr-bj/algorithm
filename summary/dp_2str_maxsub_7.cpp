@@ -1,7 +1,8 @@
 /* two strings[5]: (0010) regular express (0044) wildcard express (0072) min edit distance (0097) interleave strings (0115) max number of subsequence 
  * max sub array[2]: //(0053)max continuous subarray sum  (0152)max product of numbers from sub array 
  */
-//(0010)regular express  time O(nm), memory O(nm)
+//(0010)regular express time O(nm), memory O(nm)
+//for each pair of right limit, we devide the question into sub-questions
     bool isMatch(string s, string p) {
         int n = p.size(); 
         int m = s.size();
