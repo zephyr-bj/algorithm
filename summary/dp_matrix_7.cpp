@@ -2,6 +2,7 @@
  * matrix paths [4] unique paths (0062) unique paths with obstacles (0063) min path sum (0064)  dungeon game (0174) 
  */
 //(0085) maximal rectangle in matrix
+// for each point, we looking for the largest rectangle with this point on its bottom boundary
     int maximalRectangle(vector<vector<char>>& matrix) {
         int n = matrix.size();
         if(n<1)return 0;
