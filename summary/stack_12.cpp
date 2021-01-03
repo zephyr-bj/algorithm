@@ -1,4 +1,4 @@
-/* increasing/decreasing stack [3] : (0239) sliding window maximum (0155) min stack (0084) largest rectangle histogram
+/* increasing/decreasing stack [4] : (0239) sliding window maximum (0155) min stack (0084) largest rectangle histogram (0316) remove duplicate letters
  * modeled as a stack [6] : (0071) simplify directery path 
  *                          (0032) longest valid parentheses (0020) is valid parentheses (1190) Reverse Substrings Between Each Pair of Parentheses
  *                          (0224) calculator with "numbers, '+', '-', '(', ')'" (0227) calculator II with "numbers, '+', "-', '*', '/'" 
@@ -45,6 +45,28 @@ vector<int> maxSlidingWindow(vector<int>& nums, int k) {
             bin.push(i);
         }
         return ans;
+    }
+// (0316) remove duplicate letters
+/*
+ * If we only have one letter, just put it into the result stirng
+ * for all the following letters, we check if it is smaller than the letters in restult string
+ * If smaller, we check if we still this the larger letter in the pocket,
+ * if we have, pop up the larger ones
+ */
+    string removeDuplicateLetters(string s) {
+        if(s.empty())return s;
+        vector<int>bin(26,0);
+        for(auto c:s)bin[c-'a']++;
+        int pos=0;
+        for(int i=0; i<s.size(); i++){
+            if(s[i]<s[pos])pos=i;
+            bin[s[i]-'a']--;
+            if(bin[s[i]-'a']==0)break;
+        }
+        string sub=s.substr(pos+1);
+        for(int i=sub.size()-1; i>=0; i--)
+            if(sub[i]==s[pos])sub.erase(i,1);
+        return s.substr(pos,1)+removeDuplicateLetters(sub);
     }
 //(0155) min stack 
 class MinStack {
