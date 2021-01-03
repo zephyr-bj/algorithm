@@ -1,6 +1,6 @@
 /* O(1) depending[4]: (0139) word break time (0322) min number of coins combining to a mount of money (0070) climb stairs (0091) number of Docoding ways
- * O(n) depending[2]: (0343) max product from integer break  (0368) max (largest) divisible subset
- * O(nn) depending[2]: (0132) min cut to form palindrome substring (0312) max score by burst bulloons
+ * O(n) depending[2]: (0132) min cut to form palindrome substring (0343) max product from integer break  (0368*) max (largest) divisible subset
+ * O(nn) depending[2]: (0312*) max score by burst bulloons
  */
 
 //(0070) climb stairs time O(n), memory O(1)
@@ -87,6 +87,11 @@
         return bin.back();
     }
 //(0368) max (largest) divisible subset time O(nn), memory O(nL)
+/*
+ * the best way to tell if a number belongs to a divisible subset: it is divisible by the largest element in the subset
+ * we use the larget element divide the question into subquestions, all nums could be a larget element of a subset. 
+ * we use two fields to represents the subset: its size, the next larget element, then we can easily tell if which one is larger, and construct the subset
+ */
     vector<int> largestDivisibleSubset(vector<int>& nums) {
         sort(nums.begin(), nums.end());
         int n = nums.size();
