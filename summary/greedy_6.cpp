@@ -2,7 +2,6 @@
  *Jump Game  (0055) greedy choice, the position with current longest reach
  *Gas Station(0134) greedy choice, the position with current positive gas volume
  *Candy      (0135) greedy choice, 
- *Rm Dup Letters (0316) greedy choice, the position with current min value, which satisfy the length requirement
  *Create Max Num (0321) greedy choice, the position with current max digit, which satisfy the length requirement
  *Paching Array  (0330) gready choice, insert
  */
@@ -61,22 +60,6 @@ bool canJump(vector<int>& nums) {
             ans+=max(left[i],right[i]);
         }
         return ans;
-    }
-// (0316) remove duplicate letters
-    string removeDuplicateLetters(string s) {
-        if(s.empty())return s;
-        vector<int>bin(26,0);
-        for(auto c:s)bin[c-'a']++;
-        int pos=0;
-        for(int i=0; i<s.size(); i++){
-            if(s[i]<s[pos])pos=i;
-            bin[s[i]-'a']--;
-            if(bin[s[i]-'a']==0)break;
-        }
-        string sub=s.substr(pos+1);
-        for(int i=sub.size()-1; i>=0; i--)
-            if(sub[i]==s[pos])sub.erase(i,1);
-        return s.substr(pos,1)+removeDuplicateLetters(sub);
     }
 // (0321) create max number
     vector<int>maxNumber(vector<int>&nums, int k){
