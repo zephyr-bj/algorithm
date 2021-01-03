@@ -1,6 +1,6 @@
 /* O(1) depending[4]: (0139) word break time (0322) min number of coins combining to a mount of money (0070) climb stairs (0091) number of Docoding ways
- * O(n) depending[2]: (0132) min cut to form palindrome substring (0343) max product from integer break  (0368*) max (largest) divisible subset
- * O(nn) depending[2]: (0312*) max score by burst bulloons
+ * O(n) depending[3]: (0132) min cut to form palindrome substring (0343) max product from integer break  (0368*) max (largest) divisible subset
+ * O(nn) depending[1]: (0312*) max score by burst bulloons
  */
 
 //(0070) climb stairs time O(n), memory O(1)
