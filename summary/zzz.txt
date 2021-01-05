@@ -30,10 +30,10 @@ array_modify_11.cpp
  * merge array [1] (0088)
  * shuffle array [1] (0384)
  */
- stack_10.cpp
-/* increasing/decreasing stack [3] : (0239) sliding window maximum (0155) min stack (0084) largest rectangle histogram
- * modeled as a stack [5] : (0071) simplify directery path 
- *                          (0032) longest valid parentheses (0020) is valid parentheses 
+ stack_12.cpp
+/* increasing/decreasing stack [4] : (0239) sliding window maximum (0155) min stack (0084) largest rectangle histogram  (0316*) Rm Dup Letters greedy choice
+ * modeled as a stack [6] : (0071) simplify directery path 
+ *                          (0032) longest valid parentheses (0020) is valid parentheses (1190) Reverse Substrings Between Each Pair of Parentheses
  *                          (0224) calculator with "numbers, '+', '-', '(', ')'" (0227) calculator II with "numbers, '+', "-', '*', '/'" 
  * stack and queue [2] : (0225) implement a stack by queues (0232) implement a queue by stacks 
  */
@@ -73,12 +73,11 @@ dp_misc_8.cpp
  * O(n) depending[2]: (0343) max product from integer break  (0368) max (largest) divisible subset
  * O(nn) depending[2]: (0132) min cut to form palindrome substring (0312) max score by burst bulloons
  */
-greey_7.cpp
+greey_6.cpp
 /*Jump GameII(0045)
  *Jump Game  (0055) greedy choice, the position with current longest reach
  *Gas Station(0134) greedy choice, the position with current positive gas volume
  *Candy      (0135) greedy choice, 
- *Rm Dup Letters (0316) greedy choice, the position with current min value, which satisfy the length requirement
  *Create Max Num (0321) greedy choice, the position with current max digit, which satisfy the length requirement
  *Paching Array  (0330) gready choice, insert
  */
