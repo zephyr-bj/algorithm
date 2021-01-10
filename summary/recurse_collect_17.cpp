@@ -1,4 +1,12 @@
 /*find all possible solution:
+    0. for the "find all" problems
+    1.termination condition
+    2.complete condition
+    3.fan out loop
+    4.recursive call condition
+    5.duplicate element problem trick
+    6.back tracking
+    7.hash map to prevent duplicate call
     math[7]
     (0039)find all combinations for a target sum, use each element unlimited times
     (0040)find all combinations for a target sum, duplicate elements in set, use each once
@@ -8,8 +16,8 @@
     (0090)find all subsets of a set of n integers, may contains duplicate integers
     (0077)find all comobinations of k elements out of a set of n elements
     queue[2]
-    (0051)find the number of solutions for the N-Queen problem
-    (0052)find all solutions for the N-Queen problem 
+    (0051)find all solutions for the N-Queen problem
+    (0052)find the number of solutions for the N-Queen problem
     expression[2]
     *^(0241)find all different ways to add parentheses in an expressiong with '*', '+', '-' and integers 
     *(0282)find all different ways to add '+', '-', '*' in a integer string, so the result expression calculates to be a target integer 
@@ -43,25 +51,23 @@
         return ans;
     }
 //(0040)find all combinations for a target sum, duplicate elements in set, use each once
-    void combTool(vector<int>&candidates, int p, int target, vector<vector<int>>&ans, vector<int>&elements){
-        if(target<0)return;
-        if(target==0){
-            ans.push_back(elements);
-            return;
+    void comb(vector<int>&candidates, int k, int target, vector<vector<int>>&ans, vector<int>&cand){
+        if(target < 0)return;
+        if(target == 0){
+            ans.push_back(cand);return;
         }
-        while(p<candidates.size()){
-            elements.push_back(candidates[p]);
-            combTool(candidates, p+1, target-candidates[p], ans, elements);
-            elements.pop_back();
-            p++;
-            while(p>0&&p<candidates.size()&&candidates[p]==candidates[p-1])p++;
+        for(int i=k; i<candidates.size(); i++){
+            if(i>k && candidates[i]==candidates[i-1])continue;
+            cand.push_back(candidates[i]);
+            comb(candidates,i+1,target-candidates[i],ans,cand);
+            cand.pop_back();
         }
     }
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(),candidates.end());
         vector<vector<int>>ans;
-        vector<int>elements;
-        sort(candidates.begin(), candidates.end());
-        combTool(candidates, 0, target, ans, elements);
+        vector<int>cand;
+        comb(candidates,0,target,ans,cand);
         return ans;
     }
 //(0046) find all permutations of a set of number 
@@ -151,7 +157,7 @@
     }
     
     
-//(0051)find the number of solutions for the N-Queen problem
+//(0051)find all solutions for the N-Queen problem 
     void NQTool(int x, int n, vector<int>&pos, vector<vector<string>>&ans){
         if(x==n){
             vector<string>matrix(n,string(n,'.'));
@@ -178,7 +184,7 @@
         NQTool(0,n,pos,ans);
         return ans;
     }
-//(0052)find all solutions for the N-Queen problem 
+//(0052)find the number of solutions for the N-Queen problem
     void NQTool(int x, int n, vector<int>&pos, int & ans){
         if(x==n){
             ans++;return;
@@ -289,8 +295,8 @@
             else if(s[i] == pair[1])stack--;
             if(stack >= 0)continue;
             for(int j = last_j; j <= i; ++j){
-                if(s[j] == pair[1] && (j == last_j || s[j-1]!=pair[1]))
-                    remove(s.substr(0, j) + s.substr(j+1), ans, i, j, pair);
+                if(s[j] == pair[1] && (j == last_j || s[j-1]!=pair[1]))//similar trick as the the permutation/combination with dup elements
+                    remove(s.substr(0, j) + s.substr(j+1), ans, i, j, pair);//s is one char less, so i and j not increase
             }
             return;
         }
@@ -300,8 +306,7 @@
         else
             ans.push_back(s);
     }
-
-
+      
 //(0017)find all possible words from a phone number, O(3^N), N is the digit counts of the phone number
     void phonePhrase(string &digits, vector<string>&dict, vector<string>&ans, string &path){
         int L = path.size();
