@@ -48,28 +48,55 @@
         return false;
     }
 //find longest substring with at least K repeating characters (0395)
-    int longestSubstring(string s, int k){
-        int l = s.size();
-        if(k<2)return l;
-        if(l<k)return 0;
-        int found[26]={0};
-        int belowK = 0;
-        for(int j=0; j<l; j++){
-            found[s[j]-'a']+=1;
-            if(found[s[j]-'a']==1)belowK++;
-            if(found[s[j]-'a']==k)belowK--;
+/*Solution I*/
+int getlongestSubstring(char *s, int start, int end, int k) {
+    int scharcount[26] = {0};
+    if (end-start < k)return 0;
+
+    for (int i = start;  i < end; i++) scharcount[s[i] - 'a']++;
+    
+    //iterate through substring, find first invalid char, split, invalid char is char with count < k, 
+    for (int i = start; i < end; i++) {
+        if (/*scharcount[s[i]-'a'] >=1 &&*/  scharcount[s[i]-'a'] < k) {
+            int j = i+1;
+            //i gives first invalid char, to be more efficient skip all invalid chars after this and get to the last invalid char
+            //thereby reducing the number of recursive calls.
+            while ((j < end) && (scharcount[s[j]-'a'] < k)) j++;
+        
+            //Now j is next valid starting point of next substring
+            int left = getlongestSubstring(s, start, i,k);
+            int right = getlongestSubstring(s, j, end, k);
+            return left>right?left:right;
         }
-        if(belowK==0)return l;
-        int ans = 0;
-        int i=-1; 
-        for(int j=0; j<=l; j++){
-            if(j==l||found[s[j]-'a']<k){
-                if(i+1<j){
-                    int sec = longestSubstring(s.substr(i+1,j-i-1),k);
-                    ans = max(ans,sec);
-                }
-                i=j;
-            }
-        }
-        return ans;
     }
+    //reach here when mid = -1, no invalid char found in substring, so that whole substring is valid
+    return (end - start);
+}
+
+int longestSubstring(char * s, int k){
+    return getlongestSubstring(s, 0, strlen(s), k);
+}
+/*Solution II*/
+int longestSubstring(char * s, int k){
+    int sz=strlen(s),max=0;
+    for(int i=1;i<=26;i++){
+        int count[26]={0};
+        int a=0,b=0;
+        int l=0,r=0;
+        while(r<sz){
+            if(a<=i){
+                if(count[s[r]-'a']==0) a++;
+                count[s[r]-'a']++;
+                if(count[s[r]-'a']==k) b++;
+                r++;
+            }else {
+                if(count[s[l]-'a']==k) b--;
+                count[s[l]-'a']--;
+                if(count[s[l]-'a']==0) a--;
+                l++;
+            }
+            if(a==b&&max<r-l)max=r-l;
+        }
+    }
+    return max;
+}
