@@ -1,5 +1,5 @@
 /************************************************************************************************************************************************************************/ 
-/*misc [1]***************************************************************************************************************************************************************/
+/*misc [3]:1+1+1=3*******************************************************************************************************************************************************/
 /************************************************************************************************************************************************************************/ 
 arithmetic_13.cpp
 /* reverse integer [2] : (0007) reverse integer (0009) palindrome number
@@ -11,6 +11,26 @@ arithmetic_13.cpp
  * single number [2] : (0136) single number (0137) single number ii
  * bezout's identity [1] : (0365) the water jug problem
  */
+bit_operations_20.c
+/* n&(n-1) [3] (0191) number of set bits (0231) is power of two (0342) power of four
+/* bit mask [1] (****)MACRO Set_Bit(num, start_bit_pos, end_bit_pos) (****) int replacePartInt(int N, int B, int A, int k) (hits:2)
+/* Xor [5] (****)in-place swap. (cci.20.1) Write a function that adds two numbers (0136) single number (0137) single number II (0260) single number III
+/* bit reverse [2] (0190) reverse bits of an integer (****) reverse bits in a c string (hits:2)
+/* misc [9] 
+//Rotate an integer n left by k
+//swap the neighboring bits. (hits:2)
+//find out msb (hits:3)
+//is big endian or little endian
+//Find the Maximum of 2 numbers without using any if-else or any other comparison operator
+//binary print of a float
+//function to give mask for first 2 non zero (anything except 00) values in int.
+//write a macro to check if nth bit was set
+//(0201) bitwise ADN of numbers range
+memory_operation_2.c
+//aligned malloc and free
+//allocate a two dimension array
+//(****)#define my_sizeof(x) (****) #define offset(abc,c) (****)#define my_offsetof(type, f) (&(((type *) 0)->f))
+
 /************************************************************************************************************************************************************************/ 
 /*linear data structures/sequence container [3]:2+1+2=5******************************************************************************************************************/
 /************************************************************************************************************************************************************************/ 
