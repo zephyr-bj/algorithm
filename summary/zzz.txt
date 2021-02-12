@@ -26,10 +26,14 @@ bit_operations_20.c
 //function to give mask for first 2 non zero (anything except 00) values in int.
 //write a macro to check if nth bit was set
 //(0201) bitwise ADN of numbers range
+ */
 memory_operation_2.c
 //aligned malloc and free
 //allocate a two dimension array
+//memcpy
 //(****)#define my_sizeof(x) (****) #define offset(abc,c) (****)#define my_offsetof(type, f) (&(((type *) 0)->f))
+hashtable.c
+//https://github.com/engineer-man/youtube/blob/master/077/hashtable.cd
 
 /************************************************************************************************************************************************************************/ 
 /*linear data structures/sequence container [3]:2+1+2=5******************************************************************************************************************/
