@@ -47,3 +47,17 @@ int ** My2DAlloc(int rows, int cols){
 	  }
 	  return rowptr;
 }
+
+// memmov: memcpy for overlapping cases
+void memmove(void *dest, void *src, int size){
+    int i;
+    if (dest < src) {
+        for (i = 0; i < size; i++) {
+            ((char *)dest)[i] = ((char *)src)[i];
+        }
+    } else {
+        for (i = size - 1; i >= 0; i--) {
+            ((char *)dest)[i] = ((char *)src)[i];
+        }
+    }
+} 
