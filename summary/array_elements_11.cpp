@@ -100,15 +100,34 @@
         return x-y;
     }
 //find the duplicate number from range [1,n-1] (0287) 
+//since each value is different from the others, so if there is no duplicates, the slow pointer must iterates all the elements
+	int findDuplicate3(vector<int>& nums){
+		if (nums.size() > 1){
+			int slow = nums[0];
+			int fast = nums[nums[0]];
+			while (slow != fast){
+				slow = nums[slow];
+				fast = nums[nums[fast]];
+			}
+
+			fast = 0;
+			while (fast != slow){
+				fast = nums[fast];
+				slow = nums[slow];
+			}
+			return slow;
+		}
+		return -1;
+	}
+// the algorithm below changed the original data. sss
     int findDuplicate(vector<int>& nums) {
-        int n = nums.size();
         for(auto x:nums){
             if(nums[abs(x)]>0)
                 nums[abs(x)]=-nums[abs(x)];
             else
                 return abs(x);
         }
-        return 0;
+        return -1;
     }
 //find majority element : more than 1/2 (0169)
     //moore voting
@@ -155,26 +174,21 @@
     }
 
 // (0313) super ugly number
+// n way merge
     int nthSuperUglyNumber(int n, vector<int>& primes) {
         int k = primes.size();
-        if(n<1||k<1)return 0;
-        if(n==1)return 1;
         vector<int>index(k,0);
-        vector<int>result(1,1);
-        while(result.size()<n){
-            int tmp = INT_MAX;
-            int idx = -1;
+        vector<int>result(n,INT_MAX);
+        result[0]=1;
+        for(int j=0; j<n; j++){
             for(int i=0; i<k; i++){
-                int x = primes[i]*result[index[i]];
-                if(tmp>x){
-                    idx = i; 
-                    tmp=x;
+                if(result[j]>primes[i]*result[index[i]]){
+                    result[j] = primes[i]*result[index[i]]; 
                 }
             }
-            index[idx]+=1;
-            result.push_back(tmp);
-            for(int i=idx+1; i<k; i++){
-                if(tmp==primes[i]*result[index[i]])index[i]+=1;
+            for(int i=0; i<k; i++){
+                if(result[j]==primes[i]*result[index[i]])
+                    index[i]+=1;
             }
         }
         return result[n-1];
