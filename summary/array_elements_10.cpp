@@ -4,7 +4,6 @@
  * find elements [5]
  * missing positive (0041) (0268) (0287)
  * find majority (0169) (0229)
- * super ugly number [1] : (0313) super ugly number 
  */
 //remove duplicate in sorted arrary (0026)
     int removeDuplicates(vector<int>& nums) {
@@ -171,25 +170,4 @@
         if(cnt1>nums.size()/3)ans.push_back(a);
         if(cnt2>nums.size()/3)ans.push_back(b);
         return ans;
-    }
-
-// (0313) super ugly number
-// n way merge
-    int nthSuperUglyNumber(int n, vector<int>& primes) {
-        int k = primes.size();
-        vector<int>index(k,0);
-        vector<int>result(n,INT_MAX);
-        result[0]=1;
-        for(int j=0; j<n; j++){
-            for(int i=0; i<k; i++){
-                if(result[j]>primes[i]*result[index[i]]){
-                    result[j] = primes[i]*result[index[i]]; 
-                }
-            }
-            for(int i=0; i<k; i++){
-                if(result[j]==primes[i]*result[index[i]])
-                    index[i]+=1;
-            }
-        }
-        return result[n-1];
     }
