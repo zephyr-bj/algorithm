@@ -1,9 +1,9 @@
 // reverse [3]: (0025) reverse K group (0092) reverse list between (0206) reverse List
-// merge [2]: (0021) merge 2 lists (0023) merge K lists
+// merge [2]: (0021) merge 2 lists (0023*) merge K lists
 // partition [3]: (0328) Odd Even List (0086) partition List
 //             (0143) reorder List : partition + reverse + merge
 // sort [2]: (0147) insertion sort (0148) merge sort
-// rotate [1]: (0061) rotate right
+// rotate [1]: (0061*) rotate right
 // swap [1]: (0024) swap pairs
 
 /* reverse */
@@ -180,6 +180,10 @@ ListNode *mergeTwoLists(ListNode *l1, ListNode *l2) {
     }
     
 // (0143) reorder List : partition + reverse + merge
+// the partition algorithm as follows: 
+// when even number of nodes, say 1,2,3,4, p points to 2
+// when odd number of nodes, say 1,2,3,4,5, p points to 3
+// so p points to the middle one or the last one of the first half
     void reorderList(ListNode* head) {
         if(head==NULL||head->next==NULL||head->next->next==NULL)return;
         ListNode * p = head;
@@ -211,26 +215,23 @@ ListNode *mergeTwoLists(ListNode *l1, ListNode *l2) {
 
 /* sort */
 // (0147) insertion sort
-ListNode* insertionSortList(ListNode* head) {
-    ListNode dummy(0);
-    dummy.next = head;
-    ListNode * p1=head;
-    while(p1!=NULL&&p1->next!=NULL){
-        if(p1->val<=p1->next->val){
-            p1=p1->next;
-        }else{
-            ListNode * p2 = &dummy;
-            while(p2->next->val < p1->next->val){
-                p2=p2->next;
-            }//p2 -> the element should be insert after
-            ListNode * tmp=p1->next;
-            p1->next=p1->next->next;
-            tmp->next=p2->next;
-            p2->next=tmp;
-        } 
+    ListNode* insertionSortList(ListNode* head) {
+        ListNode dumb;
+        dumb.next=head;
+        ListNode * q = head;
+        while(q!=NULL&&q->next!=NULL){
+            ListNode * p = &dumb;
+            while(p!=q && p->next->val <= q->next->val)p=p->next;
+            if(q==p){
+                q=q->next;continue;
+            }
+            ListNode * t = q->next;
+            q->next=q->next->next;
+            t->next=p->next;
+            p->next=t;
+        }
+        return dumb.next;
     }
-    return dummy.next;
-}
 // (0148) sort list
     ListNode* sortList(ListNode* head) {
         if(head==NULL||head->next==NULL)return head;
