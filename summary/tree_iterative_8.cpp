@@ -79,31 +79,24 @@
     } 
 // (0173) BST iterator
 class BSTIterator {
-public:
-    TreeNode * p;
     stack<TreeNode*>bin;
+    TreeNode * p;
+public:
     BSTIterator(TreeNode* root) {
         p=root;
     }
     
-    /** @return the next smallest number */
     int next() {
-        while(p!=NULL || !bin.empty()){
-            if(p!=NULL){
-                bin.push(p);
-                p=p->left;
-            }else{
-                p=bin.top();
-                bin.pop();
-                int ans = p->val;
-                p=p->right;
-                return ans;
-            }
+        while(p!=NULL){
+            bin.push(p);
+            p=p->left;
         }
-        return 0;
+        TreeNode * x = bin.top();
+        bin.pop();
+        p=x->right;
+        return x->val;
     }
     
-    /** @return whether we have a next smallest number */
     bool hasNext() {
         return p!=NULL || !bin.empty();
     }
