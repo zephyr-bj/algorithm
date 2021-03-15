@@ -1,10 +1,10 @@
 /* level-order traversal [3] (0102) level-order (0107) level-order-bottom-up (0199) right side view
- * in-order traversal [3] (0098) valid BST (0099) swapped BST (0230) k-th node in BST
+ * in-order traversal [3] (0098*) valid BST (0099**) swapped BST (0230) k-th node in BST
  * pre-order traversal: two trees [2] (0100) same tree (0101) symmetric tree
  *
  * pre-order, complete tree [1] (0222)
- * post-order, tree LAC [2] (0235) LCA of BST (0236) LCA of BT
- * post-order, rob III [1] (0337)
+ * post-order, tree LAC [2] (0235**) LCA of BST (0236**) LCA of BT
+ * post-order, rob III [1] (0337**)
  * modify a tree [2] (0114) flatten tree (0226) invert tree
  */
   
@@ -55,6 +55,15 @@
         return validBSTUtil(root,&pre);
     }
 //  recovery node swapped BST (0099) iterative in order
+/* when we found the first decreasing neighbor, there could be two possibility: 
+   1) the larger one was swapped from a later larger position
+   2) the smaller one was swapped from an earlier smaller position
+   if the first case, we continue to look for the second decreasing neighbor
+   if the second case, the swapped pair must be the neighboring two, otherwise, we should meet this the decreasing neighbor earlier
+   
+   So we continue to look for the second deacreaing pair, if found, we swap the first large element and second small element
+   if no found, we jsut swap the first deacreasing neighbor.
+*/
     void recoverTreeTool(TreeNode* root, TreeNode** pre, TreeNode ** first, TreeNode ** second){
         if(root==NULL)return;
         recoverTreeTool(root->left,pre,first,second);
@@ -127,6 +136,7 @@ bool isSymmetric(TreeNode* root) {
     } 
 
 //  * lowest common ancestor of BST (0235) Binary search
+// LCA is the node, to whom one target appear in its left branch and the other target appears in its right branch
    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {   
         TreeNode* node = root;
         while(node){
@@ -157,6 +167,37 @@ bool isSymmetric(TreeNode* root) {
         return right;
     }
 //  * rob in a tree like neighborhood (0337)
+/* we have two choices: rob the root house or NOT
+ * to satisfy the condition of not 
+ * if we rob the root, the best choice is to rob all its second layer sub trees
+ * if we do not rob the root, the best choice is to rob all its first layer sub trees
+*/
+    class Solution {//1092 ms
+    public:
+    int rob(TreeNode* root) {
+        if(root==NULL)return 0;
+        int x = root->left!=0 ? rob(root->left->left)+rob(root->left->right) : 0;
+        int y = root->right!=0 ? rob(root->right->left)+rob(root->right->right) : 0;
+        int ans = x+y+root->val;
+        x = rob(root->left);
+        y = rob(root->right);
+        return max(ans, x+y);
+    }
+class Solution {
+    unordered_map<TreeNode*,int>bin;
+public:
+    int rob(TreeNode* root) { // 20ms
+        if(root==NULL)return 0;
+        if(bin.find(root)!=bin.end())return bin[root];
+        int x = root->left!=0 ? rob(root->left->left)+rob(root->left->right) : 0;
+        int y = root->right!=0 ? rob(root->right->left)+rob(root->right->right) : 0;
+        int ans = x+y+root->val;
+        x = rob(root->left);
+        y = rob(root->right);
+        ans = max(ans,x+y);
+        bin[root]=ans;
+        return ans;
+    }
   void tool(TreeNode* root, int &c, int & gc) {
         if(root==NULL){
             c=0; gc=0;
@@ -169,7 +210,7 @@ bool isSymmetric(TreeNode* root) {
         c=max(gcl+gcr+root->val, cl+cr);
         gc=cl+cr;
     }
-    int rob(TreeNode* root) {
+    int rob(TreeNode* root) { // 4ms
         int c=0; int gc=0;
         tool(root, c, gc);
         return c;
