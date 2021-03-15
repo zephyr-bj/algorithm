@@ -105,12 +105,9 @@
         return max(left, right) + 1;
     }
 //  * min depth of a tree (0111) recursive post-order, with return value
-   int minDepth(TreeNode* root) {
+    int minDepth(TreeNode* root) {
         if(root==NULL)return 0;
-        int l = minDepth(root->left);
-        int r = minDepth(root->right);
-        if(l==0&&r==0)return 1;
-        else if(l==0)return r+1;
-        else if(r==0)return l+1;
-        else return 1+min(r,l);
+        if(root->left==NULL)return 1+minDepth(root->right);
+        if(root->right==NULL)return 1+minDepth(root->left);
+        return 1+min(minDepth(root->left), minDepth(root->right));
     }
