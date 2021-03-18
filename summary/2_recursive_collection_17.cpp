@@ -11,7 +11,7 @@
     (0039)find all combinations for a target sum, use each element unlimited times
     (0040)find all combinations for a target sum, duplicate elements in set, use each once
     (0046)find all permutations of a set of number 
-    (0047)find all permutations of a set of number, duplicate elements in set
+    (0047**)find all permutations of a set of number, duplicate elements in set
     (0078)find all subsets of a set of n distinct integers 
     (0090)find all subsets of a set of n integers, may contains duplicate integers
     (0077)find all comobinations of k elements out of a set of n elements
@@ -87,6 +87,10 @@
         return ans;
     }
 //(0047) find all permutations of a set of number, duplicate elements in set
+/* why we can not swap the two elements back right after the recursive call returns?
+   when we tranverse the array, if two equal elements in front, immediately swap back will blind the checker, 
+   we will swap the equal value to the same position twice
+*/
     void perm(vector<int>&nums, int p, vector<vector<int>>&ans){
         if(p==nums.size()-1){
             ans.push_back(nums); return;
@@ -283,29 +287,36 @@
         return ans;
     }
 //(0301)find all different ways to remove invalid parentheses 
-    vector<string> removeInvalidParentheses(string s) {
-        vector<string> ans;
-        vector<char>pair={'(', ')'};
-        remove(s, ans, 0, 0, pair);
-        return ans;
-    }
-    void remove(string s, vector<string> &ans, int last_i, int last_j, vector<char> pair){
-        for(int stack = 0, i = last_i; i < s.size(); ++i){
-            if(s[i] == pair[0])stack++;
-            else if(s[i] == pair[1])stack--;
-            if(stack >= 0)continue;
-            for(int j = last_j; j <= i; ++j){
-                if(s[j] == pair[1] && (j == last_j || s[j-1]!=pair[1]))//similar trick as the the permutation/combination with dup elements
-                    remove(s.substr(0, j) + s.substr(j+1), ans, i, j, pair);//s is one char less, so i and j not increase
+class Solution {
+    void riptool(string s, int q,  int p, vector<string>&ans, vector<char>pairs){
+        int stack=0;
+        int n = s.size();
+        for(int i=q; i<n; i++){
+            if(s[i]==pairs[0])stack++;
+            else if(s[i]==pairs[1])stack--;
+            if(stack>=0)continue;
+            for(int j=p; j<=i; j++){
+                if(s[j]==pairs[1]&&(j==p||s[j]!=s[j-1])){
+                    riptool(s.substr(0,j)+s.substr(j+1), i,j, ans, pairs);
+                }
             }
             return;
         }
-        reverse(s.begin(), s.end());
-        if(pair[0] == '(')
-            remove(s, ans, 0, 0, vector<char> {')', '('});
-        else
+        reverse(s.begin(),s.end());
+        if(pairs[0]=='('){
+            riptool(s,0,0,ans,vector<char>({')','('}));
+        }else{
             ans.push_back(s);
+        }
     }
+public:
+    vector<string> removeInvalidParentheses(string s) {
+        vector<string>ans;
+        vector<char>pairs ={'(', ')'};
+        riptool(s,0,0,ans,pairs);
+        return ans;
+    }
+};
       
 //(0017)find all possible words from a phone number, O(3^N), N is the digit counts of the phone number
     void phonePhrase(string &digits, vector<string>&dict, vector<string>&ans, string &path){
