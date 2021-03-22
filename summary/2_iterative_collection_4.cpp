@@ -1,8 +1,5 @@
 /*
  *sum [4]: (0015) three sum (0016) three summ closet (0018) four sum  (0167) two sum II, for sorted array
- *water [2]:  (0011) container with most water (0042) trap rain water
- *[1]:(0209) shortest subarray with sum larger than a number 
- *[1]:(0240) search matrix II, each row sorted, and each collomn sorted
  */
 //(0015) three sum
     vector<vector<int>> threeSum(vector<int>& nums) {
@@ -97,71 +94,4 @@
             }
         }
         return ans;
-    }
-    
-    
-//(0011) container with most water 
-    int maxArea(vector<int>& height) {
-        int L = height.size();
-        int i=0; int j=L-1;
-        int m=0;
-        while(i<j){
-            int h = height[i]<height[j]?height[i]:height[j];
-            int c = h*(j-i);
-            m = c>m?c:m;
-            if(height[i]<height[j])i++;
-            else j--;
-        }
-        return m;
-    }
-//(0042) trap rain water
-    int trap(vector<int>& height) {
-        int n = height.size();
-        int i=0; int j=n-1;
-        int leftmax = 0; int rightmax=0;
-        int ans =0;
-        while(i<=j){
-            if(leftmax<rightmax){
-                if(leftmax<height[i])leftmax=height[i];
-                ans+=leftmax-height[i];
-                i++;
-            }else{
-                if(rightmax<height[j])rightmax=height[j];
-                ans+=rightmax-height[j];
-                j--;
-            }
-        }
-        return ans;
-    }
-    
-// (0209) shortest subarray with sum larger than a number 
-    int minSubArrayLen(int s, vector<int>& nums) {
-        int L = nums.size();
-        if(L<1)return 0;
-        int ans = L+1;
-        int p=0; int q=0; int sum=0;
-        while(q<L){
-            sum+=nums[q];
-            while(sum-nums[p]>=s){
-                sum-=nums[p++];
-            }
-            if(sum>=s&&q-p+1<ans)ans=q-p+1;
-            q++;
-        }
-        return ((ans>L) ? 0 : ans);
-    }
-    
-//(0240) search matrix II
-    bool searchMatrix(vector<vector<int>>& matrix, int target) {
-        int n = matrix.size();
-        if(n==0)return false;
-        int m = matrix[0].size();
-        if(m==0)return false;
-        int r = n-1; int c = 0;
-        while(c<m && r>=0){
-            if(matrix[r][c]==target)return true;
-            else if(matrix[r][c]>target)r--;
-            else c++;
-        }
-        return false;
     }
