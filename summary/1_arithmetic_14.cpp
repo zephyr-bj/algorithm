@@ -1,6 +1,6 @@
 /* reverse integer [2] : (0007) reverse integer (0009) palindrome number
  * add integers [3] : (0067) add binary (0066) Plus One (0371) add integers
- * divide integers [1] :  (0027) divide two integers
+ * divide integers [2] :  (0027) divide two integers (0166)fraction to decimal 
  * multiply strings [1] : (0043) multiply strings
  * power of double [1] : (0050) power of double float
  * roman [2] : (0012) integer to Roman (0013) Roman to Integer
@@ -90,7 +90,33 @@ vector<int> plusOne(vector<int>& digits) {
         }
         return sign * ans;
     }
-    
+//(0166)fraction to decimal
+    string fractionToDecimal(int numerator, int denominator) {
+        string sign;
+        if(numerator<0 ^ denominator<0)
+            if(numerator!=0)sign+="-";
+        long a = abs(long(numerator));
+        long b = abs(long(denominator));
+        long ip = a / b;
+        long fp = a % b;
+        string ans = sign+to_string(ip);
+        if(fp==0)return ans;
+        unordered_map<long,int>frac;
+        string fs;
+        while(fp!=0 && frac.find(fp)==frac.end()){
+            frac[fp]=fs.size();
+            long x = (10*fp)/b;
+            fs+=to_string(x);
+            fp = (10*fp)%b;
+        }
+        if(fs.size()>0)ans+=".";
+        if(fp!=0){
+            fs.insert(frac[fp],"(");
+            fs+=")";
+        }
+        ans+=fs;
+        return ans;
+    }    
 // (0043) multiply strings
     string multiply(string num1, string num2) {
         int n = num1.size(); 
