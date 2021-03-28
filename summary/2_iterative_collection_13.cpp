@@ -3,6 +3,9 @@
  *hash table for O(1) search  [2] (0001)two sum  (0454)Four Sum II search four numbers sum to zero
  * string match [2] (0049) Group Anagrams (0187) find all repeated DNA substring with 10 characters 
  * (0336)search all the Palindrome Pairs
+ *BFS[4]
+ *(0126)word ladder II (0127)word ladder length
+ *(0207) course schedule (0210)course schedule II 
  */
 //(0015) three sum
     vector<vector<int>> threeSum(vector<int>& nums) {
@@ -207,4 +210,137 @@ public:
         return ans;
     }
 };
+/*******************************************************************************************************/
+
+(0126)word ladder II 
+// two end BFS, 10 time faster, 80% less memory than the standard BST. 
+ bool explore(unordered_set<string>word1, unordered_set<string>word2, unordered_set<string>&dict,
+                unordered_map<string,vector<string>>&link, string endWord, bool reverse){
+        if(word1.empty())return false;
+        if(word1.size()>word2.size())return explore(word2,word1,dict,link, endWord, !reverse);
+        unordered_set<string>word3;
+        for(auto w:word1)dict.erase(w);
+        for(auto w:word2)dict.erase(w);
+        bool found = false;
+        for(auto w:word1){
+            int n = w.size();
+            for(int i=0; i<n; i++){
+                string d=w;
+                for(char c = 'a'; c<='z'; c++){
+                    if(w[i]!=c){
+                        d[i]=c;
+                        if(word2.find(d)!=word2.end()){
+                            found=true;
+                            if(!reverse)link[w].push_back(d);
+                            else link[d].push_back(w);
+                        }else if(dict.find(d)!=dict.end()){
+                            word3.insert(d);
+                            if(!reverse)link[w].push_back(d);
+                            else link[d].push_back(w);
+                        }
+                    }
+                }
+            }
+        }
+        if(!found)return explore(word3,word2,dict,link,endWord,reverse);
+        else return true;
+    }
+    void get_path(string endWord, vector<string>&path, vector<vector<string>>&ans, unordered_map<string,vector<string>>&link){
+        if(path.back().compare(endWord)==0){
+            ans.push_back(path); return;
+        }
+        for(auto w:link[path.back()]){
+            path.push_back(w);
+            get_path(endWord,path,ans,link);
+            path.pop_back();
+        }
+    }
+    vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_set<string>dict(wordList.begin(),wordList.end());
+        unordered_set<string>words1({beginWord});
+        unordered_set<string>words2({endWord});
+        unordered_map<string,vector<string>>link;
+        vector<vector<string>>ans;
+        if(dict.find(endWord)==dict.end())return ans;
+        if(explore(words1, words2, dict, link, endWord, false)){
+            vector<string>path({beginWord});
+            get_path(endWord,path,ans,link);
+        }
+        return ans;
+    }
+(0127)word ladder length
+ // 2 way BFS, 10 times faster   
+    int bfs(unordered_map<string,int>words1, unordered_map<string,int>words2, unordered_set<string>&dict){
+        if(words1.empty())return 0;
+        if(words1.size()>words2.size())
+            return bfs(words2,words1,dict);
+        for(auto w:words1)dict.erase(w.first);
+        for(auto w:words2)dict.erase(w.first);
+        unordered_map<string,int>words3;
+        for(auto s:words1){
+            for(int i=0; i<s.first.size(); i++){
+                string t = s.first;
+                for(char c='a'; c<='z'; c++){
+                    if(c==s.first[i])continue;
+                    t[i]=c;
+                    if(words2.find(t)!=words2.end()){
+                        return s.second+words2[t];
+                    }else if(dict.find(t)!=dict.end()){
+                        words3[t]=s.second+1;
+                    }
+                }
+            }
+        }
+        return bfs(words3,words2,dict);
+    }
+(0207)course schedule 
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        unordered_set<int>learned;
+        for(int i=0; i<numCourses; i++)learned.insert(i);
+        vector<vector<int>>leadsto(numCourses,vector<int>({}));
+        vector<int>dependson(numCourses,0);
+        for(auto v:prerequisites){
+            dependson[v[0]]+=1;
+            leadsto[v[1]].push_back(v[0]);
+            learned.erase(v[0]);
+        }
+        int cnt = learned.size();
+        while(!learned.empty()){
+            int x = *learned.begin();
+            learned.erase(learned.begin());
+            for(auto y : leadsto[x]){
+                dependson[y]--;
+                if(dependson[y]==0){
+                    learned.insert(y);
+                    cnt++;
+                }
+            }
+        }
+        return cnt==numCourses;
+    }
+(0210)course schedule II 
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        unordered_set<int>learned;
+        for(int i=0; i<numCourses; i++)learned.insert(i);
+        vector<vector<int>>leadsto(numCourses,vector<int>({}));
+        vector<int>dependson(numCourses,0);
+        for(auto v: prerequisites){
+            leadsto[v[1]].push_back(v[0]);
+            dependson[v[0]]+=1;
+            learned.erase(v[0]);
+        }
+        vector<int>path;
+        while(!learned.empty()){
+            int x = *learned.begin();
+            learned.erase(learned.begin());
+            path.push_back(x);
+            for(auto y:leadsto[x]){
+                dependson[y]-=1;
+                if(dependson[y]==0){
+                    learned.insert(y);
+                }
+            }
+        }
+        return path.size()==numCourses ? path : vector<int>({});
+    }
 /*******************************************************************************************************/
