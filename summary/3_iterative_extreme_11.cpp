@@ -4,7 +4,8 @@
  *gradient match [1] (0149) max points on a line 
  *[1]:(0209) shortest subarray with sum larger than a number 
  * (0003*)Longest Substring Without Repeating Characters 
- *search by hash table [2] (0128)search longest Consecutive Sequence (0274)search the H index (not calculate)
+ * hash: search by hash table [2] (0128)search longest Consecutive Sequence (0274)search the H index (not calculate)
+ * set: lower bound [2] : (0300) LIS; (0354) LIS: russian doll envelopes
  */
     
 //(0011) container with most water 
@@ -179,6 +180,7 @@
         return ((ans>L) ? 0 : ans);
     }
 
+/*******************************************************************************************************/
 //(0003)Longest Substring Without Repeating Characters
     int lengthOfLongestSubstring(string s) {
         vector<int>hasfound(256,-1);
@@ -232,4 +234,34 @@
             cnt+=bin[h-1];h--;
         }
         return h;
+    }
+
+/*******************************************************************************************************/
+// (0300) LIS
+    int lengthOfLIS(vector<int>& nums) {
+        set<int>bin;
+        int n = nums.size();
+        for(int i=0; i<n; i++){
+            set<int>::iterator it = bin.lower_bound(nums[i]);
+            if(it!=bin.end())bin.erase(it);
+            bin.insert(nums[i]);
+        }
+        return bin.size();
+    }
+// (0354) LIS: russian doll envelopes 
+    static bool myCmp(vector<int>&a, vector<int>&b){
+        if(a[0]==b[0])return a[1]>b[1];//for the same width, higher will inserted first, lower will either take it place or insert to somewhere else (which is not effective)
+        else return a[0]<b[0];
+    }
+    int maxEnvelopes(vector<vector<int>>& envelopes) {
+        int L = envelopes.size();
+        if(L==0)return 0;
+        sort(envelopes.begin(), envelopes.end(), myCmp);
+        set<int>level;
+        for(int i=0; i<L; i++){
+            set<int>::iterator it=level.lower_bound(envelopes[i][1]);
+            if(it!=level.end())level.erase(it);
+            level.insert(envelopes[i][1]);
+        }
+        return level.size();
     }
