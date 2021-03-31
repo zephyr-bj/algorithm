@@ -6,6 +6,7 @@
  * (0003*)Longest Substring Without Repeating Characters 
  * hash: search by hash table [2] (0128)search longest Consecutive Sequence (0274)search the H index (not calculate)
  * set: lower bound [2] : (0300) LIS; (0354) LIS: russian doll envelopes
+ * increasing/decreasing stack [4] : (0239) sliding window maximum (0155) min stack (0084) largest rectangle histogram (0316) remove duplicate letters to lexicographically smallest
  */
     
 //(0011) container with most water 
@@ -265,3 +266,107 @@
         }
         return level.size();
     }
+/*******************************************************************************************************/
+//(0239) sliding window maximum
+/*
+ * we can easily find the Max of the first window
+ * when the window moves one step, we want the new coming number kick out all the older and smaller values in the window
+ * so when the Max is evicted, the second Max is available immediately.
+ */
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        deque<int>bin;
+        int n = nums.size();
+        vector<int>ans;
+        for(int i=0; i<n; i++){
+            while(!bin.empty() && nums[bin.back()] < nums[i])bin.pop_back();
+            bin.push_back(i);
+            while(!bin.empty() && i-bin.front()>=k)bin.pop_front();
+            if(i>=k-1)ans.push_back(nums[bin.front()]);
+        }
+        return ans;
+    }
+//(0084) largest rectangle histogram
+/* 
+ * for each bar, we check the largest rectangle taking this bar for its right boarder
+ * to find the largest rectangle, we need to know how many neibhoring bars on the left side higher or equal to the current
+ * to check this within O(1) time, we keep the index of the left bar who is shorter than the current bar
+ */
+    int largestRectangleArea(vector<int>& heights) {
+        stack<int>bin;
+        bin.push(-1);                   // keep a left limit
+        heights.push_back(0);           // add a check point at the end
+        int n = heights.size();
+        int ans = 0;
+        for(int i=0; i<n; i++){         // i iterates the righ limit
+            while(bin.size()>1&&heights[bin.top()]>heights[i]){
+                int idx = bin.top();
+                bin.pop();
+                int area = heights[idx]*(i-bin.top()-1);
+                ans=max(ans,area);
+            }
+            bin.push(i);
+        }
+        return ans;
+    }
+// (0316) remove duplicate letters
+/*
+ * keep a lexicographically increasing string in a stack 
+ * later coming char will kick lexicographically smaller ones out the stack, as long as we still have one more coming later
+ * If smaller, we check if we still this the larger letter in the pocket,
+ * if we have, pop up the larger ones
+ */
+    string removeDuplicateLetters(string s) {
+        unordered_map<char, int>bin;
+        unordered_map<char, bool>v;
+        for(auto c:s){
+            bin[c]++;
+            v[c]=false;
+        }
+        stack<char>stc;
+        for(auto c:s){
+            if(v[c]==false){
+                while(!stc.empty()&&stc.top()>c&&bin[stc.top()]>0){
+                    v[stc.top()]=false;
+                    stc.pop();
+                }
+                stc.push(c);
+                v[c]=true;  
+            }
+            bin[c]--;
+        }
+        int n = stc.size();
+        string ans(n,0);
+        for(int i=n-1; i>=0; i--){
+            ans[i]=stc.top();
+            stc.pop();
+        }
+        return ans;
+    }
+//(0155) min stack 
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    stack<int>min;
+    stack<int>data;
+    MinStack() {
+    }
+    
+    void push(int x) {
+        data.push_back(x);
+        if(min.empty()||x<=min.back())min.push(x);
+    }
+    
+    void pop() {
+        if(data.top()==min.top())min.pop();
+        data.pop();
+    }
+    
+    int top() {
+        return data.top();
+    }
+    
+    int getMin() {
+        return min.top();
+    }
+};
+
