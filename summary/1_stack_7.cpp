@@ -1,100 +1,8 @@
-/* increasing/decreasing stack [4] : (0239) sliding window maximum (0155) min stack (0084) largest rectangle histogram (0316) remove duplicate letters
- * modeled as a stack [6] : (0071) simplify directery path 
+/* modeled as a stack [6] : (0071) simplify directery path 
  *                          (0032) longest valid parentheses (0020) is valid parentheses (1190) Reverse Substrings Between Each Pair of Parentheses
  *                          (0224) calculator with "numbers, '+', '-', '(', ')'" (0227) calculator II with "numbers, '+', "-', '*', '/'" 
  * stack and queue [2] : (0225) implement a stack by queues (0232) implement a queue by stacks 
  */
-
-//(0239) sliding window maximum
-/*
- * we can easily find the Max of the first window
- * when the window moves one step, we want the new coming number kick out all the older and smaller values in the window
- * so when the Max is evicted, the second Max is available immediately.
- */
-vector<int> maxSlidingWindow(vector<int>& nums, int k) {
-    list<int>bin;
-    int n = nums.size();
-    vector<int>ans;
-    for(int i=0; i<n; i++){
-        while(!bin.empty()&&nums[bin.back()]<nums[i])bin.pop_back();
-        bin.push_back(i);
-        if(i>=k&&bin.front()<=i-k)bin.pop_front();
-        if(i>=k-1)ans.push_back(nums[bin.front()]);
-    }
-    return ans;
-}
-//(0084) largest rectangle histogram
-/* 
- * for each bar, we check the largest rectangle taking this bar for its right boarder
- * to find the largest rectangle, we need to know how many neibhoring bars on the left side higher or equal to the current
- * to check this within O(1) time, we keep the index of the left bar who is shorter than the current bar
- */
-    int largestRectangleArea(vector<int>& heights) {
-        stack<int>bin;
-        bin.push(-1);                   // keep a left limit
-        heights.push_back(0);           // add a check point at the end
-        int n = heights.size();
-        int ans = 0;
-        for(int i=0; i<n; i++){         // i iterates the righ limit
-            while(bin.size()>1&&heights[bin.top()]>heights[i]){
-                int idx = bin.top();
-                bin.pop();
-                int area = heights[idx]*(i-bin.top()-1);
-                ans=max(ans,area);
-            }
-            bin.push(i);
-        }
-        return ans;
-    }
-// (0316) remove duplicate letters
-/*
- * If we only have one letter, just put it into the result stirng
- * for all the following letters, we check if it is smaller than the letters in restult string
- * If smaller, we check if we still this the larger letter in the pocket,
- * if we have, pop up the larger ones
- */
-    string removeDuplicateLetters(string s) {
-        if(s.empty())return s;
-        vector<int>bin(26,0);
-        for(auto c:s)bin[c-'a']++;
-        int pos=0;
-        for(int i=0; i<s.size(); i++){
-            if(s[i]<s[pos])pos=i;
-            bin[s[i]-'a']--;
-            if(bin[s[i]-'a']==0)break;
-        }
-        string sub=s.substr(pos+1);
-        for(int i=sub.size()-1; i>=0; i--)
-            if(sub[i]==s[pos])sub.erase(i,1);
-        return s.substr(pos,1)+removeDuplicateLetters(sub);
-    }
-//(0155) min stack 
-class MinStack {
-public:
-    /** initialize your data structure here. */
-    stack<int>min;
-    stack<int>data;
-    MinStack() {
-    }
-    
-    void push(int x) {
-        data.push_back(x);
-        if(min.empty()||x<=min.back())min.push(x);
-    }
-    
-    void pop() {
-        if(data.top()==min.top())min.pop();
-        data.pop();
-    }
-    
-    int top() {
-        return data.top();
-    }
-    
-    int getMin() {
-        return min.top();
-    }
-};
 
 //(0071) simplify directery path 
     string simplifyPath(string path) {
@@ -181,65 +89,62 @@ public:
     }
 //(0224) calculator with "numbers, '+', '-', '(', ')'" 
     int calculate(string s) {
+        stack<char> op;
+        stack<int> num;
+        op.push('+');
+        num.push(0);
         int n = s.size();
-        stack<int>res({0});
-        stack<char>sign({'+'});
-        int num = 0;
-        int i =0;
+        int x = 0;
         for(int i=0; i<=n; i++){
-            if(i<n&&s[i]>='0'&&s[i]<='9'){
-                num=num*10+(s[i]-'0');
-            }else if(i==n||s[i]=='+'||s[i]=='-'||s[i]=='('||s[i]==')'){
-                if(i==n||s[i]=='+'||s[i]=='-'){
-                    if(sign.top()=='+')res.top()+=num;
-                    else res.top()-=num;
-                    sign.top() = s[i];
-                }else if(s[i]=='('){
-                    res.push(0);
-                    sign.push('+');
-                }else if(s[i]==')'){
-                    if(sign.top()=='+')res.top()+=num;
-                    else res.top()-=num;
-                    int x = res.top();
-                    res.pop();
-                    sign.pop();
-                    if(sign.top()=='+')res.top()+=x;
-                    else res.top()-=x;
-                }
-                num=0;
-            } 
+            if(s[i]>='0' && s[i]<='9'){
+                x=x*10+(s[i]-'0');
+            }else if(s[i]=='('){
+                num.push(0);
+                op.push('+');
+            }else if(s[i]==')'){
+                if(op.top()=='+')num.top()+=x;
+                else num.top()-=x;
+                x=num.top();
+                op.pop();
+                num.pop();
+            }else if(i==n || s[i]=='+'||s[i]=='-'){
+                if(op.top()=='+') num.top() += x;
+                else num.top() -= x;
+                if(i<n)op.top() = s[i];
+                x=0;
+            }
         }
-        return res.top();
+        return num.top();
     }
 //(0227) calculator II with "numbers, '+', "-', '*', '/'" 
     int calculate(string s) {
-        int n = s.size();
-        stack<int>nums;
+        int op = '+';
+        int x = 0;
+        int y = 0;
         int num = 0;
-        char sign = '+';
+        int n = s.size();
         for(int i=0; i<=n; i++){
-            if(i<n&&s[i]>='0'&&s[i]<='9'){
-                num = num*10+(s[i]-'0');
-            }else if(i==n||s[i]=='+'||s[i]=='-'||s[i]=='*'||s[i]=='/'){
-                if(sign=='+'){
-                    nums.push(num);
-                }else if(sign=='-'){
-                    nums.push(-num);
-                }else if(sign=='*'){
-                    num = nums.top()*num;
-                    nums.pop();
-                    nums.push(num);
-                }else if(sign=='/'){
-                    num = nums.top()/num;
-                    nums.pop();
-                    nums.push(num);
+            if(s[i]>='0' && s[i]<='9'){
+                x=10*x+(s[i]-'0');
+            }else if(i==n || s[i]=='+' || s[i]=='-' || s[i]=='*' || s[i]=='/'){
+                if(op=='+'){
+                    num+=x;
+                    y=x;
+                }else if(op=='-'){
+                    num-=x;
+                    y=-x;
+                }else if(op=='*'){
+                    num-=y;
+                    num+=y*x;
+                    y=y*x;
+                }else if(op=='/'){
+                    num-=y;
+                    num+=y/x;
+                    y=y/x;
                 }
-                if(i<n)sign=s[i];
-                num=0;
+                if(i<n)op=s[i];
+                x=0;
             }
-        }
-        while(!nums.empty()){
-            num+=nums.top(); nums.pop();
         }
         return num;
     }
