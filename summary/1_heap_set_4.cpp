@@ -1,6 +1,5 @@
-/* (0378) find kth smallest in sorted matrix
- * (0347) find top k frequent element
- * (0295) find the median of data stream
+/* heap [3] (0378) find kth smallest in sorted matrix (0347) find top k frequent element (0295) find the median of data stream
+ * set [1] (0327*) count the ranges, whose element sum is within [lb, ub]
  */
  
 // (0378) find kth smallest in sorted matrix
@@ -87,4 +86,24 @@ public:
         if(firH.size()>secH.size())return (double)(firH.top());
         else return (double)(firH.top()+secH.top())/2;
     }
+ 
+ // (0327) count the ranges, whose element sum is within [lb, ub]
+    int countRangeSum(vector<int>& nums, int lower, int upper) {
+        multiset<long>bin;
+        bin.insert(0);//* important
+        long sum=0;
+        int ans=0;
+        for(int i=0; i<nums.size(); i++){
+            sum+=nums[i];//sum-x < upper; sum-x > lower; x represents a element in bin
+                         //==> sum-upper < x < sum-lower
+            multiset<long>::iterator ilow = bin.lower_bound(sum-upper); 
+            //use upper_bound here, since we do not want to touch it in the loop
+            multiset<long>::iterator ihigh = bin.upper_bound(sum-lower);
+            for(multiset<long>::iterator it=ilow; it!=ihigh; it++)ans++;
+            bin.insert(sum);
+        }
+        return ans;
+    }
 };
+
+
