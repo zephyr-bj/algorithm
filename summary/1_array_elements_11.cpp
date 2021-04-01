@@ -1,6 +1,6 @@
-/* remove elements[5] 
+/* remove elements[6] 
  * remove duplicates (0026) remove duplicates II (0080)
- * remove by value (0027) remove zeros (0283) reverse words (0151)
+ * remove by value (0027) remove zeros (0283) reverse words (0151) valid palindrome (0125)
  * find elements [5]
  * missing positive (0041) (0268) (0287)
  * find majority (0169) (0229)
@@ -47,6 +47,24 @@
         while(i<nums.size()){
             nums[i++]=0;
         }
+    }
+// (0125) valid palindrome, with invalid char and ignore cases
+    bool isPalindrome(string s) {
+        int n = s.size();
+        int i=0;
+        int l = n;
+        for(int j=0; j<n; j++){
+            s[i]=s[j];
+            if((s[i]>='a' && s[i]<='z') || (s[i]>='A'&&s[i]<='Z') || (s[i]>='0'&&s[i]<='9')){
+                if(s[i]>='A'&&s[i]<='Z')s[i]=s[i]-'A'+'a';
+                i++;
+            }
+        }
+        int a = 0; int b = i-1;
+        while(a<b){
+            if(s[a++]!=s[b--])return false;
+        }
+        return true;
     }
 //reverse every word in a string (0151)
     void str_reverse(string & s, int a, int b){
