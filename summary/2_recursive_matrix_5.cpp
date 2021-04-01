@@ -4,6 +4,7 @@
  *(0130)surrounded regions in matrix 
  *(0200)number of isolated islands in matrix 
  *(0329)longest increasing integer path in matrix
+ *(0419)battleship
  */
 //(0079)word search in matrix
     bool findWord(vector<vector<char>>&board, int i, int j, int n, int m, string&word, int p){
@@ -141,6 +142,40 @@
                 int cnt = longest(matrix,visited,i,j,n,m,INT_MIN,0);
                 if(cnt > ans)ans = cnt;
             }
+        }
+        return ans;
+    }
+//(0419)battleship
+    void shiptool(vector<vector<char>>&board, int i, int j, int n, int m, int &a, int &b, int &c, int &d){
+        if(i<0 || j<0 || i>n-1 || j>m-1 || board[i][j]!='X')return;
+        if(i<a)a=i;
+        if(i>b)b=i;
+        if(j<c)c=j;
+        if(j>d)d=j;
+        board[i][j]='Y';
+        shiptool(board, i-1, j, n,m,a,b,c,d);
+        shiptool(board, i+1, j, n,m,a,b,c,d);
+        shiptool(board, i, j-1, n,m,a,b,c,d);
+        shiptool(board, i, j+1, n,m,a,b,c,d);
+    }
+    int countBattleships(vector<vector<char>>& board) {
+        int n = board.size();
+        if(n<1)return 0;
+        int m = board[0].size();
+        if(m<1)return 0;
+        int ans =0;
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(board[i][j]=='X'){
+                    int a = i, b=i, c=j, d=j;
+                    shiptool(board, i, j, n, m, a, b, c, d);
+                    if(a==b || c==d)ans++;
+                }
+            }
+        }
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++)
+                if(board[i][j]=='Y')board[i][j]='X';
         }
         return ans;
     }
