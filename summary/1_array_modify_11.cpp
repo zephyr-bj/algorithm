@@ -1,6 +1,6 @@
 /* sort array [4] (0164) bucket sort (0215) quick sort (0324) wiggle sort II (0179*) largest number string 
                   partition (*) 3-way partition (*)
- * reverse array[3] (0344) reverse string (0345*) reverse vowels (0189*) rotate array
+ * reverse array[3] (0344) reverse string (0345*) reverse vowels (0917) Reverse Only Letters (0189*) rotate array
  * merge array [2] (0088) merge two arrays (0313) super ugly number
  * shuffle array [1] (0384)
  */
@@ -164,6 +164,23 @@ string reverseVowels(string s) {
     }
     return s;
 }
+// (0917) Reverse Only Letters
+    bool isLetter(char c){
+        if(c>='a' && c<='z')return true;
+        if(c>='A' && c<='Z')return true;
+        return false;
+    }
+    string reverseOnlyLetters(string S) {
+        int n = S.size();
+        int i=0;
+        int j=n-1;
+        while(i<j){
+            while(i<j&&!isLetter(S[i]))i++;
+            while(i<j&&!isLetter(S[j]))j--;
+            swap(S[i++],S[j--]);
+        }
+        return S;
+    }
 //retate array by k (0189), consider the case in which n%k==0
  void rotate(vector<int>& nums, int k) {
     int n = nums.size();
