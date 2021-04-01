@@ -4,6 +4,7 @@
  * find elements [5]
  * missing positive (0041) (0268) (0287)
  * find majority (0169) (0229)
+ * interval intersections [1] (0986) interval Lists intersections
  */
 //remove duplicate in sorted arrary (0026)
     int removeDuplicates(vector<int>& nums) {
@@ -187,5 +188,28 @@
         vector<int>ans;
         if(cnt1>nums.size()/3)ans.push_back(a);
         if(cnt2>nums.size()/3)ans.push_back(b);
+        return ans;
+    }
+
+//(0986) interval Lists intersections
+    vector<vector<int>> intervalIntersection(vector<vector<int>>& firstList, vector<vector<int>>& secondList) {
+        int n = firstList.size();
+        int m = secondList.size();
+        int i=0; int j=0;
+        vector<vector<int>>ans;
+        while(i<n && j<m){
+            if(firstList[i][1]< secondList[j][0])i++;
+            else if(secondList[j][1] < firstList[i][0])j++;
+            else{
+                int a = max(firstList[i][0],secondList[j][0]);
+                int b = min(firstList[i][1],secondList[j][1]);
+                if(firstList[i][1]<secondList[j][1])i++;
+                else if(firstList[i][1]>secondList[j][1])j++;
+                else{
+                    i++; j++;
+                }
+                ans.push_back(vector<int>({a,b}));
+            }
+        }
         return ans;
     }
