@@ -4,7 +4,6 @@
  * (0387)First Unique Character  
  * no match [5] (0242) is Anagram (0290) word pattern (0299) bulls and cows (0349) Intersection of Two Arrays (0350) Intersection of Two Arrays II
  */
- */
 //(0217)if contains duplicate 
     bool containsDuplicate(vector<int>& nums) {
         unordered_set<int>bin;
