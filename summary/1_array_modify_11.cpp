@@ -1,4 +1,4 @@
-/* sort array [4] (0164) bucket sort (0215) quick sort (0324) wiggle sort II (0179*) largest number string 
+/* sort array [4] (0164) bucket sort  (0825) friends of approrpiate ages (0215) quick sort (0324) wiggle sort II (0179*) largest number string 
                   partition (*) 3-way partition (*)
  * reverse array[3] (0344) reverse string (0345*) reverse vowels (0917) Reverse Only Letters (0189*) rotate array
  * merge array [2] (0088) merge two arrays (0313) super ugly number
@@ -34,6 +34,16 @@
             j=i;
         }
         return ans;
+    }
+//(0825) friends of approrpiate ages
+    int numFriendRequests(vector<int>& ages) {
+        vector<int>bin(121,0);
+        int res=0;
+        for (auto age : ages) bin[age]+=1;
+        for (auto i = 15; i <= 120; i++)
+            for (int j = 0.5 * i + 8; j <= i; ++j) 
+                res += bin[j] * (bin[i] - (i == j));
+        return res;
     }
 //largest number string by non negative integers (0179) trick for compare rule
     static bool my_cmp(int a, int b){
