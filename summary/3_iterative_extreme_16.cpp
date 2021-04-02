@@ -1,6 +1,7 @@
 /*
  *water [2]:  (0011) container with most water (0042) trap rain water
- *distribution match [2] (0030) Substring with Concatenation of All Words (0076) minimum window in S which will contain all the characters in T
+ *distribution match [3] (0030) Substring with Concatenation of All Words (0076) minimum window in S which will contain all the characters in T 
+ *                       (0438) Find All Anagrams in a String
  *gradient match [1] (0149) max points on a line 
  *[1]:(0209) shortest subarray with sum larger than a number 
  * (0003*)Longest Substring Without Repeating Characters 
@@ -115,7 +116,26 @@
         }
         return start==-1?"":s.substr(start,end-start+1);
     }
-    
+  // (0438) Find All Anagrams in a String
+    vector<int> findAnagrams(string s, string p) {
+        vector<int>tofind(256,0);
+        for(auto c:p)tofind[c]++;
+        vector<int>hasfound(256,0);
+        int n = p.size();
+        vector<int>ans;
+        int cnt = 0;
+        int sz = s.size();
+        for(int i=0; i<sz; i++){
+            hasfound[s[i]]++;
+            if(hasfound[s[i]]<=tofind[s[i]])cnt++;
+            if(cnt==n)ans.push_back(i-(n-1));
+            if(i>=n-1){
+                hasfound[s[i-(n-1)]]--;
+                if(hasfound[s[i-(n-1)]]<tofind[s[i-(n-1)]])cnt--;
+            }
+        }
+        return ans;
+    }  
 /*******************************************************************************************************/
 //(0149) max points on a line 
     unsigned gcd2(unsigned u, unsigned v) {
