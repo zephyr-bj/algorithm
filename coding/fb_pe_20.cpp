@@ -24,7 +24,8 @@
 /*[17] merge two sorted array*/
 //others
 /*[18] read4k */
-/*[19] dynasour */
+/*[19] most frequenct word in file*/
+/*[20] dynasour */
 /***********************************************************************************************************/
 /* [01].partition nums */
 // (0416) Partition Equal Subset Sum
@@ -491,8 +492,36 @@ int Read(char *buf, int n){
 	}
 	return count;
 }
-
-/*[19] dynasour */
+/*[19] most frequenct word in file */
+#include<ifstream>
+#include<unordered_map>
+#include<string>
+string mostWords(string filename){
+	ifstream sf(filename);
+	unordered_map<string,int>bin;
+	string line;
+	while(getline(sf,line)){
+		int i=0;
+		int sz = line.size();
+		for(int j=0; j<=sz; j++){
+			if(j==sz || line[j]==' '){
+				bin[line.substr(i,j-i)]++;
+				i=j+1;
+			}
+		}
+	}
+	int cnt=0;
+	string ans;
+	for(auto w:bin){
+		if(w.second > cnt){
+			cnt=w.second;
+			ans=w.first;
+		}
+	}
+	return ans;
+}
+	
+/*[20] dynasour */
 /*You will be supplied with two data files in CSV format .
 The first file contains statistics about various dinosaurs. The second file contains additional data.
 Given the following formula, speed = ((STRIDE_LENGTH / LEG_LENGTH) - 1) * SQRT(LEG_LENGTH * g)
