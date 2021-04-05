@@ -44,7 +44,6 @@
         }
     }
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        sort(candidates.begin(), candidates.end());
         vector<vector<int>>ans;
         vector<int>cand;
         combSum(ans,cand,candidates,0,target);
