@@ -1,4 +1,9 @@
-include <unistd.h>   // for sbrk
+/*
+ * http://dmitrysoshnikov.com/compilers/writing-a-memory-allocator/
+ * core part: "requestFromOS"
+ */
+
+#include <unistd.h>   // for sbrk
 
 struct Block {
   // -------------------------------------
