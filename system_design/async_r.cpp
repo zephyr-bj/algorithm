@@ -4,6 +4,7 @@
  *Real asynchronous I/O is achieved via LibAIO (on Linux) and IOCP on Windows. 
  *They dont block the calling process/thread in der User Space and they allow real overlapped I/O.
  */
+
 /*
  * 1.When F_SETOWN is invoked, nothing happens, except that a value is assigned to filp->f_owner.
  * 2.When F_SETFL is executed to turn on FASYNC, the driver’s fasync method is called. 
@@ -19,10 +20,13 @@ struct scull_pipe {
   struct cdev cdev;                  /* Char device structure */
 };
 
+/*fasync_helper is invoked to add or remove entries from the list of interested processes when the FASYNC flag changes for an open file
+ */
 static int scull_p_fasync(int fd, struct file *filp, int mode){
   struct scull_pipe *dev = filp->private_data;
   return fasync_helper(fd, filp, mode, &dev->async_queue);
 }
+
 static void scull_p_open(struct inode *inode, struct file *filp){
   struct scull_pipe *dev = hwinfo + MINOR(inode->i_rdev);
   request_irq(dev->irq, 
