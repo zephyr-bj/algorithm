@@ -16,10 +16,11 @@ struct my_x_dev {
     spinlock_t outlock;
     
     struct hw_x_dev hdev;  
-}
+};
 
 /*         read part         */
-static ssize_t my_x_dev_read (struct file *filp, char __user *buf, size_t count, loff_t *f_pos){
+static ssize_t my_x_dev_read (struct file *filp, char __user *buf, size_t count, loff_t *f_pos)
+{
     struct my_x_dev *dev = filp->private_data;
     unsigned long irqflags;
     spin_lock_irqsave(&dev->inlock, irqflags);
@@ -43,7 +44,8 @@ static ssize_t my_x_dev_read (struct file *filp, char __user *buf, size_t count,
     return count;
 }
 
-static irqreturn_t my_x_dev_in_irs_fast(int irq, void *dev_id, struct pt_regs *regs){
+static irqreturn_t my_x_dev_in_irs_fast(int irq, void *dev_id, struct pt_regs *regs)
+{
     my_x_dev * dev = (my_x_dev*)dev_id;
     unsigned long irqflags;
     spin_lock_irqsave(&(dev->inlock),irqflags);
@@ -55,12 +57,14 @@ static irqreturn_t my_x_dev_in_irs_fast(int irq, void *dev_id, struct pt_regs *r
     return IRQ_HANDLED;
 }
 
-static irqreturn_t my_x_dev_in_irs_slow(int irq, void *dev_id, struct pt_regs *regs){
+static irqreturn_t my_x_dev_in_irs_slow(int irq, void *dev_id, struct pt_regs *regs)
+{
     my_x_dev * dev = (my_x_dev*)dev_id;
     tasklet_schedule(&dev->in_tasklet);
     return IRQ_HANDLED;
 }
-void my_x_dev_in_tasklet(unsigned long dev_id){
+void my_x_dev_in_tasklet(unsigned long dev_id)
+{
     my_x_dev * dev = (my_x_dev*)dev_id;
     unsigned long irqflags;
     spin_lock_irqsave(&(dev->inlock),irqflags);
@@ -73,11 +77,13 @@ void my_x_dev_in_tasklet(unsigned long dev_id){
 /*            write part           */
 
 /* How much space is free? */
-static int spacefree(struct my_x_dev *dev){
+static int spacefree(struct my_x_dev *dev)
+{
     if (dev->outtail == dev->outhead) return dev->outsz - 1;
     return ((dev->outtail + dev->outsz - dev->outhead) % dev->outsz) - 1;
 }
-static ssize_t my_x_dev_write(struct file *filp, const char __user *buf, size_t count, loff_t *f_pos){
+static ssize_t my_x_dev_write(struct file *filp, const char __user *buf, size_t count, loff_t *f_pos)
+{
     struct my_x_dev *dev = filp->private_data;
     int result;
     unsigned long irqflags;
@@ -103,7 +109,8 @@ static ssize_t my_x_dev_write(struct file *filp, const char __user *buf, size_t 
     return count;
 }
 
-static irqreturn_t my_x_dev_out_irs(int irq, void *dev_id, struct pt_regs *regs){
+static irqreturn_t my_x_dev_out_irs(int irq, void *dev_id, struct pt_regs *regs)
+{
     my_x_dev * dev = (my_x_dev*)dev_id;
     unsigned long irqflags;
     spin_lock_irqsave(&(dev->outlock),irqflags);
