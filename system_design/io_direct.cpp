@@ -1,4 +1,13 @@
-//copied from https://gist.github.com/17twenty/2930467
+//get_user_pages: http://www.hep.by/gnu/kernel/kernel-api/API-get-user-pages.html
+// Returns number of pages pinned. This may be fewer than the number requested. If nr_pages is 0 or negative, returns 0. If no pages were pinned, returns -errno. Each page returned must be released with a put_page call when it is finished with. vmas will only remain valid while mmap_sem is held.
+
+// Must be called with mmap_sem held for read or write.
+
+// get_user_pages walks a process's page tables and takes a reference to each struct page that each user address corresponds to at a given instant. 
+// That is, it takes the page that would be accessed if a user thread accesses the given user virtual address at that instant.
+
+
+//the code below copied from https://gist.github.com/17twenty/2930467
 //show an example to use "get_user_pages"
 //get_user_pages/gu_page.c	2012-06-14 14:41:31.797310260 +0100
 #include <linux/module.h>
