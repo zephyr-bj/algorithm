@@ -7,108 +7,118 @@
  * interval intersections [1] (0986) interval Lists intersections
  */
 //remove duplicate in sorted arrary (0026)
-    int removeDuplicates(vector<int>& nums) {
-        int n = nums.size();
-        if(n<2)return n;
-        int i = 0;
-        for(int j=1; j<n; j++){
-            if(nums[j]>nums[i])i++;
-            nums[i]=nums[j];
-        }
-        return i+1;
+int removeDuplicates(vector<int>& nums) {
+    int n = nums.size();
+    if (n < 2)
+	    return n;
+    int i = 0;
+    for (int j = 1; j < n; j++) {
+        if(nums[j] > nums[i])
+			i++;
+        nums[i] = nums[j];
     }
+    return i+1;
+}
 //remove by value in unsorted array (0027)
-    int removeElement(vector<int>& nums, int val) {
-        int n = nums.size();
-        int i=0;
-        for(int j=0; j<n; j++){
-            nums[i]=nums[j];
-            if(nums[j]!=val)i++;
-        }
-        return i;
-    }
+int removeElement(vector<int>& nums, int val) {
+    int n = nums.size();
+    int i = 0;
+    for (int j = 0; j < n; j++) {
+        nums[i] = nums[j];
+        if (nums[j] != val)
+			i++;
+    }   
+    return i;
+}  
 //remove duplicate in sorted array, duplicates limit is 2 (0080)
-    int removeDuplicates(vector<int>& nums) {
-        int n = nums.size();
-        if(n<3)return n;
-        int i = 1;
-        for(int j=2;j<n;j++){
-            if(nums[i]!=nums[i-1]||nums[i]!=nums[j])i++;
-            nums[i]=nums[j];
-        }
-        return i+1;
-    }
-//remove zeros from unsorted array and append them to the end (0283)
-    void moveZeroes(vector<int>& nums) {
-        int i=0;
-        for(int j=0; j<nums.size(); j++){
-            nums[i]=nums[j];
-            if(nums[i]!=0)i++;
-        }
-        while(i<nums.size()){
-            nums[i++]=0;
-        }
-    }
-// (0125) valid palindrome, with invalid char and ignore cases
-    bool isPalindrome(string s) {
-        int n = s.size();
-        int i=0;
-        int l = n;
-        for(int j=0; j<n; j++){
-            s[i]=s[j];
-            if((s[i]>='a' && s[i]<='z') || (s[i]>='A'&&s[i]<='Z') || (s[i]>='0'&&s[i]<='9')){
-                if(s[i]>='A'&&s[i]<='Z')s[i]=s[i]-'A'+'a';
+int removeDuplicates(vector<int>& nums) {
+    int n = nums.size();
+    if (n < 3)
+            return n;
+    int i = 1;
+    for (int j = 2; j < n; j++) {
+        if(nums[i] != nums[i-1] || nums[i] != nums[j])
                 i++;
-            }
-        }
-        int a = 0; int b = i-1;
-        while(a<b){
-            if(s[a++]!=s[b--])return false;
-        }
-        return true;
-    }
+        nums[i] = nums[j];
+    }   
+    return i+1;
+}
+//remove zeros from unsorted array and append them to the end (0283)
+void moveZeroes(vector<int>& nums) {
+    int i = 0;
+    for (int j = 0; j < nums.size(); j++) {
+        nums[i] = nums[j];
+        if(nums[i] != 0)
+			i++;
+    }   
+    while (i < nums.size()) {
+        nums[i++] = 0;
+    }   
+}   
+// (0125) valid palindrome, with invalid char and ignore cases
+bool isPalindrome(string s) {
+    int n = s.size();
+    int i = 0;
+    int l = n;
+    for (int j = 0; j < n; j++) {
+        s[i] = s[j];
+        if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= '0' && s[i] <= '9')) {
+            if (s[i] >= 'A' && s[i] <= 'Z')
+				s[i] = s[i] - 'A' + 'a';
+            i++;
+        }   
+    }   
+    int a = 0; int b = i-1;
+    while (a < b) {
+        if (s[a++] != s[b--])
+			return false;
+    }   
+    return true;
+}   
 //reverse every word in a string (0151)
-    void str_reverse(string & s, int a, int b){
-        while(a<b){
-            swap(s[a++],s[b--]);
-        }
-    }
-    string reverseWords(string s) {
-        int n = s.size();
-        int i=0; 
-        int l = n; 
-        for(int j=0; j<n; j++){
-            s[i]=s[j];
-            if(s[j]==' '&&(i==0||s[i-1]==' '))l--;
-            else i++;
-        }
-        if(s[l-1]==' ')l--;
-        s.erase(l);
+void str_reverse(string & s, int a, int b) { 
+    while (a < b) {
+        swap(s[a++],s[b--]);
+    }   
+}   
+string reverseWords (string s) {
+    int n = s.size();
+    int i = 0; 
+    int l = n;  
+    for (int j = 0; j < n; j++) {
+        s[i] = s[j];
+        if (s[j] == ' ' && (i == 0 || s[i-1] == ' '))l--;
+        else i++;
+    }   
+    if(s[l-1] == ' ')
+		l--;
+    s.erase(l);
         
-        str_reverse(s,0,l-1);
-        int x = 0;
-        for(int y=0; y<=l; y++){
-            if(y==l||s[y]==' '){
-                str_reverse(s,x,y-1);
-                x=y+1;
-            }
-        }
-        return s;
-    }
+    str_reverse(s,0,l-1);
+    int x = 0;
+    for (int y = 0; y <= l; y++) {
+        if ( y == l || s[y] == ' ') { 
+            str_reverse(s,x,y-1);
+            x = y + 1;
+        }   
+    }   
+    return s;
+}
 
 //find first missing positive in a unsorted array (0041)
-   int firstMissingPositive(vector<int>& nums) {
-        int n = nums.size();
-        for(int i=0; i<n; i++){
-            while(nums[i]>0&&nums[i]<n+1&&nums[i]!=nums[nums[i]-1]){
-                swap(nums[i],nums[nums[i]-1]);
-            }
+int firstMissingPositive(vector<int>& nums) {
+    int n = nums.size();
+    for(int i = 0; i < n; i++){
+        while(nums[i] > 0 && nums[i] < n+1 && nums[i] != nums[nums[i]-1]) {
+            swap(nums[i], nums[nums[i]-1]);
         }
-        for(int i=0; i<n; i++){
-            if(nums[i]!=i+1)return i+1;
-        }
-        return n+1;
     }
+    for(int i = 0; i < n; i++){
+        if(nums[i] != i+1)
+			return i+1;
+    }
+    return n+1;
+}
 //find the missing number from range [0,n] (0268)
     int missingNumber(vector<int>& nums) {
         int n = nums.size();
