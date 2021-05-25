@@ -1,7 +1,8 @@
+//(1) complexity
 //say array of size N, and the query range of size M
-//query in array takes time O(M), space O(N)
-//query in a NxN matrix, takes time O(1), space O(NxN)
-//query in segment tree, takes time O(logM), space O(2N)
+//query in array takes time O(M), update take O(1), space O(N)
+//query in a NxN matrix takes time O(1), update takes O(N), space O(NxN)
+//query in segment tree takes time O(logN), update takes O(logN), space O(2N)
 class SGT {
 public:
     vector<int>sgt;
@@ -47,22 +48,23 @@ public:
     }
 }
 
-    NumArray(vector<int>& nums) {
-        n = nums.size();
-        for(int i=0; i<2*n; i++)sgt.push_back(0);
-        constructSGT(nums, 0, n-1, 0);
-    }
+void NumArray(vector<int>& nums) {
+    n = nums.size();
+    for (int i=0; i<2*n; i++)
+        sgt.push_back(0);
+    constructSGT(nums, 0, n-1, 0);
+}
     
-    void update(int i, int val) {
-        updateSGT(0, 0, n-1, i, val);
-    }
+void update(int i, int val) {
+    updateSGT(0, 0, n-1, i, val);
+}
     
-    int sumRange(int i, int j) {
-        return querySGT(0,0,n-1,i,j);
-    }
-// This is schematic representation of the data structure built for array of 8 elements. 
-// It consists of 4 layers (log2N + 1 in general). Each layer contains a set of ranges that don't overlap and cover the whole array. 
+int sumRange(int i, int j) {
+    return querySGT(0,0,n-1,i,j);
+}
 // https://codeforces.com/blog/entry/1256
+// There is a schematic representation of the data structure built for array of 8 elements. 
+// It consists of 4 layers (log2N + 1 in general). Each layer contains a set of ranges that don't overlap and cover the whole array. 
 
 // segment tree can be used for sum/max/min or ...?
 // also have an alternative using map
@@ -70,10 +72,10 @@ public:
 // the original array starts from n-1, so there are n elements from n-1 to 2n-2 
 // non-leaf nodes from 0 to n-2, n-1 in total
 // root at 0
-// size of array = (size of tree + 1)/2;
-// 2*p+1 for left subtree, covers elements from l to m;
-// 2*p+2 for right subtree, covers elements from m+1 to h;
-// (l-1)/2 is parent, (r-2)/2 is parent
+// (2) size of array = (size of tree + 1)/2;
+// (3) 2*p+1 for left subtree, covers elements from l to m;
+//     2*p+2 for right subtree, covers elements from m+1 to h;
+// (4) (l-1)/2 [= l/2] is parent, (r-2)/2 [= r/2-1] is parent
 class NumArray {
 public:
     NumArray(vector<int>& nums) {
@@ -114,15 +116,19 @@ public:
         
         int sum = 0;
         while (l <= r) {
-            if (l % 2 == 0) {//if not left branch
+            //if 'l' not left branch, since left branch is given by 2*p+1
+            //its parent not in our query range
+            if (l % 2 == 0) {
                 sum += tree[l];
                 l++;
             }
-            if (r % 2 == 1) {//if not right branch
+            //if 'r' not right branch, since right branch is given by 2*p+2
+            //its parent not in our query range
+            if (r % 2 == 1) {
                 sum += tree[r];
                 r--;
             }
-            l = l / 2 ;
+            l = l / 2 ; 
             r = r / 2 - 1;
         }
         return sum;
