@@ -1,3 +1,66 @@
+//say array of size N, and the query range of size M
+//query in array takes time O(M), space O(N)
+//query in a NxN matrix, takes time O(1), space O(NxN)
+//query in segment tree, takes time O(logM), space O(2N)
+class SGT {
+public:
+    vector<int>sgt;
+    int n;
+    void constructSGT(vector<int>&nums, int l, int h, int x){
+        if(l>h)return;
+        if(l==h){
+            sgt[x]=nums[l];return;
+        }
+        int m = (l+h)>>1;
+        constructSGT(nums, l, m, 2*x+1);
+        constructSGT(nums, m+1, h, 2*x+2);
+        sgt[x]=sgt[2*x+1]+sgt[2*x+2];
+    }
+    int querySGT(int x, int l, int h, int i, int j){
+        if(i<=l&&j>=h){
+            return sgt[x];
+        }else if(i>h || j<l){
+            return 0;
+        }else{
+            int m = (l+h)>>1;
+            if(m<i)return querySGT(2*x+2, m+1, h, i, j);
+            else if(m>=j)return querySGT(2*x+1, l, m, i, j);
+            else{
+                int a = querySGT(2*x+1, l, m, i,m);
+                int b = querySGT(2*x+2, m+1, h, m+1, j);
+                return a+b;
+            }
+        }
+    }
+    void updateSGT(int x, int l, int h, int i, int val){
+        if(l==h&&l==i){
+            sgt[x]=val;
+            return;
+        }
+        int m = (l+h)>>1;
+        if(i<=m){
+            updateSGT(2*x+1, l, m, i, val);    
+        }else{
+            updateSGT(2*x+2, m+1, h, i, val);
+        }
+        sgt[x]=sgt[2*x+1]+sgt[2*x+2];
+    }
+}
+
+    NumArray(vector<int>& nums) {
+        n = nums.size();
+        for(int i=0; i<2*n; i++)sgt.push_back(0);
+        constructSGT(nums, 0, n-1, 0);
+    }
+    
+    void update(int i, int val) {
+        updateSGT(0, 0, n-1, i, val);
+    }
+    
+    int sumRange(int i, int j) {
+        return querySGT(0,0,n-1,i,j);
+    }
+
 // segment tree can be used for sum/max/min or ...?
 // also have an alternative using map
 // segment tree has 2*n-1 elements in total
@@ -61,7 +124,7 @@ public:
         }
         return sum;
     }
-    
+
 private:
     vector<int> tree;
 };
