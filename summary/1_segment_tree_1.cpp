@@ -60,6 +60,9 @@ public:
     int sumRange(int i, int j) {
         return querySGT(0,0,n-1,i,j);
     }
+// This is schematic representation of the data structure built for array of 8 elements. 
+// It consists of 4 layers (log2N + 1 in general). Each layer contains a set of ranges that don't overlap and cover the whole array. 
+// https://codeforces.com/blog/entry/1256
 
 // segment tree can be used for sum/max/min or ...?
 // also have an alternative using map
