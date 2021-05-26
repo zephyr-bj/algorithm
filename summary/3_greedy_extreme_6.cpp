@@ -8,14 +8,14 @@
 // (0045) jump game II
     int jumpII(vector<int>& nums) {
         int steps = 0;
-        int near = 0;
+        int near = 0;  //last longest reach
         int far = 0;
         for (int i = 0; i < nums.size(); ++i) {
-            if (i > near) {
-                ++steps;
-                near = far;
+            if (i > near) {//if this position can be reached without an additional step
+                ++steps;   //add one step
+                near = far;//update the longest reach 
             }
-            far = max(far, i + nums[i]);      
+            far = max(far, i + nums[i]); //longest reach so far
         }
         return steps;
     }
