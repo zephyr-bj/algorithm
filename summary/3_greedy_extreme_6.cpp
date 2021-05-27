@@ -114,6 +114,12 @@ bool canJump(vector<int>& nums) {
         return ans;
     }
 // (0330) patching array
+/* when we are able to fill up to "X", the best add in number should be "X+1"
+   (1) larger number will left "X+1" empty
+   (2) smaller number make less reach range
+   when nums[i] < X+1, we take nums[i], since it's free, not cost one more patch
+   otherwise, we take X+1, since its the best option. 
+ */
     int minPatches(vector<int>& nums, int n) {
         long long maxT=0;
         int i=0;
