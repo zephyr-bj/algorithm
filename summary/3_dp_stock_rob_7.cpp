@@ -4,14 +4,14 @@
 //  max stock profit I (0121)                       time O(n),  memory O(1)
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
-        if(n<2)return 0;
-        int p = -prices[0];//the lowest price I find by far
-        int ans = 0;
-        for(int i=1; i<n; i++){
-            ans = max(ans, prices[i]+p);
-            p=max(p,-prices[i]);
+        if(n<1)return 0;
+        int buy = INT_MIN;
+        int sell = 0;
+        for (int i=0; i<n; i++) {
+            sell = max(sell, buy+prices[i]);
+            buy = max(buy, -prices[i]);
         }
-        return ans;
+        return sell;
     }
 //* max stock profit II (0122)                      time O(n),  memory O(1)
     /*solution1*/
@@ -27,35 +27,34 @@
     /*solution2*/
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
-        if(n<2)return 0;
-        int bbuy = -prices[0];
-        int bsel = 0;
-        for(int i=1; i<n; i++){
-            int tbbuy = bsel - prices[i];
-            int tbsel = bbuy + prices[i];
-            bsel = max(bsel,tbsel);
-            bbuy = max(bbuy,tbbuy);
+        int buy = INT_MIN;
+        int sell = 0;
+        for (int i=0; i<n; i++) {
+            int p = sell;
+            sell = max(sell, buy + prices[i]);
+            buy = max(buy, p - prices[i]);
         }
-        return bsel;
+        return sell;
     }
 //  max stock profit III (0123)                     time O(n),  memory O(1)
+    // bb[k] and bs[k]: buy and sell profits after k-th transaction.
+// 4 states: 5 variables;
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
         if(n<2)return 0;
-        int bbuy1 = -prices[0];
-        int bsel1 = 0;
-        int bbuy2 = INT_MIN;
-        int bsel2 = 0;
-        for(int i=1; i<n; i++){
-            if(bbuy2 > INT_MIN)bsel2 = max(bsel2, bbuy2+prices[i]);
-            if(bsel1 > 0)bbuy2 = max(bbuy2, bsel1-prices[i]);
-            bsel1 = max(bsel1, bbuy1+prices[i]);
-            bbuy1 = max(bbuy1,-prices[i]);
+        vector<int>bb=vector<int>(3,INT_MIN);
+        vector<int>bs=vector<int>(3,0);
+        for(int i=0; i<n; i++){
+            for(int k=2; k>0; k--){
+                bs[k] = max(bs[k], bb[k]+prices[i]);
+                bb[k] = max(bb[k], bs[k-1]-prices[i]);
+            }
         }
-        return max(bsel1, bsel2);
+        return bs[2];
     }
 //* max stock profit IV (0188)                      time O(nk),  memory O(k)
     /*time O(nk), space O(k), 12ms: specail process for k>=n/2*/
+// 2k states: 2k+1 variables;
        int maxProfit(int k, vector<int>& prices) {
         int n = prices.size();
         if(n<2)return 0;
@@ -78,17 +77,18 @@
         return sell[k];
     }
 //  max stock profit V (0309)                       time O(n),  memory O(1)
-    int maxProfitII(vector<int>& prices) {
+// 3 states: 4 variables
+    int maxProfit(vector<int>& prices) {
         int n = prices.size();
         if(n<2)return 0;
-        int bbuy=-prices[0];
+        int bbuy=INT_MIN;
         int bsel=0;
         int bselcd=0;
-        for(int i=1; i<n; i++){                 
-            int p = bbuy+prices[i];            
-            bbuy=max(bbuy,bselcd-prices[i]); 
-            bselcd=max(bselcd,bsel);         
-            bsel=max(bsel,p); 
+        for(int i=0; i<n; i++){ 
+            int p = bselcd;
+            bselcd=bsel;         
+            bsel=max(bsel,bbuy+prices[i]);          
+            bbuy=max(bbuy,p-prices[i]); 
         }
         return bsel;
     }
