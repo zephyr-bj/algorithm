@@ -3,6 +3,7 @@
  *find longest substring with at least K repeating characters (0395)
  */
 //sudoku solver (0037)
+//solution 1: 20ms
     bool solve(vector<vector<char>>&board, int i, int j){
         if(i==0 && j==9)return true;
         int x = (i+1)%9;
@@ -27,6 +28,41 @@
     void solveSudoku(vector<vector<char>>& board) {
         solve(board,0,0);
     }
+//solution 2: 8ms
+    bool solve(vector<vector<char>>&board, int i, int j, 
+              vector<vector<bool>>&rchk, vector<vector<bool>>&cchk, vector<vector<bool>>&bchk){
+        if(i==0 && j==9)return true;
+        int x = (i+1)%9;
+        int y = j+(i+1)/9;
+        if(board[i][j]!='.')return solve(board,x,y,rchk,cchk,bchk);
+        for(int a=0; a<9; a++){
+            if(rchk[i][a] == 0 && cchk[j][a] == 0 && bchk[(i/3)*3+(j/3)][a] == 0){
+                board[i][j]='1'+a;
+                rchk[i][a] = 1; cchk[j][a] = 1; bchk[(i/3)*3+(j/3)][a] = 1;
+                if(solve(board,x,y,rchk,cchk,bchk))return true;
+                board[i][j]='.';
+                rchk[i][a] = 0; cchk[j][a] = 0; bchk[(i/3)*3+(j/3)][a] = 0;
+            }
+        }
+        return false;
+    }
+    void solveSudoku(vector<vector<char>>& board) {
+        vector<vector<bool>>rchk(9,vector<bool>(9,0));
+        vector<vector<bool>>cchk(9,vector<bool>(9,0));
+        vector<vector<bool>>bchk(9,vector<bool>(9,0));
+        for (int i=0; i<9; i++) {
+            for (int j=0; j<9; j++) {
+                if(board[i][j] != '.') {
+                    int x = board[i][j] - '1';
+                    rchk[i][x] = 1;
+                    cchk[j][x] = 1;
+                    bchk[(i / 3) * 3 + (j/3)][x] = 1;
+                }
+            }
+        }
+        solve(board,0,0,rchk,cchk,bchk);
+    }
+
 //check if string s is scramble string of string t (0087)
    bool isScramble(string s1, string s2) {
         int n = s1.size();
@@ -47,29 +83,28 @@
         }
         return false;
     }
+
 //find longest substring with at least K repeating characters (0395)
 /*Solution I*/
 int getlongestSubstring(char *s, int start, int end, int k) {
     int scharcount[26] = {0};
-    if (end-start < k)return 0;
+    if (end-start < k)
+        return 0;
+    for (int i = start;  i < end; i++) 
+        scharcount[s[i] - 'a']++;
 
-    for (int i = start;  i < end; i++) scharcount[s[i] - 'a']++;
-    
-    //iterate through substring, find first invalid char, split, invalid char is char with count < k, 
     for (int i = start; i < end; i++) {
-        if (/*scharcount[s[i]-'a'] >=1 &&*/  scharcount[s[i]-'a'] < k) {
+        if (scharcount[s[i]-'a'] < k) {
             int j = i+1;
             //i gives first invalid char, to be more efficient skip all invalid chars after this and get to the last invalid char
             //thereby reducing the number of recursive calls.
             while ((j < end) && (scharcount[s[j]-'a'] < k)) j++;
         
-            //Now j is next valid starting point of next substring
             int left = getlongestSubstring(s, start, i,k);
             int right = getlongestSubstring(s, j, end, k);
             return left>right?left:right;
         }
     }
-    //reach here when mid = -1, no invalid char found in substring, so that whole substring is valid
     return (end - start);
 }
 
