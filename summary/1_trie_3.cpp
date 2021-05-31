@@ -127,51 +127,49 @@ public:
 
 class Solution {
 public:
-    void insertWord(TrieNode * root, string s, int p){
-        if(p==s.size()){
-            root->isfinal=true;return;
+    void insert_trieNode(trieNode * root, string str) {
+        trieNode * t = root;
+        for (auto c:str) {
+            if(t->br[c - 'a'] == NULL) 
+                t->br[c - 'a'] = new trieNode;
+            t = t->br[c - 'a'];
         }
-        int idx = s[p]-'a';
-        if(root->leaves[idx]==NULL){
-            TrieNode * node=new TrieNode(s[p]);
-            root->leaves[idx]=node;
-        }
-        insertWord(root->leaves[idx], s, p+1);
-        return;
+        t->isEnd = true;
     }
-    void dfs(TrieNode * root, vector<vector<char>>&board,int x,int y,int n,int m,
-             string &s,unordered_set<uint32_t>&visited,vector<string>&ans){
-        uint32_t tag = (((uint32_t)(x))<<16) | ((uint32_t)(y)&(0xffff));
-        if(visited.find(tag)!=visited.end())return;
-        int idx = board[x][y]-'a';
-        if(root->leaves[idx]==NULL)return;
-        s.push_back(board[x][y]);
-        visited.insert(tag);
-        if(root->leaves[idx]->isfinal){
-            ans.push_back(s);root->leaves[idx]->isfinal=false;
+    void dfs(vector<vector<char>>&board, vector<vector<bool>>&visited, int i, int j,
+            int n, int m, trieNode * root, vector<string>&ans, string &cand) {
+        if (i<0 || i>n-1 || j<0 || j>m-1 || visited[i][j]) 
+            return;
+        if (root == NULL || root->br[board[i][j] - 'a'] == NULL)
+            return;
+        cand.push_back(board[i][j]);
+        root = root->br[board[i][j] - 'a'];
+        if (root->isEnd) {
+            ans.push_back(cand);
+            root->isEnd = false;   // we will not return here after one string found, more could be still further this way
         }
-        if(x+1<n)dfs(root->leaves[board[x][y]-'a'],board,x+1,y,n,m,s,visited,ans);
-        if(x-1>=0)dfs(root->leaves[board[x][y]-'a'],board,x-1,y,n,m,s,visited,ans);
-        if(y+1<m)dfs(root->leaves[board[x][y]-'a'],board,x,y+1,n,m,s,visited,ans);
-        if(y-1>=0)dfs(root->leaves[board[x][y]-'a'],board,x,y-1,n,m,s,visited,ans);
-        visited.erase(tag);
-        s.pop_back();
+        visited[i][j] = true;
+        dfs(board,visited,i+1,j,n,m,root,ans,cand);
+        dfs(board,visited,i-1,j,n,m,root,ans,cand);
+        dfs(board,visited,i,j+1,n,m,root,ans,cand);
+        dfs(board,visited,i,j-1,n,m,root,ans,cand);
+        visited[i][j] = false;
+        cand.pop_back();
     }
+public:
     vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
-        vector<string>ans;
-        int n=board.size();
-        if(n==0)return ans;
-        int m=board[0].size();
-        if(m==0)return ans;
-        TrieNode * root=new TrieNode('*');
-        for(int i=0; i<words.size(); i++){
-            insertWord(root,words[i],0);
+        trieNode * root = new trieNode;
+        for (auto w:words) {
+            insert_trieNode(root, w);
         }
-        for(int i=0; i<n; i++){
-            for(int j=0; j<m; j++){
-                unordered_set<uint32_t>visited;
-                string s;
-                dfs(root, board,i,j,n,m,s,visited,ans);
+        int n = board.size();
+        int m = board[0].size();
+        vector<vector<bool>>visited(n,vector<bool>(m,false));
+        vector<string>ans;
+        string cand;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                dfs(board,visited,i,j,n,m,root,ans,cand);
             }
         }
         return ans;
