@@ -1,4 +1,4 @@
-alker sends a packet to that port, on the specified machine, that contains whatever the user enters on the command line.
+//alker sends a packet to that port, on the specified machine, that contains whatever the user enters on the command line.
 /*
 ** listener.c -- a datagram sockets "server" demo 
 ** listener sits on a machine waiting for an incoming packet on port 4950. t
