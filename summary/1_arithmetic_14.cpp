@@ -10,28 +10,25 @@
 
 // (0009) palindrome number
 bool isPalindrome(int x) {
-    if(x<0)return 0;
+    if (x < 0)
+	    return 0;
     int y=0;
-    int tmp=x;
-    while(tmp>0){
-        int digit=tmp%10;
-        y*=10;
-        y+=digit;
-        tmp/=10;
+    while (x > 0) {
+        y = 10 * y + x % 10;
+        x = x / 10;
     }
-    if(x==y)return 1;
-    else return 0;
+    return x == y;
 }
 // (0007) reverse integer
 int reverse(int x) {
     int prevRev = 0 , rev= 0;
     while (x != 0) {
-        rev= rev*10 + x % 10;
+        rev = rev * 10 + x % 10;
         if ((rev - x % 10) / 10 != prevRev) {
             return 0;
         }
         prevRev = rev;
-        x = x/10;
+        x = x / 10;
     }
     return rev;
 }
@@ -47,7 +44,7 @@ vector<int> plusOne(vector<int>& digits) {
             return digits;
         }
     }
-    digits[0] =1;
+    digits[0] = 1;
     digits.push_back(0);
     return digits;
 }
@@ -120,7 +117,7 @@ string fractionToDecimal(int numerator, int denominator) {
     if(fs.size() > 0)
 		ans+=".";
     if (fp!=0) {
-        fs.insert(frac[fp],"(");
+        ans += "(";
         fs += ")";
     }   
     ans += fs;
@@ -201,6 +198,7 @@ int singleNumber(vector<int>& nums) {
     return x;
 }
 // (0137) single number II
+// drive the two equations by three 1s, we see repeat
 int singleNumber(vector<int> A) 
 {
     int ones = 0, twos = 0;
