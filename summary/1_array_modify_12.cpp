@@ -1,10 +1,13 @@
 /* sort array [5] (0164) bucket sort  (0825) friends of approrpiate ages (0215) quick sort (0324) wiggle sort II (0179*) largest number string 
                   partition (*) 3-way partition (*)
  * reverse array[3] (0344) reverse string (0345*) reverse vowels (0917) Reverse Only Letters (0189*) rotate array
- * merge array [2] (0088) merge two arrays (0313) super ugly number
+ * merge array [3] (0088) merge two arrays (0313) super ugly number (0986) interval Lists intersections
  * shuffle array [1] (0384)
  */
 //maximum gap (0164)
+// the minimum max Gap happens when all the nums distributed evenly: (ub-lb)/(n-1) apart
+// we take the number of "sz" bins, so the max Gap cannot happens within one bin =>
+// we look for them between different bins
     int maximumGap(vector<int>& nums) {
         int n = nums.size();
         if(n<2)return 0;
@@ -36,10 +39,19 @@
         return ans;
     }
 //(0825) friends of approrpiate ages
+/*  no request if any of the three is true
+    age[B] <= 0.5 * age[A] + 7
+    age[B] > age[A]
+    age[B] > 100 && age[A] < 100
+
+    1 <= ages.length <= 20000.
+    1 <= ages[i] <= 120.
+ */
     int numFriendRequests(vector<int>& ages) {
         vector<int>bin(121,0);
         int res=0;
         for (auto age : ages) bin[age]+=1;
+        //0.5 * a + 7 < b <= a，0.5 * a > 7，a > 14，so a starts from 15.
         for (auto i = 15; i <= 120; i++)
             for (int j = 0.5 * i + 8; j <= i; ++j) 
                 res += bin[j] * (bin[i] - (i == j));
@@ -237,6 +249,29 @@ string reverseVowels(string s) {
         }
         return result[n-1];
     }
+//(0986) interval Lists intersections
+    vector<vector<int>> intervalIntersection(vector<vector<int>>& firstList, vector<vector<int>>& secondList) {
+        int n = firstList.size();
+        int m = secondList.size();
+        int i=0; int j=0;
+        vector<vector<int>>ans;
+        while(i<n && j<m){
+            if(firstList[i][1]< secondList[j][0])i++;
+            else if(secondList[j][1] < firstList[i][0])j++;
+            else{
+                int a = max(firstList[i][0],secondList[j][0]);
+                int b = min(firstList[i][1],secondList[j][1]);
+                if(firstList[i][1]<secondList[j][1])i++;
+                else if(firstList[i][1]>secondList[j][1])j++;
+                else{
+                    i++; j++;
+                }
+                ans.push_back(vector<int>({a,b}));
+            }
+        }
+        return ans;
+    }
+
 //shuffle array (0384)
     vector<int> shuffle() {
         vector<int>res=setx;
