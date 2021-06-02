@@ -189,6 +189,8 @@ int rotLeft32(int n, int k){
 #define SWAP_INT32(x) (((x) >> 24) | (((x) & 0x00FF0000) >> 8) | (((x) & 0x0000FF00) << 8) | ((x) << 24))
 
 //swap the neighboring bits. 
+//   $$$$$$$$$ never right shift mask like this, the 1 at highest bit will be kept. $$$$$$$$$$
+// define another mask2 = 0x55555555
 unsigned int swapneighborBits(unsigned int a){
     unsigned int mask = 0xaaaaaaaa;
     unsigned int num1 = a & mask;
@@ -240,7 +242,7 @@ int mask2nz(int a){
 // only the highest NO zero bits left
 int rangeBitwiseAnd(int m, int n) {
     int trans = 0;
-    while(m != n) {
+    while (m != n) {
         ++ trans;
         m >>= 1;
         n >>= 1;
@@ -254,7 +256,7 @@ std::string print_binary(std::string val){
     std::string rear;
     std::string *sp = &front;
     for(int i=0; i<val.size();i++){
-    	if(val[i] == '.'){
+    	if (val[i] == '.') {
 	    sp = &rear;
         }
         sp->push_back(val[i]);
