@@ -1,7 +1,7 @@
 // reverse [3]: (0025) reverse K group (0092) reverse list between (0206) reverse List
 // merge [2]: (0021) merge 2 lists (0023*) merge K lists
 // partition [3]: (0328) Odd Even List (0086) partition List
-//             (0143) reorder List : partition + reverse + merge
+//             (0143) reorder List : partition + reverse + merge (merge one into another)
 // sort [2]: (0147) insertion sort (0148) merge sort
 // rotate [1]: (0061*) rotate right
 // swap [1]: (0024) swap pairs
@@ -145,25 +145,24 @@ ListNode *mergeTwoLists(ListNode *l1, ListNode *l2) {
 
 /* partition */
 // (0086) partition List
-    ListNode* partitionX(ListNode* head, int x) {
-        ListNode dummy(0);
-        dummy.next = head;
-        ListNode * p1 = &dummy;
-        ListNode d(0);
-        ListNode * p2=&d;
-        while(p1!=NULL&&p1->next!=NULL){
-            if(p1->next->val>=x){
-                p1=p1->next;
+    ListNode* partition(ListNode* head, int x) {
+        ListNode dumb;
+        dumb.next = head;
+        ListNode * p = &dumb;
+        ListNode large;
+        ListNode * q = &large;
+        while(p->next!=NULL){
+            if(p->next->val>=x){
+                q->next = p->next;
+                p->next = p->next->next;
+                q=q->next;
+                q->next=NULL;
             }else{
-                ListNode * tmp=p1->next;
-                p1->next=p1->next->next;
-                tmp->next=p2->next;
-                p2->next=tmp;
-                p2=p2->next;
+                p=p->next;
             }
         }
-        p2->next=dummy.next;
-        return d.next;;
+        p->next=large.next;
+        return dumb.next;
     }
 // (0328) Odd Even List
     ListNode* oddEvenList(ListNode* head) {
@@ -183,7 +182,7 @@ ListNode *mergeTwoLists(ListNode *l1, ListNode *l2) {
 // the partition algorithm as follows: 
 // when even number of nodes, say 1,2,3,4, p points to 2
 // when odd number of nodes, say 1,2,3,4,5, p points to 3
-// so p points to the middle one or the last one of the first half
+// so p points to the middle one (odd case) or the last one of the first half (even case)
     void reorderList(ListNode* head) {
         if(head==NULL||head->next==NULL||head->next->next==NULL)return;
         ListNode * p = head;
