@@ -8,8 +8,11 @@
     bool containsDuplicate(vector<int>& nums) {
         unordered_set<int>bin;
         for(int i=0; i<nums.size(); i++){
-            if(bin.find(nums[i])!=bin.end())return true;
-            else bin.insert(nums[i]);
+            if (bin.find(nums[i])!=bin.end()) {
+                return true;
+            } else {
+                bin.insert(nums[i]);
+            }
         }
         return false;
     }
@@ -18,11 +21,10 @@
         unordered_map<int,int>bin;
         int n = nums.size();
         for(int i=0; i<n; i++){
-            if(bin.find(nums[i])==bin.end()){
+            if ((bin.find(nums[i]) != bin.end()) && (i-bin[nums[i]] <= k)) {
+                return true;
+            } else {
                 bin[nums[i]]=i;
-            }else{
-                if(i-bin[nums[i]]<=k)return true;
-                else bin[nums[i]]=i;
             }
         }
         return false;
@@ -32,7 +34,10 @@
         unordered_map<long,int>bin;
         int n = nums.size();
         for(int i=0; i<n; i++){
-            long r = ((long)(nums[i])+(long)(INT_MAX))/((long)t+1);//for the negative case, say [-3, 3, -6]
+            // We (floor) divide each number by t+1 and put it in a bucket with key as the quotient.
+            // On observing carefully, we can see that the absolute difference
+            //     between any two numbers in any bucket is at most t, which is what we want.
+            long r = ((long)(nums[i])+(long)(INT_MAX))/((long)t+1);//for the negative case, say [-3, 3, -6], k=2, t=3
             /* another solution for negative case 
              * long r = (long)(nums[i])/((long)t+1);
              * if(nums[i]<0)r--;
@@ -45,18 +50,29 @@
         return false;
     }
 //(0387)First Unique Character 
-    int lengthOfLongestSubstring(string s) {
-        vector<int>hasfound(256,-1);
-        int ans = 0; int start = -1;
-        int L = s.size();
-        for(int i=0; i<L; i++){
-            if(hasfound[s[i]]>start){
-                start=hasfound[s[i]];
-            }
-            hasfound[s[i]]=i;
-            ans=max(ans,i-start);
+ int firstUniqChar(string s) {
+        unordered_map<char, int> m;
+        for (auto &c : s) {
+            m[c]++;
         }
-        return ans;
+        for (int i = 0; i < s.size(); i++) {
+            if (m[s[i]] == 1) return i;
+        }
+        return -1;
+    }
+//if the string is extremely long, we wouldn't want to traverse it twice, so instead only storing just counts of a char, 
+//we also store the index, and then traverse the hash table.
+    int firstUniqChar(string s) {
+        unordered_map<char, pair<int, int>> m;
+        int idx = s.size();
+        for (int i = 0; i < s.size(); i++) {
+            m[s[i]].first++;
+            m[s[i]].second = i;
+        }
+        for (auto &p : m) {
+            if (p.second.first == 1) idx = min(idx, p.second.second);
+        }
+        return idx == s.size() ? -1 : idx;
     }
 /*******************************************************************************************************/
 //(0242) is Anagram 
