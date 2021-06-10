@@ -15,7 +15,7 @@
     (0078)find all subsets of a set of n distinct integers 
     (0090)find all subsets of a set of n integers, may contains duplicate integers
     (0077)find all comobinations of k elements out of a set of n elements
-    queue[2]
+    queen[2]
     (0051)find all solutions for the N-Queen problem
     (0052)find the number of solutions for the N-Queen problem
     expression[2]
@@ -29,7 +29,7 @@
     (0093)find all possible IP Address out of a string of digits 
     (0131)find all possible palindrome partions of a string
     *^(0140)find all string break ways, so that all words belongs to a provided word set
- */    
+*/    
 //(0039)find all combinations for a target sum, use each element unlimited times
     void combSum(vector<vector<int>>&ans, vector<int>&cand, vector<int>&candidates, int k, int target){
         if(target<0)return;
@@ -214,6 +214,7 @@
     
         
 //(0241)find all different ways to add parentheses in an expressiong with '*', '+', '-' and integers 
+//so we do have duplicate values returned
     vector<int> diffWaysToCompute(string input) {
         int n = input.size();
         vector<int>ans;
