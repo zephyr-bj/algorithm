@@ -393,33 +393,31 @@ public:
         return ans;
     }
 //(0140)find all string break ways, so that all words belongs to a provided word set     
-    vector<string> dfs(string s, vector<string>&dict, unordered_map<string,vector<string>>&visited){
-        if(visited.find(s)!=visited.end()){
-            return visited[s];
+    void wbtool(string&s, int p, int l, unordered_set<string>&bin, vector<string>&ans, string&path){
+        int n = s.size();
+        if(p==n){
+            ans.push_back(path);return;
         }
-        if(s.size()==0){
-            vector<string>emptys(1,"");
-            return emptys;
-        }
-        int L = dict.size();
-        vector<string>ans;
-        for(int i=0; i<L; i++){
-            int ll=dict[i].size();
-            string subs=s.substr(0,ll);
-            if(subs.compare(dict[i])==0){
-                vector<string>subv=dfs(s.substr(ll,s.size()-ll),dict,visited);
-                for(int j=0; j<subv.size(); j++){
-                    string space="";
-                    if(subv[j].size()>0)space+=" ";
-                    ans.push_back(subs+space+subv[j]);
-                }
+        for(int i=p; i<p+l && i<n; i++){
+            string sub = s.substr(p,i-p+1);
+            int q = path.size();
+            if(bin.find(sub)!=bin.end()){
+                if(!path.empty())path+=" ";
+                path+=sub;
+                wbtool(s,i+1,l,bin,ans,path);
+                path.erase(q);
             }
         }
-        visited[s]=ans;
-        return ans;
-        
     }
     vector<string> wordBreak(string s, vector<string>& wordDict) {
-        unordered_map<string,vector<string>>visited;
-        return dfs(s,wordDict,visited);
+        unordered_set<string>bin;
+        int l = 0;
+        for(auto s:wordDict){
+            bin.insert(s);
+            l = max(l,(int)s.size());
+        }
+        vector<string>ans;
+        string path;
+        wbtool(s,0,l,bin,ans,path);
+        return ans;
     }
