@@ -3,20 +3,23 @@
  *(0079)word search in matrix
  *(0130)surrounded regions in matrix 
  *(0200)number of isolated islands in matrix 
- *(0329)longest increasing integer path in matrix
- *(0419)battleship
+ *(0329*)longest increasing integer path in matrix //use memory to reduce branches
+ *(0419*)battleship                                //how to tell an area is battleship
  */
 //(0079)word search in matrix
-    bool findWord(vector<vector<char>>&board, int i, int j, int n, int m, string&word, int p){
+// **Space complexity** O(Length of longest word) as space complexity = depth of recursion tree. 
+// **Time complexity** = O(n * m * 4^L) , where L = length of longest word. 
+// **not change the board** make sure we recover the board element before return
+    bool existTool(vector<vector<char>>&board, int i, int j, int n, int m, string&word, int p){
         if(p==word.size())return true;
         if(i<0||j<0||i>=n||j>=m||board[i][j]!=word[p])return false;
-        board[i][j]='*';
-        if(findWord(board,i-1,j,n,m,word,p+1))return true;
-        if(findWord(board,i+1,j,n,m,word,p+1))return true;
-        if(findWord(board,i,j-1,n,m,word,p+1))return true;
-        if(findWord(board,i,j+1,n,m,word,p+1))return true;
-        board[i][j]=word[p];
-        return false;
+        board[i][j]=0;
+        bool ans = existTool(board,i-1,j,n,m,word,p+1);
+        ans |= existTool(board,i+1,j,n,m,word,p+1);
+        ans |= existTool(board,i,j-1,n,m,word,p+1);
+        ans |= existTool(board,i,j+1,n,m,word,p+1);
+        board[i][j]=word[p];    
+        return ans;
     }
     bool exist(vector<vector<char>>& board, string word) {
         int n = board.size();
@@ -25,9 +28,8 @@
         if(m<1)return false;
         for(int i=0; i<n; i++){
             for(int j=0; j<m; j++){
-                if(board[i][j]==word[0]){
-                    if(findWord(board,i,j,n,m,word,0))return true;
-                }
+                if(board[i][j]==word[0])
+                    if(existTool(board,i,j,n,m,word,0))return true;
             }
         }
         return false;
