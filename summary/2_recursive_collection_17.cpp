@@ -1,3 +1,11 @@
+// time complexity O(B^d): B is the branching factor, d is the depth of the call tree
+// space complexity O(d): d is the depth of the call tree
+// NP-complete: non-polynomial complete problem: exponential O(2^n) and factorial O(n!)
+// https://jarednielsen.com/big-o-recursive-space-complexity/
+// https://jarednielsen.com/big-o-recursive-time-complexity/
+// https://jarednielsen.com/big-o-factorial-time-complexity/
+// https://www.usna.edu/Users/cs/taylor/courses/ic312/units/02/unit2c.html
+
 /*find all possible solution:
     0. for the "find all" problems
     1.termination condition
