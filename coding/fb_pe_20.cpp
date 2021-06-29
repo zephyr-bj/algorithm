@@ -210,6 +210,22 @@ Node * treeToDoublelyList(Node* root){
         return res;
     }
 };
+//solution II
+   int numFriendRequests(vector<int>& ages) {
+        unordered_map<int, int> count;
+        for (int &age : ages)
+            count[age]++;
+        int res = 0;
+        for (auto &a : count)
+            for (auto &b : count)
+                if (request(a.first, b.first))
+                    res += a.second * (b.second - (a.first == b.first ? 1 : 0));
+        return res;
+    }
+
+    bool request(int a, int b) {
+        return !(b <= 0.5 * a + 7 || b > a || (b > 100 && a < 100));
+    }
 /*[09]Find All Anagrams in a String*/
 // (0438) Find All Anagrams in a String
     vector<int> findAnagrams(string s, string p) {
@@ -349,7 +365,7 @@ vector<vectot<char>>generateMines(int n, int m, int k){
     for(int i=0; i<k; i++){
         int p = rand()%(sz-i);
         bomb.push_back(idx[p]);
-      s  wap(idx[p], idx[sz-i-1]);
+        swap(idx[p], idx[sz-i-1]);
     }
     vector<vector<char>>board(n,vector<int>(m,'E'));
     for(auto x:bomb){
