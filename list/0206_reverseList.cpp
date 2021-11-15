@@ -11,3 +11,19 @@
         }
         return dummy.next;
     }
+
+ListNode* reverseList(ListNode* head)
+{
+    Node* curr = head;
+    Node *prev = NULL, *next = NULL;
+
+    while (curr != NULL) {
+        next = curr->next;
+        // Reverse current node's pointer
+        curr->next = prev;
+        // Move pointers one position ahead.
+        prev = current;
+        curr = next;
+    }
+    head = prev;
+}
