@@ -31,9 +31,9 @@ public:
     int id;
 
     unsigned virtual executeThis()
-	{
+    {
 		return 0;
-	}
+    }
 
     WorkerThread(int id) : id(id) {}
     virtual ~WorkerThread(){}
@@ -48,12 +48,12 @@ public:
     ThreadPool(int maxThreadsTemp);
     virtual ~ThreadPool();
 	
-	void destroyPool(int maxPollSecs);
+    void destroyPool(int maxPollSecs);
 
     bool assignWork(WorkerThread *worker);
     bool fetchWork(WorkerThread **worker);
 
-	void initializeThreads();
+    void initializeThreads();
 	
     static void *threadExecute(void *param);
     
@@ -68,18 +68,15 @@ private:
     sem_t availableWork;
     sem_t availableThreads;
 
-    //WorkerThread ** workerQueue;
     vector<WorkerThread *> workerQueue;
 
     int topIndex;
     int bottomIndex;
-	
-	int incompleteWork;
-
-    
+    int incompleteWork;
     int queueSize;
 
 };
+
 
 
 
