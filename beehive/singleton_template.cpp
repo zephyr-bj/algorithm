@@ -19,7 +19,7 @@ template <typename T>
 T* Singleton<T>::Instance(){
     if (object == NULL){// if it is not initialized, try to lock it
         pthread_mutex_lock(&lock); //wait for the lock
-       // for the same batch of thread wait for the lock, only the first one needs to initialize the instances. 
+        // for the same batch of thread wait for the lock, only the first one needs to initialize the instances. 
         if (object == NULL){ 
             object = new T;
         }
