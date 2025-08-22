@@ -161,15 +161,15 @@ void reverseStr(char * str){
     int L = sizeof(str)/sizeof(str[0]);
     for(int i = 0; i<L/2; i++){
         char tmp = str[i];
-	str[L-i-1] = tmp;
+    	str[L-i-1] = tmp;
         str[i] = str[L-i-1];
     }
     for(int i = 0; i<L; i++){
         char a = str[i]; 
         char b = a;
-	int count = 7;
-	a >>= 1;
-	while(a>0){
+	    int count = 7;
+	    a >>= 1;
+	    while(a>0){
             b <<= 1;	
             b = b | (a & 1);
             a >>= 1;
@@ -195,11 +195,13 @@ unsigned int swapneighborBits(unsigned int a){
     unsigned int mask = 0xaaaaaaaa;
     unsigned int num1 = a & mask;
     unsigned int num2 = a & (mask >> 1);
+    num1 >>= 1;
+    num2 <<= 1;
     return num1 | num2;
 }
 
 // find out msb: floor(log2(number)) (hits:3) (log2(x)=log(x)/log(2)) (what about input int)
-int setBitNumber(int n) { 
+int numberMsb(int n) { 
     int msb = 0; 
     n = n / 2; 
     while (n != 0) { 
@@ -238,7 +240,7 @@ int mask2nz(int a){
     return mask;
 }
 
-//(0201) bitwise ADN of numbers range
+//(0201) bitwise AND of numbers range
 // only the highest NO zero bits left
 int rangeBitwiseAnd(int m, int n) {
     int trans = 0;
@@ -251,35 +253,28 @@ int rangeBitwiseAnd(int m, int n) {
 }
 
 //binary print
-std::string print_binary(std::string val){
-    std::string front;
-    std::string rear;
-    std::string *sp = &front;
-    for(int i=0; i<val.size();i++){
-    	if (val[i] == '.') {
-	    sp = &rear;
-        }
-        sp->push_back(val[i]);
-    }
-    int intpart = atoi(front.c_str());
-    double decpart = atof(rear.c_str());
-    std::string fpart;
-    for(int i=0; i<32;i++){
-        if(intpart & (1<<i)){
-            fpart[i] = '1';
-        }else{
-            fpart[i] = '0';
-        }
-    }
-    std::string bpart;
-    for(int i=0; i<32; i++){
-        decpart*=2;
-	if(decpart > 1){
-             bpart[i] = '1';
-             decpart-=1;
-        }else{
-             bpart[i] = '0';
+// Define a union to access the float's bit pattern
+typedef union {
+    float f;
+    unsigned int u;
+} FloatUnion;
+
+int main() {
+    float myFloat = 12.345f;
+    FloatUnion fu;
+    fu.f = myFloat; // Assign the float value
+
+    // or this works too
+    // memcpy(&u, &myFloat, sizeof(float));
+
+    printf("Binary representation of %.3f: ", myFloat);
+    for (int i = 31; i >= 0; i--) {
+        printf("%d", (fu.u >> i) & 1);
+        if (i == 31 || i == 23) { // Add spaces for sign, exponent, and mantissa
+            printf(" ");
         }
     }
-    return fpart+"."+bpart;
+    printf("\n");
+
+    return 0;
 }

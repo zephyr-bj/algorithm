@@ -1,7 +1,10 @@
 /* print in order [4] : (1114) print in order (1115) print alternatively (1116) print zero even odd (1195) print fizz buzz
  * group action [1] : (1117) build H2O
+ * multiple locks [1]: (1226) dining philosophers
  */
 #include <semaphore.h>
+#include <mutex>
+#include <condition_variable>
 // (1114) print in order
 class Foo {
 public:
@@ -13,21 +16,48 @@ public:
     }
 
     void first(function<void()> printFirst) {
-        // printFirst() outputs "first". Do not change or remove this line.
         printFirst();
         sem_post(&firstdone);
     }
 
     void second(function<void()> printSecond) {
         sem_wait(&firstdone);
-        // printSecond() outputs "second". Do not change or remove this line.
         printSecond();
         sem_post(&seconddone);
     }
 
     void third(function<void()> printThird) {
         sem_wait(&seconddone);
-        // printThird() outputs "third". Do not change or remove this line.
+        printThird();
+    }
+};
+
+class Foo_2 {
+public:
+    Foo_2() {
+        ready = 0;
+    }
+    int ready;
+    std::mutex mtx;
+    std::condition_variable cv;
+    void first(function<void()> printFirst) {
+        std::unique_lock<std::mutex>lock(mtx);
+        printFirst();
+        ready = 1;
+        cv.notify_all();
+    }
+
+    void second(function<void()> printSecond) {
+        std::unique_lock<std::mutex>lock(mtx);
+        cv.wait(lock, [this](){return this->ready == 1;});
+        printSecond();
+        ready=2;
+        cv.notify_all();
+    }
+
+    void third(function<void()> printThird) {
+        std::unique_lock<std::mutex>lock(mtx);
+        cv.wait(lock, [this](){return this->ready == 2;});
         printThird();
     }
 };
@@ -48,7 +78,6 @@ public:
     void foo(function<void()> printFoo) {      
         for (int i = 0; i < n; i++) {
             sem_wait(&bardone);
-        	// printFoo() outputs "foo". Do not change or remove this line.
         	printFoo();
             sem_post(&foodone);     
         }
@@ -57,9 +86,41 @@ public:
     void bar(function<void()> printBar) {        
         for (int i = 0; i < n; i++) {
             sem_wait(&foodone);
-        	// printBar() outputs "bar". Do not change or remove this line.
         	printBar();
             sem_post(&bardone);
+        }
+    }
+};
+
+class FooBar_2 {
+private:
+    int n;
+
+public:
+    FooBar_2(int n) {
+        this->n = n;
+        flag = 0;
+    }
+    std::mutex mtx;
+    std::condition_variable cv;
+    bool flag;
+    void foo(function<void()> printFoo) {
+        for (int i = 0; i < n; i++) {
+            std::unique_lock<std::mutex>lock(mtx);
+            cv.wait(lock, [this](){return this->flag == 0;});
+        	printFoo();
+            flag = 1;
+            cv.notify_one();
+        }
+    }
+
+    void bar(function<void()> printBar) {
+        for (int i = 0; i < n; i++) {
+            std::unique_lock<std::mutex>lock(mtx);
+            cv.wait(lock, [this](){return this->flag == 1;});
+        	printBar();
+            flag = 0;
+            cv.notify_one();
         }
     }
 };
@@ -79,7 +140,6 @@ public:
         sem_init(&print_even, 0, 0);
     }
 
-    // printNumber(x) outputs "x", where x is an integer.
     void zero(function<void(int)> printNumber) {
         for(int i=1; i<=n; i++){
             sem_wait(&print_zero);
@@ -105,6 +165,61 @@ public:
             printNumber(i);
             if(i<n)sem_post(&print_zero);
         }
+    }
+};
+
+class ZeroEvenOdd {
+private:
+    int n;
+
+public:
+    std::mutex mtx;
+    std::condition_variable cv;
+    int i;
+    unsigned int flag;
+    ZeroEvenOdd(int n) {
+        this->n = n;
+        i = 1;
+        flag = 0;
+    }
+
+    // printNumber(x) outputs "x", where x is an integer.
+    void zero(function<void(int)> printNumber) {
+        while( i <= n ) {
+            std::unique_lock<std::mutex>lock(mtx);
+            cv.wait(lock, [this](){return ((this->flag) % 2) == 0;});
+            if (i <= n) {
+                printNumber(0);
+            }
+            flag++;
+            cv.notify_all();
+        }
+    }
+
+    void even(function<void(int)> printNumber) {
+        while ( i <= n ) {
+            std::unique_lock<std::mutex>lock(mtx);
+            cv.wait(lock, [this](){return ((this->flag) % 4) == 3;});
+            if (i <= n) {
+                printNumber(i);
+            }
+            flag++;
+            i++;
+            cv.notify_all();
+        }       
+    }
+
+    void odd(function<void(int)> printNumber) {
+        while ( i <= n ) {
+            std::unique_lock<std::mutex>lock(mtx);
+            cv.wait(lock, [this](){return ((this->flag) % 4) == 1;});
+            if (i <= n) {
+                printNumber(i);
+            }
+            flag++;
+            i++;
+            cv.notify_all();
+        }         
     }
 };
 
@@ -144,7 +259,7 @@ public:
             sem_post(&semN);
         }
     }
-    // printFizz() outputs "fizz".
+
     void fizz(function<void()> printFizz) {
         while(1){
             sem_wait(&semF);
@@ -155,7 +270,6 @@ public:
         }
     }
 
-    // printBuzz() outputs "buzz".
     void buzz(function<void()> printBuzz) {
         while(1){
             sem_wait(&semB);
@@ -166,7 +280,6 @@ public:
         }
     }
 
-// printFizzBuzz() outputs "fizzbuzz".
 	void fizzbuzz(function<void()> printFizzBuzz) {
         while(1){
             sem_wait(&semFB);
@@ -185,6 +298,82 @@ public:
             printNumber(x);
             x++;
             fizzbuzzRelease();
+        }
+    }
+};
+
+class FizzBuzz_2 {
+private:
+    int n;
+    int i;
+    int done;
+    std::mutex mtx;
+    std::condition_variable cv;
+
+public:
+    FizzBuzz_2(int n) {
+        this->n = n;
+        i = 1;
+        done = 0;
+    }
+
+    void fizz(function<void()> printFizz) {
+        while ( done == 0 ) {
+            std::unique_lock<std::mutex>lock(mtx);
+            cv.wait(lock, [this](){return  (((i % 3) == 0) && ((i % 5) != 0)) || (done == 1);});
+            if (done == 0) {
+                printFizz();
+                i++;
+            }
+            if (i > n) {
+                done = 1;
+            }
+            cv.notify_all();
+        }
+    }
+
+    void buzz(function<void()> printBuzz) {
+        while ( done == 0 ) {
+            std::unique_lock<std::mutex>lock(mtx);
+            cv.wait(lock, [this](){return  (((i % 3) != 0) && ((i % 5) == 0)) || (done == 1);});
+            if (done == 0) {
+                printBuzz();
+                i++;
+            }
+            if (i > n) {
+                done = 1;
+            }
+            cv.notify_all();
+        }
+    }
+
+	void fizzbuzz(function<void()> printFizzBuzz) {
+        while ( done == 0 ) {
+            std::unique_lock<std::mutex>lock(mtx);
+            cv.wait(lock, [this](){return  (((i % 3) == 0) && ((i % 5) == 0)) || (done == 1);});
+            if (done == 0) {
+                printFizzBuzz();
+                i++;
+            }
+            if (i > n) {
+                done = 1;
+            }
+            cv.notify_all();
+        }
+    }
+
+    void number(function<void(int)> printNumber) {
+        while ( done == 0 ) {
+            std::unique_lock<std::mutex>lock(mtx);
+            cv.wait(lock, [this](){return  (((i % 3) != 0) && ((i % 5) != 0)) || (done == 1);});
+            if (done == 0) {
+                printNumber(i);
+                i++;
+            }
+            if (i > n) {
+                done = 1;
+            }
+            cv.notify_all();
         }
     }
 };
@@ -220,7 +409,6 @@ public:
             sem_post(&mdone);
             sem_post(&mdone);
         }
-        // releaseHydrogen() outputs "H". Do not change or remove this line.
         releaseHydrogen();
         sem_post(&semH);
     }
@@ -238,20 +426,19 @@ public:
             sem_post(&mdone);
             sem_post(&mdone);
         }
-        // releaseOxygen() outputs "O". Do not change or remove this line.
         releaseOxygen();
         sem_post(&semO);
     }
 };
 
 // the non-blocking "sem_trywait" solution
-class H2O {
+class H2O_2 {
 public:
     sem_t sem_h;
     sem_t sem_o;
     sem_t sem_c;
     sem_t sem_m;
-    H2O() {
+    H2O_2() {
         sem_init(&sem_h,0,2);
         sem_init(&sem_o,0,1);
         sem_init(&sem_c,0,0);
@@ -260,19 +447,140 @@ public:
 
     void hydrogen(function<void()> releaseHydrogen) {
         sem_wait(&sem_h);
-        // releaseHydrogen() outputs "H". Do not change or remove this line.
         releaseHydrogen();
         if(sem_trywait(&sem_m)!=0) sem_post(&sem_c);
     }
 
     void oxygen(function<void()> releaseOxygen) {
         sem_wait(&sem_o);
-        // releaseOxygen() outputs "O". Do not change or remove this line.
         releaseOxygen();
+        //wait until the second hydrogen post sem_c
         sem_wait(&sem_c);
+        //post sem_m for the next molecule
         sem_post(&sem_m);
         sem_post(&sem_o);
         sem_post(&sem_h);
         sem_post(&sem_h);
+    }
+};
+
+class H2O_3 {
+public:
+    H2O_3() {
+        o_cnt = 0;
+        h_cnt = 0;
+        ready = 0;
+        complete = 0;
+    }
+    std::mutex mtx;
+    int o_cnt;
+    int h_cnt;
+    int ready;
+    int complete;
+    std::condition_variable cv;
+    void hydrogen(function<void()> releaseHydrogen) {
+        std::unique_lock<std::mutex>lock(mtx);
+        cv.wait(lock, [this](){return (this->h_cnt) < 2;});
+        h_cnt++;
+        if (h_cnt < 2 || o_cnt < 1) {
+            cv.notify_all();
+        } else {
+            ready=1;
+        }
+
+        cv.wait(lock, [this](){return this->ready == 1;});
+        releaseHydrogen();
+        // only the last atom, who pass the second lock, 
+        // can re-init the states
+        complete++;
+        if(complete == 3) {
+            complete = 0;
+            ready = 0;
+            o_cnt = 0;
+            h_cnt = 0;
+        }
+        cv.notify_all();
+    }
+
+    void oxygen(function<void()> releaseOxygen) {
+        std::unique_lock<std::mutex>lock(mtx);
+        cv.wait(lock, [this](){return this->o_cnt < 1;});
+        o_cnt++;
+        if (h_cnt < 2) {
+            cv.notify_all();
+        } else {
+            ready = 1;
+        }
+
+        cv.wait(lock, [this](){return this->ready == 1;});
+
+        releaseOxygen();
+        // only the last atom, who pass the second lock, 
+        // can re-init the states
+        complete++;
+        if (complete == 3) {
+            complete = 0;
+            ready = 0;
+            o_cnt = 0;
+            h_cnt = 0;
+        }
+        cv.notify_all(); 
+    }
+};
+
+// (1226) The Dining Philosophers
+class DiningPhilosophers {
+    static const int DPC = 5; // Dining Philosopher Count
+    std::mutex mtk[DPC]; 
+    std::condition_variable cv[DPC];
+    int fk[DPC];
+    int noble[DPC];
+public:
+    DiningPhilosophers() {
+        for (int i = 0; i < DPC; i++) {
+            fk[i] = 1; // 1 means available to use
+            if ( (i % 2) == 0 ) {
+                noble[i] = 1;
+            } else {
+                noble[i] = 0;
+            }
+        }
+    }
+
+    void wantsToEat(int philosopher,
+                    function<void()> pickLeftFork,
+                    function<void()> pickRightFork,
+                    function<void()> eat,
+                    function<void()> putLeftFork,
+                    function<void()> putRightFork) {
+        int lf_idx = (philosopher + 1) % DPC;
+        std::unique_lock<std::mutex>lock_left(mtk[lf_idx]);
+        cv[lf_idx].wait(lock_left, [this, lf_idx, philosopher](){
+            return (this->fk[lf_idx] == 1) && 
+                    (this->noble[philosopher] == 0);});
+        fk[lf_idx] = 0;
+        pickLeftFork();
+
+        int rf_idx = philosopher;
+        std::unique_lock<std::mutex>lock_right(mtk[rf_idx]);
+        cv[rf_idx].wait(lock_right, [this, rf_idx](){
+            return this->fk[rf_idx] == 1;});
+        fk[rf_idx] = 0;
+        pickRightFork();
+
+        eat();
+        if (noble[(philosopher + DPC - 1) % DPC] == 1) {
+            noble[(philosopher + DPC - 1) % DPC] = 0;
+            noble[philosopher] = 1;
+        }
+
+        putLeftFork();
+        fk[lf_idx] = 1;
+        cv[lf_idx].notify_all();
+
+        putRightFork();
+        fk[rf_idx] = 1;
+        cv[rf_idx].notify_all();
+		
     }
 };
