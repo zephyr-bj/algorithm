@@ -4,6 +4,7 @@
 # include <stdlib.h>
 # include <thread>
 # include <mutex>
+# include <chrono>
 # include <condition_variable>
 # define BufferSize 10
 static const unsigned int n = 25;
@@ -39,7 +40,7 @@ void Producer(int n)
             printf("Produce : %d at %d\n", BUFFER[head], head);
             head = (head + 1) % BufferSize;
         }
-        sleep(1);
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         cv.notify_one();
     }
 
