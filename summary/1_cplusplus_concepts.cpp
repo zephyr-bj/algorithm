@@ -1,11 +1,18 @@
 #include <iostream>
 #include <unordered_map>
 #include <string>
-#include <unistd.h> // for sleep()
-#include <new> // Required for placement new
-#include <memory_resource> // For pmr types
+#include <unistd.h>         // for sleep()
+#include <thread>           // for this_thread::sleep_for()
+#include <chrono>           // for chrono::seconds()
+#include <new>              // Required for placement new
+#include <memory_resource>  // For pmr types
+#include <queue>            // for priority_queue
+#include <vector>
 
 #include <cstdarg> // Required for va_list, va_start, va_arg, va_end
+
+//g++ -o ppt 1_cplusplus_concepts.cpp -std=c++2a for 'std::pmr' to be used 
+
 
 // pla_new
 //
@@ -41,12 +48,12 @@ private:
 void test_pla_new() {
     char buffer[sizeof(MyClass)];
     MyClass* obj1 = new (buffer) MyClass(10);
-    sleep(1); // or do something else
+    std::this_thread::sleep_for(std::chrono::seconds(1)); // or do something else
     obj1->~MyClass();
 
     std::pmr::synchronized_pool_resource pool_resource;
     MyClass* obj2 = newElement<MyClass>(pool_resource,  11);
-    sleep(1); // or do something else
+    std::this_thread::sleep_for(std::chrono::seconds(1)); // or do something else
     deleteElement<MyClass>(pool_resource, obj2);
 }
 
@@ -86,17 +93,62 @@ void test_variadic_template() {
     print_pack('a', true);
 }
 
+struct MyData {
+    int value;
+    char key;
+    MyData(int v, char k) : value(v), key(k) {}
+};
+
+void test_max_heap() {
+    auto lambda_comparator = [] (const MyData& a, const MyData& b) {
+        return a.value < b.value;
+    };
+    std::priority_queue<MyData, std::vector<MyData>, decltype(lambda_comparator)>pq;
+    pq.push(MyData(10,'A'));
+    pq.push(MyData(5, 'B'));
+    pq.push(MyData(20, 'C'));
+
+    while(!pq.empty()) {
+        MyData top = pq.top();
+        printf("value: %d, key: %c; ", top.value, top.key);
+        pq.pop();
+    }
+}
+
+struct CompareMyData {
+    bool operator() (const MyData& a, const MyData& b) {
+        return a.value > b.value;
+    }
+};
+
+void test_min_heap() {
+    std::priority_queue<MyData, std::vector<MyData>, CompareMyData>pq;
+    pq.push(MyData(10,'A'));
+    pq.push(MyData(5, 'B'));
+    pq.push(MyData(20, 'C'));
+
+    while(!pq.empty()) {
+        MyData top = pq.top();
+        printf("value: %d, key: %c; ", top.value, top.key);
+        pq.pop();
+    }
+}
+
 enum class test_type{
     PLA_NEW,
     VAR_FUN,
     VAR_TPL,
+    MIN_HEP,
+    MAX_HEP,
 };
 
 int main(int argc, char* argv[]) {
     std::unordered_map<std::string, test_type>test_map;
-    test_map["pla_new"] = test_type::PLA_NEW;
-    test_map["variadic_fun"] = test_type::VAR_FUN;
-    test_map["variadic_tpl"] = test_type::VAR_TPL;
+    test_map["pla_new"] =       test_type::PLA_NEW;
+    test_map["variadic_fun"] =  test_type::VAR_FUN;
+    test_map["variadic_tpl"] =  test_type::VAR_TPL;
+    test_map["min_heap"] =    test_type::MIN_HEP;
+    test_map["max_heap"] =    test_type::MAX_HEP;
 
     if (argc < 2) {
         printf("please enter test option\n");
@@ -117,6 +169,12 @@ int main(int argc, char* argv[]) {
             break;
         case test_type::VAR_TPL:
             test_variadic_template();
+            break;
+        case test_type::MIN_HEP:
+            test_min_heap();
+            break;
+        case test_type::MAX_HEP:
+            test_max_heap();
             break;
         default:
 	    printf("test function not implemented for '%s'\n", argv[1]);

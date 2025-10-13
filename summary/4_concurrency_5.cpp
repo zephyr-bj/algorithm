@@ -306,72 +306,62 @@ class FizzBuzz_2 {
 private:
     int n;
     int i;
-    int done;
     std::mutex mtx;
     std::condition_variable cv;
 
 public:
-    FizzBuzz_2(int n) {
+    FizzBuzz(int n) {
         this->n = n;
         i = 1;
-        done = 0;
     }
 
+    // printFizz() outputs "fizz".
     void fizz(function<void()> printFizz) {
-        while ( done == 0 ) {
+        while (i <= n) {
             std::unique_lock<std::mutex>lock(mtx);
-            cv.wait(lock, [this](){return  (((i % 3) == 0) && ((i % 5) != 0)) || (done == 1);});
-            if (done == 0) {
+            cv.wait(lock, [this](){return  (((i % 3) == 0) && ((i % 5) != 0)) || (i > n);});
+            if (i <= n) {
                 printFizz();
                 i++;
             }
-            if (i > n) {
-                done = 1;
-            }
             cv.notify_all();
         }
     }
 
+    // printBuzz() outputs "buzz".
     void buzz(function<void()> printBuzz) {
-        while ( done == 0 ) {
+        while (i <= n) {
             std::unique_lock<std::mutex>lock(mtx);
-            cv.wait(lock, [this](){return  (((i % 3) != 0) && ((i % 5) == 0)) || (done == 1);});
-            if (done == 0) {
+            cv.wait(lock, [this](){return  (((i % 3) != 0) && ((i % 5) == 0)) || (i > n);});
+            if (i <= n) {
                 printBuzz();
                 i++;
             }
-            if (i > n) {
-                done = 1;
-            }
             cv.notify_all();
         }
     }
 
+    // printFizzBuzz() outputs "fizzbuzz".
 	void fizzbuzz(function<void()> printFizzBuzz) {
-        while ( done == 0 ) {
+        while (i <= n) {
             std::unique_lock<std::mutex>lock(mtx);
-            cv.wait(lock, [this](){return  (((i % 3) == 0) && ((i % 5) == 0)) || (done == 1);});
-            if (done == 0) {
+            cv.wait(lock, [this](){return  (((i % 3) == 0) && ((i % 5) == 0)) || (i > n);});
+            if (i <= n) {
                 printFizzBuzz();
                 i++;
             }
-            if (i > n) {
-                done = 1;
-            }
             cv.notify_all();
         }
     }
 
+    // printNumber(x) outputs "x", where x is an integer.
     void number(function<void(int)> printNumber) {
-        while ( done == 0 ) {
+        while (i <= n) {
             std::unique_lock<std::mutex>lock(mtx);
-            cv.wait(lock, [this](){return  (((i % 3) != 0) && ((i % 5) != 0)) || (done == 1);});
-            if (done == 0) {
+            cv.wait(lock, [this](){return  (((this->i % 3) != 0) && ((i % 5) != 0)) || (i > n);});
+            if (i <= n) {
                 printNumber(i);
                 i++;
-            }
-            if (i > n) {
-                done = 1;
             }
             cv.notify_all();
         }
@@ -467,63 +457,24 @@ public:
 class H2O_3 {
 public:
     H2O_3() {
-        o_cnt = 0;
         h_cnt = 0;
-        ready = 0;
-        complete = 0;
     }
     std::mutex mtx;
-    int o_cnt;
     int h_cnt;
-    int ready;
-    int complete;
     std::condition_variable cv;
     void hydrogen(function<void()> releaseHydrogen) {
         std::unique_lock<std::mutex>lock(mtx);
         cv.wait(lock, [this](){return (this->h_cnt) < 2;});
         h_cnt++;
-        if (h_cnt < 2 || o_cnt < 1) {
-            cv.notify_all();
-        } else {
-            ready=1;
-        }
-
-        cv.wait(lock, [this](){return this->ready == 1;});
         releaseHydrogen();
-        // only the last atom, who pass the second lock, 
-        // can re-init the states
-        complete++;
-        if(complete == 3) {
-            complete = 0;
-            ready = 0;
-            o_cnt = 0;
-            h_cnt = 0;
-        }
-        cv.notify_all();
+        cv.notify_one();
     }
 
     void oxygen(function<void()> releaseOxygen) {
         std::unique_lock<std::mutex>lock(mtx);
-        cv.wait(lock, [this](){return this->o_cnt < 1;});
-        o_cnt++;
-        if (h_cnt < 2) {
-            cv.notify_all();
-        } else {
-            ready = 1;
-        }
-
-        cv.wait(lock, [this](){return this->ready == 1;});
-
+        cv.wait(lock, [this](){return this->h_cnt >= 2;});
         releaseOxygen();
-        // only the last atom, who pass the second lock, 
-        // can re-init the states
-        complete++;
-        if (complete == 3) {
-            complete = 0;
-            ready = 0;
-            o_cnt = 0;
-            h_cnt = 0;
-        }
+        h_cnt = 0;
         cv.notify_all(); 
     }
 };

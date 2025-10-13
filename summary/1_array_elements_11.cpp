@@ -105,6 +105,8 @@ string reverseWords (string s) {
 }
 
 //find first missing positive in a unsorted array (0041)
+//for the elements within [1,n], swap them in place
+//otherwise, they can go anywhere, we don't care
 int firstMissingPositive(vector<int>& nums) {
     int n = nums.size();
     for(int i = 0; i < n; i++){
@@ -119,88 +121,90 @@ int firstMissingPositive(vector<int>& nums) {
     return n+1;
 }
 //find the missing number from range [0,n] (0268)
-    int missingNumber(vector<int>& nums) {
-        int n = nums.size();
-        int x = (0+n)*(n+1)/2;
-        int y = 0;
-        for(auto a:nums)y+=a;
-        return x-y;
-    }
+int missingNumber(vector<int>& nums) {
+    int n = nums.size();
+    int x = (0+n)*(n+1)/2;
+    int y = 0;
+    for(auto a:nums)y+=a;
+    return x-y;
+}
 //find the duplicate number from range [1,n-1], only one repeated number (0287) 
-//    or: n+1 integer, [1,n] inclusive
-//since each value is different from the others, so if there is no duplicates, the slow pointer must iterates all the elements
-	int findDuplicate3(vector<int>& nums){
-		if (nums.size() > 1){
-			int slow = nums[0];
-			int fast = nums[nums[0]];
-			while (slow != fast){
-				slow = nums[slow];
-				fast = nums[nums[fast]];
-			}
-
-			fast = 0;
-			while (fast != slow){
-				fast = nums[fast];
-				slow = nums[slow];
-			}
-			return slow;
+//the value of each element can also be the pointer to the next element, conceptually a single linked list
+//Floyd's Cycle Detection Algorithm (also known as the Tortoise and Hare algorithm) 
+int findDuplicate3(vector<int>& nums){
+	if (nums.size() > 1){
+		int slow = nums[0];
+		int fast = nums[nums[0]];
+		while (slow != fast){
+			slow = nums[slow];
+			fast = nums[nums[fast]];
 		}
-		return -1;
+
+		fast = 0;
+		while (fast != slow){
+			fast = nums[fast];
+			slow = nums[slow];
+		}
+		return slow;
 	}
+	return -1;
+}
 // the algorithm below changed the original data. sss
-    int findDuplicate(vector<int>& nums) {
-        for(auto x:nums){
-            if(nums[abs(x)]>0)
-                nums[abs(x)]=-nums[abs(x)];
-            else
-                return abs(x);
-        }
-        return -1;
+int findDuplicate(vector<int>& nums) {
+    for(auto x:nums){
+        if(nums[abs(x)]>0)
+            nums[abs(x)]=-nums[abs(x)];
+        else
+            return abs(x);
     }
+    return -1;
+}
 //find majority element : more than 1/2 (0169)
-    //moore voting
-    int majorityElement(vector<int>& nums) {
-        int n = nums.size();
-        int maj = 1;
-        int cnt = 0;
-        for (int i=0; i<n; i++) {
-            if(nums[i] == maj){
-                cnt++;
-            } else if (cnt == 0) {
-                maj = nums[i];
-                cnt = 1;
-            } else {
-                cnt--;
-            }
+//moore voting
+int majorityElement(vector<int>& nums) {
+    int n = nums.size();
+    int maj = 1;
+    int cnt = 0;
+    for (int i=0; i<n; i++) {
+        if(nums[i] == maj){
+            cnt++;
+        } else if (cnt == 0) {
+            maj = nums[i];
+            cnt = 1;
+        } else {
+            cnt--;
         }
-        return maj;
     }
+    return maj;
+}
 //ind majority elements : more than 1/3 (0229)
-   vector<int> majorityElement(vector<int>& nums) {
-        int cnt1 = 0; int cnt2 = 0; int a = 0; int b = 1;
-        for(auto x:nums){
-            if(x==a){
-                cnt1++;
-            }else if(x==b){
-                cnt2++;
-            }else if(cnt1==0){
-                a=x;
-                cnt1=1;
-            }else if(cnt2==0){
-                b=x;
-                cnt2=1;
-            }else{
-                cnt1--;
-                cnt2--;
-            }
+vector<int> majorityElement(vector<int>& nums) {
+    int cnt1 = 0; int cnt2 = 0; int a = 0; int b = 1;
+    for(auto x:nums){
+        if(x==a){
+            cnt1++;
+        }else if(x==b){
+            cnt2++;
+        }else if(cnt1==0){
+            a=x;
+            cnt1=1;
+        }else if(cnt2==0){
+            b=x;
+            cnt2=1;
+        }else{
+            cnt1--;
+            cnt2--;
         }
-        cnt1=0; cnt2=0;
-        for(auto x:nums){
-            if(x==a)cnt1++;
-            if(x==b)cnt2++;
-        }
-        vector<int>ans;
-        if(cnt1>nums.size()/3)ans.push_back(a);
-        if(cnt2>nums.size()/3)ans.push_back(b);
-        return ans;
     }
+    cnt1=0; cnt2=0;
+    for(auto x:nums){
+        if(x==a)cnt1++;
+        if(x==b)cnt2++;
+    }
+    vector<int>ans;
+    if(cnt1>nums.size()/3)ans.push_back(a);
+    if(cnt2>nums.size()/3)ans.push_back(b);
+    return ans;
+}
+
+

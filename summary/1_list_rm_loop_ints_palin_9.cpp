@@ -83,6 +83,8 @@
     
 /* loop */
 // (0141) cycle test
+// the hare is one step faster than the tortoise, the distance between
+// them decrease by one for each move, so they eventually meet in a loop
     bool hasCycle(ListNode *head) {
         if(head==NULL)return false;
         ListNode * fast=head;
@@ -95,13 +97,11 @@
         return false;
     }
 /* (1)if there is no loop, both pointers eventually hit the NULL pointer, otherwise they enter the loop
- * (2)slow travels x to the loop entry, while the fast travels 2*x
- * (3)suppose the slow is y nodes ahead of the fast
- * (3.1) => the fast will meet the slow after 2*y nodes
- * (3.2) => 2*x+2*y-kL = x+y
- * (3.3) => x+y = kL
- * (3.4) => the low reach the loop entry again after x nodes
- * (3.5) => start another slow pointer from head, two slows meet at the loop entry.
+ * (2)else they meet at a point y distance from the loop entry
+ * (3) the meet equation is
+ * (3.1) => 2*x+2*y-kL = x+y (kL represents the complete loop difference between slow and fast)
+ * (3.2) => x+y = kL (equavilent)
+ * (3.3) => if someone at the meet point, it goes x steps reach the entry, if someone at the start point, it also goes x steps reach the entry.
  */
 // (0142) find cycle entry node
     ListNode *detectCycle(ListNode *head) {
@@ -125,14 +125,19 @@
 // (0160) intersection of two lists
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
         ListNode *p = headA, *q = headB;
-        while(p != q){
-            p = p!=NULL?p->next:headB;
-            q = q!=NULL?q->next:headA;
+        while(p != nullptr && q != nullptr && p != q){
+            p = p->next;
+            q = q->next;
+            if (p == q) //meet or reach to the seperate ends together
+                return p;
+            if (p == nullptr) p = headB;
+            if (q == nullptr) q = headA;
         }
         return p;
     }
 
 // (0234) is Palindrome List
+// another algorithm: cut the list half half, reverse one and compare
     bool isPalindrome(ListNode* head) {
         return check(head, head);
     }  
