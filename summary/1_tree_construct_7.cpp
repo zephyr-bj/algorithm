@@ -7,34 +7,29 @@
  */
 
 // build all unique trees by n elements
-    vector<TreeNode*> treeTool(int a, int b){
-        vector<TreeNode*>res;
-        if(a==b){
-            TreeNode * node = new TreeNode(a);
-            res.push_back(node);
-        }else if(a<b){
-            for(int i=a; i<=b; i++){
-                vector<TreeNode*>left = treeTool(a,i-1);
-                vector<TreeNode*>right = treeTool(i+1,b);
-                //not use the "a>b" case to push a NULL pointer, but use this
-                //for the n = 0 case;
-                if(left.empty())left.push_back(NULL);
-                if(right.empty())right.push_back(NULL);
-                for(auto l:left){
-                    for(auto r:right){
-                        TreeNode * node = new TreeNode(i);
-                        node->left=l;
-                        node->right=r;
-                        res.push_back(node);
-                    }
+vector<TreeNode*> buildTool(int a, int b) {
+    vector<TreeNode*> ans;
+    if(a > b) {
+        ans.push_back(nullptr);
+    } else {
+        for (int i = a; i <=b; i++) {
+            vector<TreeNode*> left = buildTool(a, i-1);
+            vector<TreeNode*> right = buildTool(i+1, b);
+            for(auto l : left) {
+                for(auto r : right) {
+                    TreeNode * root = new struct TreeNode(i);
+                    root->left = l;
+                    root->right = r;
+                    ans.push_back(root);
                 }
             }
         }
-        return res;
     }
-    vector<TreeNode*> generateTrees(int n) {
-        return treeTool(1,n);
-    }
+    return ans;
+}
+vector<TreeNode*> generateTrees(int n) {
+    return treeTool(1,n);
+}
 // build BST by sorted array
 TreeNode * tool(vector<int>&nums, int a, int b){
     if(a>b)return NULL;

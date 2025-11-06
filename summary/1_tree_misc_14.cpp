@@ -8,7 +8,7 @@
  * modify a tree [2] (0114) flatten tree (0226) invert tree
  */
   
-//  * level order traversal (0102) BFS or recursive pre-order, with additional parameter depth
+//  * level order traversal (0102) BFS or recursive pre-order, with additional parameter depth, DFS faster
     void tool(TreeNode * root, vector<vector<int>>&ans, int level){
         if(root==NULL)return;
         if(level>=ans.size())ans.push_back(vector<int>(0,0));
@@ -23,11 +23,33 @@
     }
 //  * level order traversal bottom up (0107) 
     vector<vector<int>> levelOrderBottom(TreeNode* root) {
-        vector<vector<int>>bin;
+        vector<vector<int>>ans;
         tool(root,ans,0);
         reverse(bin.begin(), bin.end());
         return ans;
     }
+    /*
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        vector<vector<int>>bin;
+        queue<TreeNode*>level;
+        if(root != nullptr) {
+            level.push(root);
+        }
+        while(!level.empty()) {
+            vector<int>nums;
+            int n = level.size();
+            for (int i = 0; i < n; i++) {
+                TreeNode* node = level.front();
+                level.pop();
+                nums.push_back(node->val);
+                if(node->left != nullptr) level.push(node->left);
+                if(node->right != nullptr) level.push(node->right);
+            }
+            bin.insert(bin.begin(), nums);
+        }
+        return bin;
+    }
+    */
 //  * right side view of a binary tree (0199) BFS or recursive pre-order, with additional parameter depth
     void tool(TreeNode * root, vector<int>&ans, int level){
         if(root==NULL)return;

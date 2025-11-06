@@ -36,6 +36,9 @@
         return ans;
     }
 // (0145) post-order traversal
+// bin2 could be a value stack, but not a good practice when value
+// is super large. 
+// use another loop, since there is no "push_front" for vector
     vector<int> postorderTraversal(TreeNode* root) {
         vector<TreeNode *>bin1;
         vector<TreeNode *>bin2;

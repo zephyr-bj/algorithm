@@ -1,6 +1,9 @@
 /*
- * path  [5]: (0112) find a root-to-leaf path that has a given node sum (0113) find all root-to-leaf path that has a given node sum 
+ * path  [6]: (0112) find a root-to-leaf path that has a given sum 
+ *            (0113) find all root-to-leaf path that has a given sum
+ *            (0437) find number of ancestor-to-descendant paths that has a given sum
  *            (0124) find a node-to-node path which has the largest sum
+ *
  *            (0129) calculate the sum of the root-to-leaf path numbers
  *            (0257) find all root-to-leaf path
  * depth [3]: post order: (0104) max depth (0110) balanced tree (0111) min depth
@@ -32,6 +35,55 @@
         pathSum(root,sum,ans,path);
         return ans;
     }
+// (0437) a2d sum
+    void sumTool(TreeNode* root, long long targetSum, int& cnt) {
+        if (root == nullptr)
+            return;
+        if(root->val == targetSum)
+            cnt++;
+        sumTool(root->left, targetSum - root->val, cnt);
+        sumTool(root->right, targetSum - root->val, cnt);
+    }
+    void pathSum(TreeNode* root, int targetSum, int& cnt) {
+        if(root == nullptr)
+            return;
+        sumTool(root, targetSum, cnt);
+        pathSum(root->left, targetSum, cnt);
+        pathSum(root->right, targetSum,cnt);
+    }
+    int pathSum(TreeNode* root, int targetSum) {
+        int cnt = 0;
+        pathSum(root, targetSum, cnt);
+        return cnt;
+    }
+/* my first solution
+    int pathSum(TreeNode* root, int targetSum, vector<long long>& path) {
+        if (root == nullptr) {
+            return 0;
+        }
+        int cnt = 0;
+        for(int i = 0; i<path.size(); i++) {
+            if (path[i] == root->val) {
+                cnt++;
+            }
+            path[i] -= root->val;
+        }
+
+        path.push_back(targetSum);
+        cnt += pathSum(root->left, targetSum, path);
+        cnt += pathSum(root->right, targetSum, path);
+        path.pop_back();
+        for(int i = 0; i < path.size(); i++) {
+            path[i] += root->val;
+        }
+        return cnt;
+    }
+    int pathSum(TreeNode* root, int targetSum) {
+        int cnt = 0;
+        vector<long long>path(1,targetSum);
+        return pathSum(root, targetSum, path);
+    }
+*/
 // (0124) node to node sum
     int maxBrSum(TreeNode * root, int & ans){
         if(root==NULL)return 0;
@@ -80,12 +132,21 @@
 //  * max depth of a tree (0104) recursive post-order, with return value 
     int maxDepth(TreeNode* root) {
         if(root==NULL)return 0;
-        if(root->left==NULL&&root->right==NULL)return 1;
         int l=maxDepth(root->left);
         int r=maxDepth(root->right);
         return 1+max(l,r);
     }
-//  is balanced tree (0110) recursive post-order, with aditional parameter depth                                                                                                                                                                                                                                                                                                                                                                                                                                   
+//  * min depth of a tree (0111) recursive post-order, with return value
+    int minDepth(TreeNode* root) {
+        if (root == nullptr)
+            return 0;
+        int l = minDepth(root->left);
+        int r = minDepth(root->right);
+        if (l == 0) return r + 1;
+        else if (r == 0) return l + 1;
+        else return 1+min(l,r);
+    }
+//  is balanced tree (0110) recursive post-order, with aditional parameter depth 
     bool isBalanced(TreeNode* root) {
         if(depth(root)==-1) return false;
         return true;
@@ -103,11 +164,4 @@
         if(diff>1) return -1;
         
         return max(left, right) + 1;
-    }
-//  * min depth of a tree (0111) recursive post-order, with return value
-    int minDepth(TreeNode* root) {
-        if(root==NULL)return 0;
-        if(root->left==NULL)return 1+minDepth(root->right);
-        if(root->right==NULL)return 1+minDepth(root->left);
-        return 1+min(minDepth(root->left), minDepth(root->right));
     }
