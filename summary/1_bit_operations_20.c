@@ -37,8 +37,7 @@
 //(0191) Given an int, write code to return the number of bits that are 1 in O(m) time, where m is the number of bits that are 1.
 int nsetbits(int x){
     int ans = 0;
-    unsigned int * p = (unsigned int*)(&x);
-    unsigned int num = *p;
+    unsigned int num = (unsigned int)x;
     while(num!=0){
         num &=(num-1);
         ans++;
@@ -48,27 +47,20 @@ int nsetbits(int x){
 
 //(0231) Is the given number is of the power of 2 (hits:2)
 //alternative method return ((n&(n-1))==0)&&(n!=0))
-bool isPower2(unsigned int num){
-    unsigned int mask = 0x1;
-    if(num & mask != 0) return true;
-    else return false;
+bool isPowerOfTwo(int n) {
+    if (n <= 0) return 0;
+    return (n & (n-1)) == 0;
 }
 
 //(0342) power of four
-bool isPowerOfFour(int num) {
-    if(num<1)return false;
-    return ((num&(num-1))==0) && ((num&0xAAAAAAAA)==0);
+// (a x b) (mod m) = ((a (mod m)) x (b (mod m))) (mod m)
+bool isPowerOfFour(int n) {
+    if (n <= 0) return false;
+    return ((n & (n-1)) == 0) && (n % 3 == 1);
 }
-    
-// is set ?
-#define isSet(num,n) (num) & (1<<(n-1))
-
-//Implement a MACRO(i,j,k) where i is a Hex number, j is the bit position and k is 0/1. So based on k, jth bit in i should be replaced.
-#define setbit(i,j,k) i=(k==0)?((~(1<<j))&i):((1<<j)|i)//not very satisfied with this 
-
-//Macro to set the bits
-#define Set_Bit(num, start_bit_pos, end_bit_pos) (num) | ((1<<(end_bit_pos-start_bit_pos+1))-1)<<((start_bit_pos)-1)
-
+   
+#define setmask1(B, A) ((1<<(B-A+1))-1)<<A
+#define setmask2(B, A) ((1<<B)-1)&(~((1<<A)-1))
 /*given a 32 bit number N and 2 numbers(A & B) that determine 2 different bit positions of N how do you make all the bits between A and B 
 	equal to another given integer k. given (A,B is in the range [0 to 31] and k<=2^(B-A+1) 
 	(so that k fits between B-A+1 bits). Give an O(1) solution for this (hits:2)*/

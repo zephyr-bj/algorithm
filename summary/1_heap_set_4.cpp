@@ -3,6 +3,7 @@
  */
  
 // (0378) find kth smallest in sorted matrix
+// solution 1
     struct my_cmp{
         bool operator()(vector<int>&a, vector<int>&b){return a[2]>b[2];}
     };
@@ -27,7 +28,28 @@
         }
         return -1;
     }
-    
+/* solution 2
+    We have an invariant in this algorithm: [le, ri] always contains the correct kth smallest number. 
+    Once we have this invariant, when le == ri, we know le is the kth smallest number.
+*/
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int n = matrix.size();
+        int l = matrix[0][0];
+        int r = matrix[n-1][n-1];
+        while(l < r) {
+            int m = l + ((r-l) >> 2);
+            int cnt = 0;
+            for(int i = 0; i < n; i++) {
+                cnt += upper_bound(matrix[i].begin(), matrix[i].end(), m) - matrix[i].begin();
+            }
+            if (cnt < k) {
+                l = m+1;
+            } else {
+                r = m;
+            }
+        }
+        return l;
+    }    
 // (0347) find top k frequent element
     struct my_cmp {
         bool operator () (pair<int,int>&a, pair<int,int>&b){return a.second > b.second;}
@@ -88,6 +110,7 @@ public:
     }
  
  // (0327) count the ranges, whose element sum is within [lb, ub]
+ // solution 1: could be O(nxn)
     int countRangeSum(vector<int>& nums, int lower, int upper) {
         multiset<long>bin;
         bin.insert(0);//* important
@@ -104,6 +127,43 @@ public:
         }
         return ans;
     }
-};
+// solution 2: O(nlogn)
+    int mergeCount(vector<long long>& sums, int lower, int upper, int l, int r) {
+/*for the merge algorithm used below, we have to keep 'r' points to the non content 'end'
+*/
+        if(r-l<=1) {
+            return 0;
+        }
+        int cnt = 0;
+        int m = l + ((r-l) >> 1);
+        cnt += mergeCount(sums, lower, upper, l, m);
+        cnt += mergeCount(sums, lower, upper, m, r);
+        int j = m, k = m;
+        for(int i = l; i < m; i++) {
+            while(j < r && sums[j] - sums[i] < lower) j++;
+            while(k < r && sums[k] - sums[i] <= upper) k++;
+            cnt += k - j;
+        }
+/* normal double loop 'time limit excceded'
+   in the above code, inner loop index never goes back to 'm' again
+        for(int i = l; i < m; i++) {
+            for (int j = m; j < r; j++) {
+                long long x = sums[j] - sums[i];
+                if (x >= lower && x < upper) cnt++;
+            }
+        }
+*/
+        inplace_merge(sums.begin()+l, sums.begin()+m, sums.begin()+r);
+        return cnt;
+    }
+    int countRangeSum(vector<int>& nums, int lower, int upper) {
+        vector<long long>sums;
+        sums.push_back(0);
+        for(auto x:nums){
+            sums.push_back(sums.back()+x);
+        }
+        int ans = mergeCount(sums, lower, upper, 0, sums.size());
+        return ans;
+    }
 
 

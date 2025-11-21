@@ -48,22 +48,23 @@
         }
         return left.empty();
     }
-//(0032) longest valid parentheses 
+//(0032) longest valid parentheses
     int longestValidParentheses(string s) {
-        stack<int>left;
-        stack<int>levelsum;
-        int l = s.size();
-        int ans=0;
-        for(int i=0; i<l; i++){
-            if(s[i]=='('){
-                left.push(i);
-                if(levelsum.size()<left.size())levelsum.push(0);
-            }else{
-                if(left.size()<levelsum.size())levelsum.pop();
-                if(left.empty())continue;
-                levelsum.top()+=i-left.top()+1;
-                if(ans<levelsum.top())ans=levelsum.top();
-                left.pop();
+        stack<int>bin;
+        bin.push(-1);
+        int ans = 0;
+        int n = s.size();
+        for(int i = 0; i < n; i++) {
+            if (s[i] == '(') {
+                bin.push(i);
+            } else {
+                bin.pop();
+                if(bin.empty()) {
+                    bin.push(i);
+                } else {
+                    int x = i - bin.top();
+                    if(x>ans)ans = x;
+                }
             }
         }
         return ans;
