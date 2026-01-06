@@ -1,15 +1,17 @@
-/* matrix area [3] (0085*) rectangle area (0211) square (0363*) sub matrix sum
+/* matrix area [3] (0085*) rectangle area (0221) square (0363*) sub matrix sum
  * matrix paths [4] unique paths (0062) unique paths with obstacles (0063) min path sum (0064)  dungeon game (0174) 
  */
 //(0085) maximal rectangle in matrix
-// for each point, we looking for the largest rectangle with this point on its bottom boundary
+// we model a rectangle as a column with it left and right extensions
+// for one row, we call all columns based on this row
+// using DP, we check all rows, so we find the maximal rectangle
     int maximalRectangle(vector<vector<char>>& matrix) {
         int n = matrix.size();
         if(n<1)return 0;
         int m = matrix[0].size();
-        vector<int>left(m,0);
-        vector<int>right(m,m-1);
-        vector<int>height(m,0);
+        vector<int>left(m,0);   //the left most position @ j
+        vector<int>right(m,m-1);//the right most position @ j
+        vector<int>height(m,0); //the max height @ j
         int ans = 0;
         for(int i=0; i<n; i++){
             for(int j=0; j<m; j++){
@@ -31,7 +33,7 @@
         }
         return ans;
     }
-//(0211) max sqaure in matrix
+//(0221) max sqaure in matrix
     int maximalSquare(vector<vector<char>>& matrix) {
         int n = matrix.size();
         if(n==0)return 0;
@@ -71,7 +73,7 @@
                 set<int>::iterator it;
                 for(int r=0; r<n; r++){
                     curMax+=sums[r];
-                    it = bin.lower_bound(curMax-k);
+                    it = bin.lower_bound(curMax-k);//curMax - *it < k ==> *it >= curMax - k
                     if(it!=bin.end()){
                         ans=max(ans,curMax-*it);
                     }

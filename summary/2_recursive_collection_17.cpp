@@ -95,8 +95,10 @@
     }
 //(0047) find all permutations of a set of number, duplicate elements in set
 /* why we can not swap the two elements back right after the recursive call returns?
-   when we tranverse the array, if two equal elements in front, immediately swap back will blind the checker, 
-   we will swap the equal value to the same position twice
+   We need to keep the array in increasing order all the time.
+   So we cannot always swap the first element.
+   The backtracking method below only swap two neighboring elements, so the
+   subarray keeps the increasing order.
 */
     void perm(vector<int>&nums, int p, vector<vector<int>>&ans){
         if(p==nums.size()-1){
@@ -295,6 +297,7 @@
         return ans;
     }
 //(0301)find all different ways to remove invalid parentheses 
+//dfs faster 1ms
 class Solution {
     void riptool(string s, int q,  int p, vector<string>&ans, vector<char>pairs){
         int stack=0;
@@ -325,7 +328,47 @@ public:
         return ans;
     }
 };
-      
+//bfs slower 8ms
+class Solution {
+    char check_valid(string s) {
+        int left = 0;
+        for(auto c : s) {
+            if (c == '(') left++;
+            else if (c ==  ')'){
+                if(left>0) left--;
+                else return ')';
+            }
+        }
+        return left == 0 ? 1 : '(';
+    }
+    vector<string> removeInvalidParentheses(string s) {
+        queue<string>bin;
+        bin.push(s);
+        unordered_set<string>visited;
+        vector<string>res;
+        while(!bin.empty()) {
+            int n = bin.size();
+            for(int i = 0; i < n; i++) {
+                string ss = bin.front();
+                bin.pop();
+                char c = check_valid(ss);
+                if(c==1) res.push_back(ss);
+                if(res.size())continue;
+                int len = ss.size();
+                for(int j = 0; j < len; j++) {
+                    if (ss[j] == c && (j==0 || ss[j] != ss[j-1])) {
+                        string next = ss.substr(0,j)+ss.substr(j+1);
+                        if (visited.find(next) == visited.end()) {
+                            bin.push(next);
+                            visited.insert(next);
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};
 //(0017)find all possible words from a phone number, O(3^N), N is the digit counts of the phone number
     void phonePhrase(string &digits, vector<string>&dict, vector<string>&ans, string &path){
         int L = path.size();

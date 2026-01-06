@@ -19,6 +19,46 @@ int readTextLine(const std::string & filename) {
     return 0;
 }
 
+#include <fstream>
+#include <vector>
+#include <iostream>
+
+int read4K(const std::string & filename) {
+    std::ifstream file("filename", std::ios::binary); // Open in binary mode for raw data
+
+    if (!file.is_open()) {
+        std::cerr << "Error opening file!" << std::endl;
+        return 1;
+    }
+
+    // Define a buffer size (e.g., 4KB)
+    const int bufferSize = 4096;
+    std::vector<char> buffer(bufferSize);
+
+    while (file) { // Loop as long as the stream is in a good state
+        file.read(buffer.data(), buffer.size()); // Read a chunk into the buffer
+        std::streamsize bytesRead = file.gcount(); // Get the number of bytes actually read
+
+        if (bytesRead > 0) {
+            // Process the data in the buffer
+            // For example, print it (careful with binary data, may not be printable)
+            for (int i = 0; i < bytesRead; ++i) {
+                std::cout << buffer[i];
+            }
+        } else if (file.eof()) {
+            // Reached end of file
+            break;
+        } else if (file.fail() && !file.eof()) {
+            // An error occurred during reading (not just EOF)
+            std::cerr << "Error reading file!" << std::endl;
+            break;
+        }
+    }
+
+    file.close(); // Close the file
+    return 0;
+}
+
 int writeTextLine(const std::string & filename) {
     std::ofstream outputFile(filename);
 

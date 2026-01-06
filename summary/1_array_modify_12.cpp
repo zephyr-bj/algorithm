@@ -231,6 +231,7 @@ string reverseVowels(string s) {
     }  
 // (0313) super ugly number
 // n way merge
+// tow inner loops since we may update more than 1 indexes
     int nthSuperUglyNumber(int n, vector<int>& primes) {
         int k = primes.size();
         vector<int>index(k,0);
