@@ -45,6 +45,9 @@ bool canJump(vector<int>& nums) {
         return sum+gap>=0?ans:-1;
     }
 // (0135) candy
+// considering:
+//case1: [1,3,2,2,1]
+//case2: [1,2,87,87,87,2,1]
     int candy(vector<int>& ratings) {
         int n = ratings.size();
         vector<int>left(n,1);

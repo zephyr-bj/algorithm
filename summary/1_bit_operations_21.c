@@ -25,16 +25,19 @@
 //Rotate an integer n left by k (what about input int)
 //alternate big endian and small endian
 
-/* misc */ [8]
+/* misc */ [7]
 //swap the neighboring bits. (hits:2)
 //find out msb (hits:3)
-//is big endian or little endian
 //Find the Maximum of 2 numbers without using any if-else or any other comparison operator
 //binary print of a float
 //function to give mask for first 2 non zero (anything except 00) values in int.
-//(0201) bitwise ADN of numbers range
+//(0201) bitwise AND of numbers range
 
 //(0191) Given an int, write code to return the number of bits that are 1 in O(m) time, where m is the number of bits that are 1.
+
+/* check memory pin */ [2]
+//check data pin
+//check address pin
 int nsetbits(int x){
     int ans = 0;
     unsigned int num = (unsigned int)x;
@@ -203,14 +206,6 @@ int numberMsb(int n) {
     return msb; 
 } 
 
-//find whether a machine is big endian or little endian
-bool isSmall_endian(){
-    short int word = 0x0001;
-    char * byte = (char *)&word;
-    if(*byte == 1) return true;
-    else return false;
-}
-
 //Find the Maximum of 2 numbers without using any if-else or any other comparison operator
 int maximum(int a, int b){
     int k = ((a-b)&0x8000000)>>31;
@@ -270,3 +265,127 @@ int main() {
 
     return 0;
 }
+
+// find a defect data pin
+// The Logic: Walking 1s and 0s
+#include <stdio.h>
+#include <stdint.h>
+
+void find_defective_pins(volatile uint8_t *address) {
+    uint8_t pattern;
+    uint8_t read_back;
+    int pin_found = 0;
+
+    printf("Starting Memory Data Bus Test...\n");
+    printf("---------------------------------\n");
+
+    // Test for 'Stuck-at-High' (Walking 0s)
+    // We write 0 to each pin and see if it stays 0
+    for (int i = 0; i < 8; i++) {
+        pattern = ~(1 << i);
+        *address = pattern;
+        read_back = *address;
+
+        if (read_back != pattern) {
+            printf("FAULT: Pin %d is stuck HIGH (Expected %02X, Got %02X)\n", i, pattern, read_back);
+            pin_found = 1;
+        }
+    }
+
+    // Test for 'Stuck-at-Low' (Walking 1s)
+    // We write 1 to each pin and see if it stays 1
+    for (int i = 0; i < 8; i++) {
+        pattern = (1 << i);
+        *address = pattern;
+        read_back = *address;
+
+        if (read_back != pattern) {
+            printf("FAULT: Pin %d is stuck LOW (Expected %02X, Got %02X)\n", i, pattern, read_back);
+            pin_found = 1;
+        }
+    }
+
+    if (!pin_found) {
+        printf("All data pins are functioning correctly.\n");
+    }
+}
+
+int main() {
+    // In a real system, this would be a hardware address:
+    // uint8_t *mem_ptr = (uint8_t *)0x40001000;
+
+    uint8_t dummy_mem = 0;
+
+    // Simulate a fault for demonstration: Pin 3 is stuck LOW
+    // In real hardware, the read_back would fail automatically.
+    find_defective_pins(&dummy_mem);
+
+    return 0;
+}
+
+//Short Circuits: If two pins are shorted together, writing a 1 to one might cause the other to also read as 1. You can detect this by writing 0x00 and then 0x01, 0x02, etc., and checking if multiple bits flip simultaneously.
+
+//Volatile Keyword: In the code above, volatile is crucial. It tells the C compiler not to optimize away the memory access, ensuring the CPU actually hits the hardware every time.
+
+// find a defect address line
+// The Logic: Power-of-Two Testing
+#include <stdio.h>
+#include <stdint.h>
+
+/**
+ * Checks for defective address pins within a range of memory.
+ * @param base_addr The starting address of the memory block to test.
+ * @param n_bytes   The size of the memory block (should be a power of 2).
+ */
+void find_defective_address_pins(volatile uint32_t *base_addr, uint32_t n_bytes) {
+    uint32_t n_words = n_bytes / sizeof(uint32_t);
+    uint32_t offset;
+    uint32_t test_pattern = 0xAAAAAAAA;
+    uint32_t initial_pattern = 0x55555555;
+
+    printf("Starting Address Bus Test...\n");
+    printf("-----------------------------\n");
+
+    // 1. Initialize the base address with a pattern
+    base_addr[0] = initial_pattern;
+
+    // 2. Write unique patterns to each power-of-two offset
+    // This checks if any pin is "Stuck High" or "Shorting"
+    for (offset = 1; offset < n_words; offset <<= 1) {
+        base_addr[offset] = test_pattern;
+    }
+
+    // 3. Check the base address to see if it was overwritten
+    if (base_addr[0] != initial_pattern) {
+        printf("FAULT: Address pin 0 or a related control line is defective.\n");
+    }
+
+    // 4. Check each power-of-two offset
+    // If a pin is "Stuck Low", the write to base_addr[offset]
+    // would have gone to base_addr[0] instead.
+    for (offset = 1; offset < n_words; offset <<= 1) {
+        if (base_addr[offset] != test_pattern) {
+            // Log2 of offset gives the pin number
+            int pin = 0;
+            uint32_t temp = offset;
+            while (temp >>= 1) pin++;
+
+            printf("FAULT: Address Pin A%d is likely defective (Stuck Low or Shorted).\n", pin);
+        }
+    }
+
+    printf("Test Complete.\n");
+}
+
+int main() {
+    // Example: Testing a 4KB block of memory starting at a specific pointer
+    // In a real embedded system, this might be:
+    // uint32_t *mem_start = (uint32_t *)0x20000000;
+
+    uint32_t simulated_memory[1024]; // 4KB of local RAM for simulation
+    find_defective_address_pins(simulated_memory, sizeof(simulated_memory));
+
+    return 0;
+}
+
+// Destructive Test: This test is "destructive"—it overwrites whatever was in memory. Do not run this on memory containing your active stack or program code.

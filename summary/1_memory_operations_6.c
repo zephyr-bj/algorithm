@@ -1,8 +1,9 @@
-//aligned malloc and free
-//allocate a two dimension array
-//memory copy between overlapping buffers
-//my_sizeof
-//my_offset
+//[1]aligned malloc and free
+//[1]allocate a two dimension array
+//[1]memory copy between overlapping buffers
+//[1]my_sizeof
+//[1]my_offset
+//[1]big endian or small endian
 
 //implementation of the sizeof operator
 #define my_sizeof(x) (char *)(&x+1)-(char*)(&x)
@@ -69,3 +70,12 @@ void memmove(void *dest, void *src, int size){
         }
     }
 } 
+
+//find whether a machine is big endian or little endian
+bool isSmall_endian(){
+    short int word = 0x0001;
+    char * byte = (char *)&word;
+    if(*byte == 1) return true;
+    else return false;
+}
+
