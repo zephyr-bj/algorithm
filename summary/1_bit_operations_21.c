@@ -33,11 +33,11 @@
 //function to give mask for first 2 non zero (anything except 00) values in int.
 //(0201) bitwise AND of numbers range
 
-//(0191) Given an int, write code to return the number of bits that are 1 in O(m) time, where m is the number of bits that are 1.
-
 /* check memory pin */ [2]
 //check data pin
 //check address pin
+
+//(0191) Given an int, write code to return the number of bits that are 1 in O(m) time, where m is the number of bits that are 1.
 int nsetbits(int x){
     int ans = 0;
     unsigned int num = (unsigned int)x;
@@ -111,7 +111,7 @@ int singleNumber(vector<int>& s) {
     int res = 0;
     for (j = 31; j >= 0; --j){
         n = t[j] % 3;//"3" represents k times. 
-	if (n) res += 1 << (31 - j);
+	    if (n) res += 1 << (31 - j);
     }
     return res;
 }
@@ -181,7 +181,7 @@ int rotLeft32(int n, int k){
 }
 
 // alternate big / small endian
-#define SWAP_INT32(x) (((x) >> 24) | (((x) & 0x00FF0000) >> 8) | (((x) & 0x0000FF00) << 8) | ((x) << 24))
+#define SWAP_INT32(x) ((((x) >> 24) & 0xFF) | (((x) & 0x00FF0000) >> 8) | (((x) & 0x0000FF00) << 8) | ((x) << 24))
 
 //swap the neighboring bits. 
 //   $$$$$$$$$ never right shift mask like this, the 1 at highest bit will be kept. $$$$$$$$$$
@@ -195,7 +195,7 @@ unsigned int swapneighborBits(unsigned int a){
     return num1 | num2;
 }
 
-// find out msb: floor(log2(number)) (hits:3) (log2(x)=log(x)/log(2)) (what about input int)
+// find out msb: floor(log2(number)) (hits:3) (log2(x)=log(x)/log(2)) (<math.h>)
 int numberMsb(int n) { 
     int msb = 0; 
     n = n / 2; 
@@ -209,6 +209,7 @@ int numberMsb(int n) {
 //Find the Maximum of 2 numbers without using any if-else or any other comparison operator
 int maximum(int a, int b){
     int k = ((a-b)&0x8000000)>>31;
+	// int k = ((a-b) >> 31) & 1;
     return (1-k)*a+k*b;
 }
 
