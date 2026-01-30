@@ -1,4 +1,4 @@
-/* sort array [5] (0164) bucket sort  (0825) friends of approrpiate ages (0215) quick sort (0324) wiggle sort II (0179*) largest number string 
+/* sort array [4] (0164) bucket sort  (0215) quick sort (0324) wiggle sort II (0179*) largest number string 
                   partition (*) 3-way partition (*)
  * reverse array[3] (0344) reverse string (0345*) reverse vowels (0917) Reverse Only Letters (0189*) rotate array
  * merge array [3] (0088) merge two arrays (0313) super ugly number (0986) interval Lists intersections
@@ -6,7 +6,14 @@
  */
 //maximum gap (0164)
 // the minimum max Gap happens when all the nums distributed evenly: (ub-lb)/(n-1) apart
-// we take the number of "sz" bins, so the max Gap cannot happens within one bin =>
+// Lets assume for array max element as 'M',min element as 'm',and size of array as 'N'
+// For any given numbers like a1,a2,a3,.....,aN in sorted order, the sum of gaps would be
+// (a2 - a1) + (a3 - a2) + ..... + (aN - aN-1) = aN - a1 = M - m
+// as there are N-1 gaps so
+// Average Gap = (M - m) / (N - 1)
+// As we know average lies between largest and smallest gap value, so we are sure
+// there should exist gap that is greater than average gap.
+// we take bins with the Gap Size, so the max Gap cannot happens within one bin =>
 // we look for them between different bins
     int maximumGap(vector<int>& nums) {
         int n = nums.size();
@@ -38,25 +45,30 @@
         }
         return ans;
     }
-//(0825) friends of approrpiate ages
-/*  no request if any of the three is true
-    age[B] <= 0.5 * age[A] + 7
-    age[B] > age[A]
-    age[B] > 100 && age[A] < 100
-
-    1 <= ages.length <= 20000.
-    1 <= ages[i] <= 120.
- */
-    int numFriendRequests(vector<int>& ages) {
-        vector<int>bin(121,0);
-        int res=0;
-        for (auto age : ages) bin[age]+=1;
-        //0.5 * a + 7 < b <= a，0.5 * a > 7，a > 14，so a starts from 15.
-        for (auto i = 15; i <= 120; i++)
-            for (int j = 0.5 * i + 8; j <= i; ++j) 
-                res += bin[j] * (bin[i] - (i == j));
-        return res;
+// use n bins, it works too
+    int maximumGap(vector<int>& nums) {
+        int n = nums.size();
+        if(n<2)return 0;
+        long long ub = *max_element(nums.begin(),nums.end());
+        long long lb = *min_element(nums.begin(),nums.end());
+        if(lb==ub)return 0;
+        vector<int>lbin(n,INT_MAX);
+        vector<int>ubin(n,INT_MIN);
+        for(int i=0; i<n; i++){
+            int idx = (nums[i]-lb)*(n-1)/(ub-lb);
+            if(nums[i]<lbin[idx])lbin[idx]=nums[i];
+            if(nums[i]>ubin[idx])ubin[idx]=nums[i];
+        }
+        int ans =0;
+        int j=0;
+        for(int i=1; i<n; i++){
+            if(lbin[i]==INT_MAX||ubin[i]==INT_MIN)continue;
+            ans = max(ans,lbin[i]-ubin[j]);
+            j=i;
+        }
+        return ans;
     }
+
 //largest number string by non negative integers (0179) trick for compare rule
     static bool my_cmp(int a, int b){
         return to_string(a)+to_string(b) > to_string(b)+to_string(a);
@@ -143,7 +155,7 @@ int partition(vector<int>&arr, int l, int r) {
     swap(arr[i], arr[r]); 
     return i; 
 } 
-//3-way partition
+//3-way partition, also for quick sort, but better performance
 void partition3Way(vector<int>&arr, int l, int r, int& x, int&y) { 
     int pivot = arr[r];
     int i = l; int j=l; int k=r-1;
@@ -231,7 +243,7 @@ string reverseVowels(string s) {
     }  
 // (0313) super ugly number
 // n way merge
-// tow inner loops since we may update more than 1 indexes
+// two inner loops since we may update more than 1 index
     int nthSuperUglyNumber(int n, vector<int>& primes) {
         int k = primes.size();
         vector<int>index(k,0);

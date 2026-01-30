@@ -1,14 +1,13 @@
 /************************************************************************************************************************************************************************/ 
 /*misc [3]:1+1+1=3*******************************************************************************************************************************************************/
 /************************************************************************************************************************************************************************/ 
-arithmetic_13.cpp
+arithmetic_12.cpp
 /* reverse integer [2] : (0007) reverse integer (0009) palindrome number
  * add integers [3] : (0067) add binary (0066) Plus One (0371) add integers
- * divide integers [1] :  (0027) divide two integers
+ * divide integers [1] :  (0027) divide two integers (0166)fraction to decimal
  * multiply strings [1] : (0043) multiply strings
  * power of double [1] : (0050) power of double float
  * roman [2] : (0012) integer to Roman (0013) Roman to Integer
- * single number [2] : (0136) single number (0137) single number ii
  * bezout's identity [1] : (0365) the water jug problem
  */
 bit_operations_21.c
@@ -227,6 +226,18 @@ hash_search_11.cpp
  * (0128)search longest Consecutive Sequence (0274)search the H index (not calculate)
  * (0336)search all the Palindrome Pairs
  */
+
+interative search
+/*
+ *sum [4]: (0015) three sum (0016) three summ closet (0018) four sum  (0167) two sum II, for sorted array
+ *hash table for O(1) search  [4] (0001)two sum  (0454)Four Sum II search four numbers sum to zero
+ *                                (0049) Group Anagrams (0187) find all repeated DNA substring with 10 characters 
+ *brutal force double loop [2] (0336)search all the Palindrome Pairs (0825) friend requests of approrpiate ages
+ *BFS[4]
+ *(0126)word ladder II (0127)word ladder length
+ *(0207) course schedule (0210)course schedule II 
+ */
+
 /************************************************************************************************************************************************************************/ 
 /*design [2]:1+1=2*******************************************************************************************************************************************************/
 /************************************************************************************************************************************************************************/ 

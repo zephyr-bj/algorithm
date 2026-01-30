@@ -10,7 +10,7 @@
  *square root [2]: (0069*) find square root (0367) check if a valid perfect square
  *                       binary search algorithm: (1)(b)loop: while(a<=b) (c)step: if(nums[m]<target)a=m+1; else b=m-1; (d) return false if not found
  *                                                (2)when there are targets, a and b could stop anywhere whenever a target is found
- *                                                (c)where ther is no target in the array, a finds the "insert position", b stops at the position before a
+ *                                                (c)when there is no target in the array, a finds the "insert position", b stops at the position before a
  *find peak [2]: (0162) find peak element (0852) find the peak index
  *               (1) (a)initial: a=0; b=n-1; (b) if(nums[m]>nums[m+1])b=m; else a=m+1; 
  *               (2) condition: no neighbors equal
@@ -28,7 +28,7 @@
             if(nums[m]>nums[b])a=m+1;
             else b=m;
         }
-        return a; // the problem 153 shour "return nums[a]";
+        return a; // the problem 153 should "return nums[a]";
     }
 //(0154) search min element in rotated sorted array with duplicated elements 
     int findMinII(vector<int>& nums) {
@@ -49,6 +49,7 @@
         int n = nums.size();
         int b = n-1;
         int p = findMin(nums);
+        //'a' and 'b' are only bounds now, not used as indexes
         while(a<=b){
             int m = (a+b)/2;
             int realM = (m+p)%n;
@@ -239,17 +240,21 @@
     }
 /***************************************************/
 
-//(0275) find H Index II 
-    int hIndexII(vector<int>& citations) {
+//(0275) find H Index II
+    int hIndex(vector<int>& citations) {
         int n = citations.size();
         if(n<1)return 0;
+        // for the cases of zero citation for all publications
+        if(citations[n-1]==0)return 0;
         int a = 0; int b = n-1;
         while(a<b){
             int m = (a+b)/2;
+            // we are looking for a index, whose citation is larger than the number of papers have higher or equal citations
+            // so we are basiclly pushing the index as small as possible.
             if(citations[m]>=n-m)b=m;
             else a=m+1;
         }
-        return min(citations[a],n-a);
+        return n-a;
     }
 //(0278) find the first bad version
     int firstBadVersion(int n) {

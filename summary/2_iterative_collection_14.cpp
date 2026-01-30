@@ -1,8 +1,8 @@
 /*
  *sum [4]: (0015) three sum (0016) three summ closet (0018) four sum  (0167) two sum II, for sorted array
- *hash table for O(1) search  [2] (0001)two sum  (0454)Four Sum II search four numbers sum to zero
- * string match [2] (0049) Group Anagrams (0187) find all repeated DNA substring with 10 characters 
- * (0336)search all the Palindrome Pairs
+ *hash table for O(1) search  [4] (0001)two sum  (0454)Four Sum II search four numbers sum to zero
+ *                                (0049) Group Anagrams (0187) find all repeated DNA substring with 10 characters 
+ *brutal force double loop [2] (0336)search all the Palindrome Pairs (0825) friend requests of approrpiate ages
  *BFS[4]
  *(0126)word ladder II (0127)word ladder length
  *(0207) course schedule (0210)course schedule II 
@@ -210,6 +210,29 @@ public:
         return ans;
     }
 };
+
+//(0825) friend requests of approrpiate ages
+    int numFriendRequests(vector<int>& ages) {
+        /*
+        a(y) <= 0.5*a(x)+7 ||
+        a(y) > a(x) ||
+        (a(y) > 100 && a(x) < 100)*/
+        /*
+        a(y) > 0.5*a(x)+14 &&
+        a(y) <= a(x) &&
+        (a(y) <= 100 || a(x) > 100)*/
+        vector<int>bin(200, 0);
+        for(auto x:ages)bin[x]+=1;
+        int req = 0;
+        for(int i = 1; i < 200; i++) {
+            for(int j = 0.5*i+8; j <= i; j++) {
+                //if (j > 100 & i < 100) continue;
+                if (i == j) req += bin[j] * (bin[i]-1);
+                else req += bin[j] * bin[i];
+            }
+        }
+        return req;
+    }
 /*******************************************************************************************************/
 
 (0126)word ladder II 

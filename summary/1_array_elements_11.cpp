@@ -48,7 +48,7 @@ void moveZeroes(vector<int>& nums) {
     for (int j = 0; j < nums.size(); j++) {
         nums[i] = nums[j];
         if(nums[i] != 0)
-	    i++;
+	        i++;
     }   
     while (i < nums.size()) {
         nums[i++] = 0;
@@ -160,7 +160,11 @@ int findDuplicate(vector<int>& nums) {
     return -1;
 }
 //find majority element : more than 1/2 (0169)
-//moore voting
+//moore voting: 
+// the candidate policy: different element cancel each other
+// the candidate verification: two groups of numbers, each
+//     with same number don't have a majority
+
 int majorityElement(vector<int>& nums) {
     int n = nums.size();
     int maj = 1;
@@ -178,6 +182,10 @@ int majorityElement(vector<int>& nums) {
     return maj;
 }
 //ind majority elements : more than 1/3 (0229)
+// the candidate policy: different element cancel a member 
+// from each of the leading group
+// the candidate verification: the count is larger than 1/3
+// total count
 vector<int> majorityElement(vector<int>& nums) {
     int cnt1 = 0; int cnt2 = 0; int a = 0; int b = 1;
     for(auto x:nums){
@@ -206,5 +214,3 @@ vector<int> majorityElement(vector<int>& nums) {
     if(cnt2>nums.size()/3)ans.push_back(b);
     return ans;
 }
-
-

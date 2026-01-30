@@ -4,7 +4,6 @@
  * multiply strings [1] : (0043) multiply strings
  * power of double [1] : (0050) power of double float
  * roman [2] : (0012) integer to Roman (0013) Roman to Integer
- * single number [2] : (0136) single number (0137) single number ii
  * bezout's identity [1] : (0365) the water jug problem
  */
 
@@ -21,16 +20,15 @@ bool isPalindrome(int x) {
 }
 // (0007) reverse integer
 int reverse(int x) {
-    int prevRev = 0 , rev= 0;
+    long long rev= 0;
     while (x != 0) {
         rev = rev * 10 + x % 10;
-        if ((rev - x % 10) / 10 != prevRev) {
+        // for case x = 1534236469; 964632435 * 10 out of range
+        if (rev > INT_MAX || rev < INT_MIN)
             return 0;
-        }
-        prevRev = rev;
         x = x / 10;
     }
-    return rev;
+    return (int)rev;
 }
 
 // (0066) Plus One
@@ -67,7 +65,7 @@ string addBinary(string a, string b) {
         i--; j--;
     }
     if (c > 0)
-		bss.insert(0,string(1,c+'0'));
+		ss.insert(0,string(1,c+'0'));
     return ss;
 }
 // (0371) add integers
@@ -181,7 +179,7 @@ int romanToInt(string s) {
     unordered_map<char, int> T = { { 'I' , 1 }, { 'V' , 5 }, { 'X' , 10 }, { 'L' , 50 }, { 'C' , 100 }, { 'D' , 500 }, { 'M' , 1000 } };
                                    
     int sum = T[s.back()];
-        for (int i = s.length() - 2; i >= 0; --i) {
+    for (int i = s.length() - 2; i >= 0; --i) {
        if (T[s[i]] < T[s[i + 1]]){
            sum -= T[s[i]];
        }else{
@@ -191,23 +189,6 @@ int romanToInt(string s) {
    
    return sum;            
 } 
-// (0136) single number
-int singleNumber(vector<int>& nums) {
-    int x = 0;
-    for(auto y:nums)x^=y;
-    return x;
-}
-// (0137) single number II
-// drive the two equations by three 1s, we see repeat
-int singleNumber(vector<int> A) 
-{
-    int ones = 0, twos = 0;
-    for(int i = 0; i < A.size; i++) {
-            ones = (ones ^ A[i]) & ~twos;
-            twos = (twos ^ A[i]) & ~ones;
-    }
-    return ones;
-}
 
 // (0365) the water jug problem
 int gcd(int x, int y){ 

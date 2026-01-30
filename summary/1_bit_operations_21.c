@@ -115,6 +115,19 @@ int singleNumber(vector<int>& s) {
     }
     return res;
 }
+
+// (0137) single number II (solution-2)
+// drive the two equations by three 1s, we see repeat
+int singleNumber(vector<int> A)
+{
+    int ones = 0, twos = 0;
+    for(int i = 0; i < A.size; i++) {
+            ones = (ones ^ A[i]) & ~twos;
+            twos = (twos ^ A[i]) & ~ones;
+    }
+    return ones;
+}
+
 //(0260) signle number III
 vector<int> singleNumber(vector<int>& nums) {
     long long i, j, xnor=0;
