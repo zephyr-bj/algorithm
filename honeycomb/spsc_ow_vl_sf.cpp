@@ -5,118 +5,187 @@
 #include <cassert>
 
 // non-blocking, lockless, no data corruption
-class SPSCRingOverwrite {
+#include <atomic>
+#include <cstdint>
+#include <cstring>
+#include <vector>
+#include <cassert>
+
+class SPSCRingBuffer {
 public:
-    explicit SPSCRingOverwrite(size_t capacity_pow2)
-        : capacity_(capacity_pow2),
-          mask_(capacity_pow2 - 1),
-          buffer_(capacity_pow2)
+    explicit SPSCRingBuffer(size_t size)
+        : capacity_(round_up_pow2(size)),
+          mask_(capacity_ - 1),
+          buffer_(capacity_),
+          head_(0),
+          tail_(0),
+          next_seq_(1)
     {
-        assert((capacity_pow2 & (capacity_pow2 - 1)) == 0);
+        assert((capacity_ & (capacity_ - 1)) == 0);
+        assert(capacity_ >= 32);
     }
 
+    // ------------------------------------------------------------
+    // Producer
+    // ------------------------------------------------------------
     bool push(const void* data, uint32_t len)
     {
-        const uint32_t total = sizeof(Header) + len;
+        if (len == 0 || len == UINT32_MAX)
+            return false;
 
-        if (total >= capacity_)
-            return false;   // record too large ever to fit
+        constexpr size_t header_size = 8;
+        size_t total = align4(header_size + len);
 
-        uint64_t head = head_seq_.load(std::memory_order_relaxed);
-        uint64_t tail = tail_seq_.load(std::memory_order_acquire);
+        size_t head = head_.load(std::memory_order_relaxed);
+        size_t tail = tail_.load(std::memory_order_acquire);
 
-        // Ensure space logically (overwrite allowed)
-        if (head - tail + total > capacity_) {
-            // nothing to do — consumer will detect loss
+        // ---- overwrite oldest until space exists
+        while ((head - tail) + total > capacity_)
+        {
+            if (!discard_one(tail))
+                break;
         }
 
-        size_t index = head & mask_;
-        size_t space_to_end = capacity_ - index;
+        size_t write_pos = head & mask_;
+        size_t space_to_end = capacity_ - write_pos;
 
-        // If not enough contiguous space, insert padding marker
-        if (space_to_end < total) {
-            writePadding(index, space_to_end);
+        // ---- wrap handling
+        if (space_to_end < total)
+        {
+            if (space_to_end >= sizeof(uint32_t))
+                write_padding(write_pos);
+
             head += space_to_end;
-            index = 0;
+            write_pos = 0;
         }
 
-        Header h;
-        h.len = len;
-        h.seq_low = static_cast<uint32_t>(head);
+        uint32_t seq = next_seq_++;
 
-        std::memcpy(&buffer_[index], &h, sizeof(Header));
-        std::memcpy(&buffer_[index + sizeof(Header)], data, len);
+        // ---- write header
+        std::memcpy(&buffer_[write_pos + 0], &seq, sizeof(uint32_t));
+        std::memcpy(&buffer_[write_pos + 4], &len, sizeof(uint32_t));
 
-        // Publish
-        head_seq_.store(head + total, std::memory_order_release);
+        // ---- write payload
+        std::memcpy(&buffer_[write_pos + header_size], data, len);
 
+        // ---- optional: zero padding (debug)
+        size_t used = header_size + len;
+        size_t pad = total - used;
+        if (pad)
+            std::memset(&buffer_[write_pos + used], 0, pad);
+
+        head_.store(head + total, std::memory_order_release);
         return true;
     }
 
-    bool pop(std::vector<uint8_t>& out)
+    // ------------------------------------------------------------
+    // Consumer
+    // ------------------------------------------------------------
+    bool pop(std::vector<uint8_t>& out, uint32_t& seq_out)
     {
-        uint64_t tail = tail_seq_.load(std::memory_order_relaxed);
-        uint64_t head = head_seq_.load(std::memory_order_acquire);
+        constexpr size_t header_size = 8;
+
+        size_t tail = tail_.load(std::memory_order_relaxed);
+        size_t head = head_.load(std::memory_order_acquire);
 
         if (tail == head)
-            return false;   // empty
-
-        // Detect overwrite (consumer too slow)
-        if (head - tail > capacity_) {
-            tail = head - capacity_;
-        }
-
-        size_t index = tail & mask_;
-
-        Header h;
-        std::memcpy(&h, &buffer_[index], sizeof(Header));
-
-        // Padding marker
-        if (h.len == 0) {
-            tail += (capacity_ - index);
-            tail_seq_.store(tail, std::memory_order_release);
-            return pop(out);
-        }
-
-        // Verify record not overwritten
-        if (h.seq_low != static_cast<uint32_t>(tail)) {
-            // record overwritten — skip forward
-            tail = head - capacity_;
-            tail_seq_.store(tail, std::memory_order_release);
             return false;
+
+        size_t read_pos = tail & mask_;
+
+        uint32_t len;
+        std::memcpy(&len, &buffer_[read_pos + 4], sizeof(uint32_t));
+
+        // ---- padding marker
+        if (len == UINT32_MAX)
+        {
+            size_t space_to_end = capacity_ - read_pos;
+            tail += space_to_end;
+            read_pos = 0;
+
+            std::memcpy(&len, &buffer_[read_pos + 4], sizeof(uint32_t));
         }
 
-        size_t total = sizeof(Header) + h.len;
+        if (len == 0 || len == UINT32_MAX)
+            return false;
 
-        out.resize(h.len);
+        size_t total = align4(header_size + len);
+        if (tail + total > head)
+            return false; // incomplete write
+
+        uint32_t seq;
+        std::memcpy(&seq, &buffer_[read_pos + 0], sizeof(uint32_t));
+
+        out.resize(len);
         std::memcpy(out.data(),
-                    &buffer_[index + sizeof(Header)],
-                    h.len);
+                    &buffer_[read_pos + header_size],
+                    len);
 
-        tail_seq_.store(tail + total, std::memory_order_release);
+        seq_out = seq;
+        tail_.store(tail + total, std::memory_order_release);
         return true;
     }
 
 private:
-    struct Header {
-        uint32_t len;
-        uint32_t seq_low;
-    };
-
-    void writePadding(size_t index, size_t size)
+    // ------------------------------------------------------------
+    // Drop exactly one oldest record
+    // ------------------------------------------------------------
+    bool discard_one(size_t& tail)
     {
-        Header h{};
-        h.len = 0;  // padding marker
-        h.seq_low = 0;
-        std::memcpy(&buffer_[index], &h, sizeof(Header));
+        constexpr size_t header_size = 8;
+
+        size_t head = head_.load(std::memory_order_acquire);
+        if (tail == head)
+            return false;
+
+        size_t pos = tail & mask_;
+        uint32_t len;
+
+        std::memcpy(&len, &buffer_[pos + 4], sizeof(uint32_t));
+
+        if (len == UINT32_MAX)
+        {
+            size_t space_to_end = capacity_ - pos;
+            tail += space_to_end;
+            tail_.store(tail, std::memory_order_release);
+            return true;
+        }
+
+        if (len == 0 || len == UINT32_MAX)
+            return false;
+
+        size_t total = align4(header_size + len);
+        tail += total;
+        tail_.store(tail, std::memory_order_release);
+        return true;
+    }
+
+    static size_t align4(size_t n)
+    {
+        return (n + 3) & ~size_t(3);
+    }
+
+    static size_t round_up_pow2(size_t v)
+    {
+        size_t p = 1;
+        while (p < v) p <<= 1;
+        return p;
+    }
+
+    void write_padding(size_t pos)
+    {
+        uint32_t marker = UINT32_MAX;
+        std::memcpy(&buffer_[pos + 4], &marker, sizeof(marker));
     }
 
 private:
     const size_t capacity_;
     const size_t mask_;
-
     std::vector<uint8_t> buffer_;
 
-    alignas(64) std::atomic<uint64_t> head_seq_{0};
-    alignas(64) std::atomic<uint64_t> tail_seq_{0};
+    alignas(64) std::atomic<size_t> head_;
+    alignas(64) std::atomic<size_t> tail_;
+
+    uint32_t next_seq_; // producer-only
 };
+
