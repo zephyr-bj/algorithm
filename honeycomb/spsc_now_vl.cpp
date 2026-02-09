@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <cstring>
 #include <vector>
+#include <string>
 
 class SPSCRingBuffer {
 public:
@@ -121,6 +122,7 @@ int main () {
     std::vector<uint8_t> out;
     if (rb.pop(out)) {
         std::string s(out.begin(), out.end());
+        printf("out data %s\n", s.c_str());
     }
 }
 

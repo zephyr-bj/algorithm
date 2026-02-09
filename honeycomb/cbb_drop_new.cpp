@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include <vector>
+#include <memory> // for unique_ptr
 
 #define BUFFER_SIZE 128
 
@@ -9,19 +11,22 @@ class rb {
 private:
     uint32_t head;
     uint32_t tail;
-    std::unique_ptr<char[]> buffer_ptr;
+    std::unique_ptr<char[]> buffer;
     size_t buf_size;
     size_t rb_space();
     bool rb_empty();
 public:
-    rbb(size_t sz) : buf_size(sz), buffer_ptr(std::make_unique<char[]>(size)) {}
-    ~rbb() {}
+    rb(size_t sz) : buf_size(sz), buffer(std::make_unique<char[]>(sz)) {
+        head = 0;
+        tail = 0;
+    }
+    ~rb() {}
     int rb_try_write(const uint8_t *data, uint32_t length);
     bool rb_read(uint8_t *out_data, uint32_t *out_length, uint32_t max_buf_size);
 };
 
 size_t rb::rb_space() {
-    if (head>tail) {
+    if (head>=tail) {
         return buf_size - (head-tail) - 1;
     } else {
         return tail-head;
@@ -50,7 +55,7 @@ int rb::rb_try_write(const uint8_t *data, uint32_t length) {
 
 // Read data from the buffer
 bool rb::rb_read(uint8_t *out_data, uint32_t *out_length, uint32_t max_buf_size) {
-    if (is_empty()) return false;
+    if (rb_empty()) return false;
 
     uint32_t record_len = 0;
     uint32_t temp = tail;
@@ -58,6 +63,7 @@ bool rb::rb_read(uint8_t *out_data, uint32_t *out_length, uint32_t max_buf_size)
         ((uint8_t*)&record_len)[i] = buffer[temp];
         temp = (temp + 1) % buf_size;
     }
+    printf("len = %d\n", record_len);
 
     if (record_len > max_buf_size) return false; // Provided buffer too small
     tail = temp;
@@ -69,4 +75,23 @@ bool rb::rb_read(uint8_t *out_data, uint32_t *out_length, uint32_t max_buf_size)
 
     *out_length = record_len;
     return true;
+}
+
+int main() {
+    rb my_rb(64);
+    std::vector<uint8_t>in_data(9,0xff);
+    std::vector<uint8_t>out_data(15,0);
+    for(int i = 0; i < 9; i++) {
+        std::vector<uint8_t>in_data(9, 0x55+i);
+        int w1 = my_rb.rb_try_write(in_data.data(), in_data.size());
+        printf("write return %d\n", w1);
+    }
+    uint32_t bytes;
+    my_rb.rb_read(out_data.data(), &bytes, out_data.size());
+    printf("read data %d: ", bytes);
+    for(auto b : out_data) {
+        printf("%d ", b);
+    }
+    printf("\n");
+    return 0;
 }
