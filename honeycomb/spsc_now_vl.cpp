@@ -123,3 +123,14 @@ int main () {
         std::string s(out.begin(), out.end());
     }
 }
+
+/*
+Memory Ordering
+Producer:
+Loads tail with acquire → sees consumer progress
+Stores head with release → publishes data
+
+Consumer:
+Loads head with acquire → sees producer data
+Stores tail with release → publishes consumption
+*/
