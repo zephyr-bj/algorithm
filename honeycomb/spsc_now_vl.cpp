@@ -1,14 +1,7 @@
 #include <atomic>
-#include <cstdint>
-#include <cstring>
-#include <vector>
-#include <string>
-
-#include <atomic>
-#include <cstdint>
-#include <cstring>
 #include <vector>
 #include <cassert>
+#include <string>
 
 class SPSCRingBuffer {
 public:
@@ -25,10 +18,7 @@ public:
 
     bool push(const void* data, uint32_t len)
     {
-        if (len == 0 || len == UINT32_MAX)
-            return false;
-
-        constexpr size_t header_size = sizeof(uint32_t);
+        size_t header_size = sizeof(uint32_t);
         size_t total = align4(header_size + len);
 
         size_t head = head_.load(std::memory_order_relaxed);
@@ -41,35 +31,26 @@ public:
         size_t space_to_end = capacity_ - write_pos;
 
         // ---- wrap handling
-        if (space_to_end < total)
-        {
-            if (space_to_end >= header_size)
-            {
-                write_padding(write_pos);
+        if (space_to_end < total) {
+            if (space_to_end >= header_size) {
+                uint32_t marker = UINT32_MAX;
+                std::memcpy(&buffer_[write_pos], &marker, sizeof(marker));
             }
-
             head += space_to_end;
             write_pos = 0;
         }
+        if ((head - tail) + total > capacity_)
+            return false; // no overwrite
 
-        // ---- write header
         std::memcpy(&buffer_[write_pos], &len, header_size);
-        // ---- write payload
         std::memcpy(&buffer_[write_pos + header_size], data, len);
-
-        // ---- zero trailing padding (optional, for debugging)
-        size_t used = header_size + len;
-        size_t pad = total - used;
-        if (pad)
-            std::memset(&buffer_[write_pos + used], 0, pad);
-
         head_.store(head + total, std::memory_order_release);
         return true;
     }
 
     bool pop(std::vector<uint8_t>& out)
     {
-        constexpr size_t header_size = sizeof(uint32_t);
+        size_t header_size = sizeof(uint32_t);
 
         size_t tail = tail_.load(std::memory_order_relaxed);
         size_t head = head_.load(std::memory_order_acquire);
@@ -92,19 +73,15 @@ public:
             std::memcpy(&len, &buffer_[read_pos], header_size);
         }
 
-        if (len == 0 || len == UINT32_MAX)
-            return false; // corruption guard
-
         size_t total = align4(header_size + len);
-
+        
+        out.resize(len);
         if (tail + total > head)
             return false; // incomplete record
 
-        out.resize(len);
         std::memcpy(out.data(),
                     &buffer_[read_pos + header_size],
                     len);
-
         tail_.store(tail + total, std::memory_order_release);
         return true;
     }
@@ -126,12 +103,6 @@ private:
         size_t p = 1;
         while (p < v) p <<= 1;
         return p;
-    }
-
-    void write_padding(size_t pos)
-    {
-        uint32_t marker = UINT32_MAX;
-        std::memcpy(&buffer_[pos], &marker, sizeof(marker));
     }
 
 private:
