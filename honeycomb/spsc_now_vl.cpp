@@ -3,6 +3,11 @@
 #include <cassert>
 #include <string>
 
+#include <cstring> //for memcpy
+
+#include <thread>
+#include <chrono>
+
 class SPSCRingBuffer {
 public:
     explicit SPSCRingBuffer(size_t size)
@@ -34,7 +39,7 @@ public:
         if (space_to_end < total) {
             if (space_to_end >= header_size) {
                 uint32_t marker = UINT32_MAX;
-                std::memcpy(&buffer_[write_pos], &marker, sizeof(marker));
+                memcpy(&buffer_[write_pos], &marker, sizeof(marker));
             }
             head += space_to_end;
             write_pos = 0;
@@ -42,8 +47,8 @@ public:
         if ((head - tail) + total > capacity_)
             return false; // no overwrite
 
-        std::memcpy(&buffer_[write_pos], &len, header_size);
-        std::memcpy(&buffer_[write_pos + header_size], data, len);
+        memcpy(&buffer_[write_pos], &len, header_size);
+        memcpy(&buffer_[write_pos + header_size], data, len);
         head_.store(head + total, std::memory_order_release);
         return true;
     }
@@ -61,7 +66,7 @@ public:
         size_t read_pos = tail & mask_;
         uint32_t len;
 
-        std::memcpy(&len, &buffer_[read_pos], header_size);
+        memcpy(&len, &buffer_[read_pos], header_size);
 
         // ---- padding marker?
         if (len == UINT32_MAX)
@@ -70,7 +75,7 @@ public:
             tail += space_to_end;
             read_pos = 0;
 
-            std::memcpy(&len, &buffer_[read_pos], header_size);
+            memcpy(&len, &buffer_[read_pos], header_size);
         }
 
         size_t total = align4(header_size + len);
@@ -79,7 +84,7 @@ public:
         if (tail + total > head)
             return false; // incomplete record
 
-        std::memcpy(out.data(),
+        memcpy(out.data(),
                     &buffer_[read_pos + header_size],
                     len);
         tail_.store(tail + total, std::memory_order_release);
@@ -114,17 +119,37 @@ private:
     alignas(64) std::atomic<size_t> tail_;
 };
 
+
 int main () {
-    SPSCRingBuffer rb(64 * 1024);
+    SPSCRingBuffer rb(64);
 
-    std::string msg = "hello world";
-    rb.push(msg.data(), msg.size());
+    std::thread producer ( [&] () {
+        for(int i = 0; i < 10; i++) {
+            char c = 'a'+i;
+            std::string msg = std::string(11,c);
+            bool good = rb.push(msg.data(), msg.size());
+            auto now = std::chrono::system_clock::now();
+            auto ts = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch());
+            printf("[%ld] push return  %d\n", ts.count(), good);
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+    });
 
-    std::vector<uint8_t> out;
-    if (rb.pop(out)) {
-        std::string s(out.begin(), out.end());
-        printf("out data %s\n", s.c_str());
-    }
+    std::thread consumer ( [&] () {
+        for(int i = 0; i < 10; i++) {
+            std::vector<uint8_t> out;
+            if (rb.pop(out)) {
+                std::string s(out.begin(), out.end());
+                printf("out data %s\n", s.c_str());
+            } else {
+                printf("pop failed\n");
+            }
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+        }
+    });
+
+    producer.join();
+    consumer.join();
 }
 
 /*

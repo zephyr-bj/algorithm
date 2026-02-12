@@ -2,6 +2,11 @@
 #include <vector>
 #include <cassert>
 #include <string>
+#include <cstring> // for memcpy
+
+#include <thread>
+#include <chrono>
+#include <functional>
 
 class MPSCRingBuffer {
 public:
@@ -23,6 +28,8 @@ public:
 
         // === Phase 1: Reserve space ===
         uint64_t head, tail;
+        size_t index, space_to_end;
+        size_t padding = 0;
         while (true) {
             head = head_reserve_.load(std::memory_order_relaxed);
             tail = tail_.load(std::memory_order_acquire);
@@ -30,8 +37,16 @@ public:
             if (head - tail + total > capacity_)
                 return false; // no space (no overwrite)
 
+            index = head & mask_;
+            space_to_end = capacity_ - index;
+            if (space_to_end < total) {
+                padding = space_to_end;
+                if (head - tail + total + space_to_end > capacity_)
+                    return false;
+            }
+
             if (head_reserve_.compare_exchange_weak(
-                    head, head + total,
+                    head, head + total + padding,
                     std::memory_order_acquire,
                     std::memory_order_relaxed))
             {
@@ -40,17 +55,7 @@ public:
             }
         }
 
-        size_t index = reserved & mask_;
-        size_t space_to_end = capacity_ - index;
-        
-        size_t needed = total;
-        if (space_to_end < total)
-            needed = total + space_to_end;
-        
-        if (head - tail + needed > capacity_)
-            return false;
-
-        if (space_to_end < total) {
+        if (padding > 0) {
             // insert padding
             Header* hdr = reinterpret_cast<Header*>(&buffer_[index]);
             hdr->len = 0;
@@ -127,15 +132,39 @@ private:
     alignas(64) std::atomic<uint64_t> tail_{0};
 };
 
-int main () {
-     MPSCRingBuffer rb(64 * 1024);
-
-    std::string msg = "hello world";
-    rb.push(msg.data(), msg.size());
-
-    std::vector<uint8_t> out;
-    if (rb.pop(out)) {
-        std::string s(out.begin(), out.end());
-        printf("out data %s\n", s.c_str());
+void writeFunc (MPSCRingBuffer &rb, char content, int index, int msg_sz, int interval) {
+    for(int i = 0; i < 10; i++) {
+        char c = content+i;
+        std::string msg = std::string(msg_sz, c);
+        bool good = rb.push(msg.data(), msg.size());
+        auto now = std::chrono::system_clock::now();
+        auto ts = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch());
+        printf("[%ld] prod[%d]: push return  %d\n", ts.count(), index, good);
+        std::this_thread::sleep_for(std::chrono::seconds(interval));
     }
 }
+
+int main () {
+    MPSCRingBuffer rb(64);
+
+    std::thread producer1 (writeFunc, std::ref(rb), 'a', 0, 11, 1);
+    std::thread producer2 (writeFunc, std::ref(rb), '1', 1, 9, 1);
+
+    std::thread consumer ( [&] () {
+        for(int i = 0; i < 10; i++) {
+            std::vector<uint8_t> out;
+            if (rb.pop(out)) {
+                std::string s(out.begin(), out.end());
+                printf("out data %s\n", s.c_str());
+            } else {
+                printf("pop failed\n");
+            }
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+        }
+    });
+
+    producer1.join();
+    producer2.join();
+    consumer.join();
+}
+

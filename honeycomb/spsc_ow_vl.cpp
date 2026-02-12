@@ -4,6 +4,11 @@
 #include <cassert>
 #include <string>
 
+#include <cstring> // for memcpy
+
+#include <thread>
+#include <chrono>
+
 class SPSCRingOverwrite {
 public:
     explicit SPSCRingOverwrite(size_t capacity_pow2)
@@ -114,16 +119,35 @@ private:
     alignas(64) std::atomic<uint64_t> tail_{0};
 };
 
-
 int main () {
-    SPSCRingOverwrite rb(64 * 1024);
+    SPSCRingOverwrite rb(64);
 
-    std::string msg = "hello world";
-    rb.push(msg.data(), msg.size());
+    std::thread producer ( [&] () {
+        for(int i = 0; i < 10; i++) {
+            char c = 'a'+i;
+            std::string msg = std::string(11,c);
+            bool good = rb.push(msg.data(), msg.size());
+            auto now = std::chrono::system_clock::now();
+            auto ts = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch());
+            printf("[%ld] push return  %d\n", ts.count(), good);
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+    });
 
-    std::vector<uint8_t> out;
-    if (rb.pop(out)) {
-        std::string s(out.begin(), out.end());
-        printf("out data %s\n", s.c_str());
-    }
+    std::thread consumer ( [&] () {
+        for(int i = 0; i < 10; i++) {
+            std::vector<uint8_t> out;
+            if (rb.pop(out)) {
+                std::string s(out.begin(), out.end());
+                printf("out data %s\n", s.c_str());
+            } else {
+                printf("pop failed\n");
+            }
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+        }
+    });
+
+    producer.join();
+    consumer.join();
 }
+
