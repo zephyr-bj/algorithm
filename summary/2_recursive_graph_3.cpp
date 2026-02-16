@@ -26,6 +26,7 @@
         return nn;
     }
 //(0332) reconstruct itinerary
+// the backtracking algorithm below leads to TLE now with new test cases
     bool dfs(unordered_map<string, map<string,int>>&G, string start, int stops, vector<string>&path){
         if(path.size()==stops+1)return true;
         for(auto m: G[start])
@@ -47,4 +48,24 @@
         dfs(G,"JFK", K, path);
         return path;
     }
-
+// new one works
+    void dfs(unordered_map<string,multiset<string>>&proj, 
+                vector<string>&ans, string dept){
+        while (!proj[dept].empty()) {
+            auto arrv = proj[dept].begin();
+            string new_dept = *arrv;
+            proj[dept].erase(arrv);
+            dfs(proj, ans, new_dept);
+        }
+        ans.push_back(dept);
+    }
+    vector<string> findItinerary(vector<vector<string>>& tickets) {
+        unordered_map<string,multiset<string>>proj;
+        for(auto t : tickets) {
+            proj[t[0]].insert(t[1]);
+        }
+        vector<string>ans;
+        dfs(proj, ans, "JFK");
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
