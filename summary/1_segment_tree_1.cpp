@@ -1,3 +1,6 @@
+/* (0307) Range Sum Query - mutable
+ */
+
 //(1) complexity
 //say array of size N, and the query range of size M
 //query in array takes time O(M), update take O(1), space O(N)

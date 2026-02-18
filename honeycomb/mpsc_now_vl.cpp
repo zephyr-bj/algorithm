@@ -148,7 +148,7 @@ int main () {
     MPSCRingBuffer rb(64);
 
     std::thread producer1 (writeFunc, std::ref(rb), 'a', 0, 11, 1);
-    std::thread producer2 (writeFunc, std::ref(rb), '1', 1, 9, 1);
+    std::thread producer2 (writeFunc, std::ref(rb), '1', 1, 9, 2);
 
     std::thread consumer ( [&] () {
         for(int i = 0; i < 10; i++) {
