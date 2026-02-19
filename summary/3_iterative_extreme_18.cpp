@@ -290,6 +290,48 @@
         }
         return level.size();
     }
+// get the Longest Increasing Sequence
+std::vector<int> getLIS(const std::vector<int>& nums) {
+    if (nums.empty()) return {};
+
+    int n = nums.size();
+    std::vector<int> tails;          // Stores values of the current active LIS
+    std::vector<int> tail_indices;   // Stores indices of values in tails
+    std::vector<int> parent(n, -1);  // To reconstruct the path
+
+    for (int i = 0; i < n; ++i) {
+        // Find the first element in tails >= nums[i]
+        auto it = std::lower_bound(tails.begin(), tails.end(), nums[i]);
+        int pos = std::distance(tails.begin(), it);
+
+        if (it == tails.end()) {
+            // Extend the longest subsequence
+            if (!tail_indices.empty()) {
+                parent[i] = tail_indices.back();
+            }
+            tails.push_back(nums[i]);
+            tail_indices.push_back(i);
+        } else {
+            // Replace existing element to maintain potential for longer sequences
+            *it = nums[i];
+            tail_indices[pos] = i;
+            if (pos > 0) {
+                parent[i] = tail_indices[pos - 1];
+            }
+        }
+    }
+    
+    // Reconstruct the LIS using the parent pointers
+    std::vector<int> result;
+    int curr = tail_indices.back();
+    while (curr != -1) {
+        result.push_back(nums[curr]);
+        curr = parent[curr];
+    }
+    std::reverse(result.begin(), result.end());
+    
+    return result;
+}
 
 // (0218) skyline problem
 // only left or right edges will contribute to the output 
