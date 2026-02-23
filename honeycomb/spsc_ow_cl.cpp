@@ -22,18 +22,21 @@ public:
     bool push(T & data) {
         uint32_t head = head_.load(std::memory_order_relaxed);
         uint32_t tail = tail_.load(std::memory_order_acquire);
-        if (head-tail==cap_)
-            return false;
+        bool ans = true;
+        if (head-tail>=cap_)
+            ans = false;
         uint32_t index = head % cap_;
         buf_[index] = std::move(data);
         head_.store(head+1, std::memory_order_release);
-        return true;
+        return ans;
     }
     bool pop(T & data) {
         uint32_t tail = tail_.load(std::memory_order_relaxed);
         uint32_t head = head_.load(std::memory_order_acquire);
         if (head == tail)
             return false;
+        if (head - tail > cap_)
+            tail = head - cap_;
         uint32_t index = tail % cap_;
         data = std::move(buf_[index]);
         tail_.store(tail+1, std::memory_order_release);
@@ -54,7 +57,7 @@ int main()
     ringBuf<testNode> myrb(8);
     
     std::thread producer ([&]() {
-        for(int i = 0; i < 12; i++) {
+        for(int i = 0; i < 20; i++) {
             testNode input(i, i + 1, i + 2);
             bool good = myrb.push(input);
             //requires right value reference: T&& data
@@ -69,7 +72,7 @@ int main()
     });
     
     std::thread consumer ([&]() {
-        for(int i = 0; i < 12; i++) {
+        for(int i = 0; i < 20; i++) {
             testNode output;
             bool good = myrb.pop(output);
             if (good) {

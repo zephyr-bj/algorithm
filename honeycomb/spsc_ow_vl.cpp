@@ -59,44 +59,54 @@ public:
     {
         uint64_t tail = tail_.load(std::memory_order_relaxed);
         uint64_t head = head_.load(std::memory_order_acquire);
-
+    
         if (tail == head)
-            return false;   // empty
-
-        // Detect overwrite (consumer too slow)
-        if (head - tail > capacity_) {
-            tail = head - capacity_;
-        }
-
-        size_t read_pos = tail & mask_;
-
-        Header h;
-        std::memcpy(&h, &buffer_[read_pos], sizeof(Header));
-
-        // Padding marker
-        if (h.len == UINT32_MAX) {
-            tail += (capacity_ - read_pos);
-            tail_.store(tail, std::memory_order_release);
-            return pop(out);
-        }
-
-        // Verify record not overwritten
-        if (h.seq_low != static_cast<uint32_t>(tail)) {
-            // record overwritten — skip forward
-            tail = head - capacity_;
-            tail_.store(tail, std::memory_order_release);
             return false;
+    
+        // --------- OVERWRITE DETECTION ---------
+        if (head - tail > capacity_) {
+            // Move into valid window
+            tail = head - capacity_;
         }
-
-        size_t total = align4(sizeof(Header) + h.len);
-
-        out.resize(h.len);
-        std::memcpy(out.data(),
-                    &buffer_[read_pos + sizeof(Header)],
-                    h.len);
-
-        tail_.store(tail + total, std::memory_order_release);
-        return true;
+    
+        // --------- RESYNC LOOP ---------
+        while (true) {
+    
+            size_t index = tail & mask_;
+    
+            Header h;
+            std::memcpy(&h, &buffer_[index], sizeof(Header));
+    
+            // Padding marker
+            if (h.len == 0) {
+                tail += (capacity_ - index);
+                continue;
+            }
+    
+            // Check header consistency
+            if (h.seq_low == static_cast<uint32_t>(tail)) {
+    
+                // Validate record fully inside window
+                uint64_t record_end = tail + sizeof(Header) + h.len;
+    
+                if (record_end <= head) {
+                    // Found valid record
+                    out.resize(h.len);
+                    std::memcpy(out.data(),
+                                &buffer_[index + sizeof(Header)],
+                                h.len);
+    
+                    tail_.store(record_end,
+                                    std::memory_order_release);
+                    return true;
+                }
+            }
+    
+            // Not a valid header → advance by 1 byte
+            tail++;
+            if (tail >= head)
+                return false;
+        }
     }
 
 private:
