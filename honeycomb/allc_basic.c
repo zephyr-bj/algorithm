@@ -1,5 +1,6 @@
-#include <unistd.h>
-#include <string.h> // Required for sbrk()
+#include <unistd.h> // for skrb()
+#include <string.h>
+#include <stdio.h>
 
 // compile with gcc allc_basic.c -o allc
 
@@ -42,7 +43,7 @@ block_t *request_space(block_t *last, size_t size) {
     return block;
 }
 
-void *malloc(size_t size) {
+void *my_alloc(size_t size) {
     if (size == 0)
         return NULL;
 
@@ -66,7 +67,7 @@ void *malloc(size_t size) {
     return (block + 1);
 }
 
-void free(void *ptr) {
+void my_free(void *ptr) {
     if (!ptr)
         return;
 
@@ -74,7 +75,31 @@ void free(void *ptr) {
     block->free = 1;
 }
 
-int main () {
-    unsigned char *data = (unsigned char*)malloc(63);
-    free((void*)data);
+void traverseList() {
+    block_t *cur = free_list;
+    while(cur!=NULL) {
+        printf("size(%ld)free(%d)|", cur->size, cur->free);
+        cur=cur->next;
+    }
+    printf("\n");
+}
+
+int main()
+{
+    void * x = my_alloc(15);
+    void * y = my_alloc(64);
+    void * z = my_alloc(100);
+    
+    traverseList();
+    my_free(y);
+    traverseList();
+    my_free(z);
+    traverseList();
+    void * a = my_alloc(30);
+    my_free(x);
+    traverseList();
+    my_free(a);
+    traverseList();
+
+    return 0;
 }
