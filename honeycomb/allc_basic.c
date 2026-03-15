@@ -6,6 +6,7 @@
 
 // Has no splitting/coalescing
 // Not thread-safe
+// Align the size with power of 2 is important
 
 typedef struct block {
     size_t size;
@@ -46,7 +47,7 @@ block_t *request_space(block_t *last, size_t size) {
 void *my_alloc(size_t size) {
     if (size == 0)
         return NULL;
-
+// ALIGN_UP is important, otherwise, sbrk may not work as expected. 
     size = ALIGN_UP(size);
     block_t *block;
 
