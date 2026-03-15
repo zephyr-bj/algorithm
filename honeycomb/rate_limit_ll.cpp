@@ -1,6 +1,10 @@
 #include <atomic>
 #include <chrono>
 #include <algorithm>
+//get_now: get duration from now, using 'time_since_epoch'
+//get_now: get double time from duration<double>(now)
+//initialize atomic variable by 'store', not in the init list
+//to compile big atomic object, we may need '-latomic' to build
 
 class LockFreeRateLimiter {
 private:
