@@ -15,7 +15,7 @@
     5.duplicate element problem trick
     6.back tracking
     7.hash map to prevent duplicate call
-    math[7]
+    math[8]
     (0039)find all combinations for a target sum, use each element unlimited times
     (0040)find all combinations for a target sum, duplicate elements in set, use each once
     (0046)find all permutations of a set of number 
@@ -23,6 +23,7 @@
     (0078)find all subsets of a set of n distinct integers 
     (0090)find all subsets of a set of n integers, may contains duplicate integers
     (0077)find all comobinations of k elements out of a set of n elements
+    (0698*)partition to K equal sum subsets
     queen[2]
     (0051)find all solutions for the N-Queen problem
     (0052)find the number of solutions for the N-Queen problem
@@ -169,7 +170,45 @@
         return ans;
     }
     
-    
+//(0698*)partition to K equal sum subsets
+    bool backtrack(vector<int>&nums, int k, int idx, uint32_t used, int cur, 
+                    int avg, unordered_set<uint32_t>&visited) {
+        if (idx == k)
+            return true;
+        if (cur == avg) {
+            return backtrack(nums, k, idx+1, used, 0, avg, visited);
+        }
+        int n = nums.size();
+        for (int i = 0; i < n; i++) {
+            if (used & ((uint32_t)1 << i)) continue;
+        /* optmization #0 */
+            if (cur + nums[i] > avg) continue;
+            used |= ((uint32_t)1 << i);
+        /* optmization #2 */
+            if (visited.find(used) != visited.end()) {
+                used &= ~((uint32_t)1 << i);
+                continue;
+            }
+            visited.insert(used);
+            if (backtrack(nums, k, idx, used, cur+nums[i], avg, visited))
+                return true;
+            used &= ~((uint32_t)1 << i);
+        }
+        return false;
+    }
+public:
+    bool canPartitionKSubsets(vector<int>& nums, int k) {
+        uint32_t used = 0;
+        int sum = 0;
+        for(auto x : nums)
+            sum += x;
+        if (sum % k != 0) return false;
+        int avg = sum / k;
+        /* optmization #1 */
+        sort(nums.begin(), nums.end(), greater<int>());
+        unordered_set<uint32_t>visited;
+        return backtrack(nums, k, 0, used, 0, avg, visited);
+    }
 //(0051)find all solutions for the N-Queen problem 
     void NQTool(int x, int n, vector<int>&pos, vector<vector<string>>&ans){
         if(x==n){

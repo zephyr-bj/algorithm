@@ -58,6 +58,10 @@ private:
         Duration interval;   // zero = one-shot
         size_t id;
 
+        Task(TimePoint tp, TaskFunc tf, Duration period, size_t index):
+            next_run(tp), func(tf), interval(period), id(index){
+        }
+        // we need the two 'const' in this definition
         bool operator>(const Task& other) const {
             return next_run > other.next_run;
         }
@@ -72,7 +76,7 @@ private:
 
     void schedule_at(TimePoint tp, TaskFunc func, Duration interval) {
         std::lock_guard<std::mutex> lock(mtx);
-        task_queue.push(Task{tp, std::move(func), interval, id_gen++});
+        task_queue.push(Task(tp, std::move(func), interval, id_gen++));
         cv.notify_all();
     }
 
