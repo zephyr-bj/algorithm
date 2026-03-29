@@ -114,39 +114,34 @@ public:
 // (0380) randomized set
 class RandomizedSet {
 public:
-    /** Initialize your data structure here. */
-    unordered_map<int,int>setr;
-    vector<int>vr;
+    vector<int>array;
+    unordered_map<int, int>vimap; // value -> index
     RandomizedSet() {
     }
     
-    /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
     bool insert(int val) {
-        if(setr.find(val)!=setr.end())return false;
-        setr[val]=vr.size();
-        vr.push_back(val);
+        if (vimap.find(val) != vimap.end()) return false;
+        array.push_back(val);
+        vimap[val]=array.size()-1;
         return true;
     }
-    
-    /** Removes a value from the set. Returns true if the set contained the specified element. */
+    // always has pop_back in array and erase map
     bool remove(int val) {
-        if(setr.find(val)==setr.end())return false;
-        int idx = vr.size()-1;
-        if(setr[val]!=idx){
-            vr[setr[val]]=vr[idx];
-            setr[vr[idx]]=setr[val];
-        }
-        vr.pop_back();
-        setr.erase(val);
+        if (vimap.find(val) == vimap.end()) return false;
+        int idx = vimap[val];
+        array[idx] = array.back();
+        vimap[array[idx]] = idx;
+        array.pop_back();
+        vimap.erase(val);
         return true;
     }
     
-    /** Get a random element from the set. */
     int getRandom() {
-        int x = rand() % vr.size();
-        return vr[x];
+        int idx = rand() % array.size();
+        return array[idx];
     }
 };
+
 // (0381) randomized collection
 class RandomizedCollection {
 public:
@@ -161,6 +156,9 @@ public:
         m[val].insert(v.size() - 1);
         return m[val].size() == 1;
     }
+    // always have pop_back in array, and check if erase is necessary in map. 
+    // insert 'v.back' first then erase(v.size-1), so erase alway has an element to remove,
+    //   otherwise, when it's the last element -> v pop and empty, but m still has element
     bool remove(int val) {
         auto it = m.find(val);
         if(it==m.end())return false;
