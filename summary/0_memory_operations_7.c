@@ -1,3 +1,4 @@
+//[1]64bit counter read
 //[1]aligned malloc and free
 //[1]allocate a two dimension array
 //[1]memory copy between overlapping buffers
@@ -18,6 +19,22 @@
 //Say a function takes a pointer and allocates it some memory. How would the function 'Prototype' be? 
 void memallocate (size_t size, void ** p); 
 
+// 64 bit counter reads
+// Replace these with your actual hardware addresses or register macros
+#define REG_COUNTER_LOW  (*(volatile uint32_t*)0x40001000)
+#define REG_COUNTER_HIGH (*(volatile uint32_t*)0x40001004)
+
+uint64_t read_64bit_counter(void) {
+    uint32_t high1, high2, low;
+
+    do {
+        high1 = REG_COUNTER_HIGH; // Read high bits first
+        low   = REG_COUNTER_LOW;  // Read low bits
+        high2 = REG_COUNTER_HIGH; // Read high bits again to check for rollover
+    } while (high1 != high2);     // If high changed, the low bits are suspect. Repeat.
+
+    return ((uint64_t)high1 << 32) | low;
+}
 
 //aligned malloc and free (hits:x)
 void *aligned_malloc(size_t size, size_t alignment) {
