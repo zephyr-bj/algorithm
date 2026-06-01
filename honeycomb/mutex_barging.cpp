@@ -4,6 +4,7 @@
 #include <mutex>
 #include <thread>
 #include <iostream>
+#include <vector>
 
 class SpinLock {
     std::atomic_flag flag = ATOMIC_FLAG_INIT;
@@ -47,6 +48,8 @@ private:
         w->cv.notify_one();
     }
     std::atomic<std::thread::id> owner;
+    // lock to protect the invariant:
+    // "owner == nobody" AND "wait_queue is empty"
     SpinLock wait_lock;
     std::deque<Waiter*> waiters;
 
@@ -72,12 +75,9 @@ public:
         }
     
         Waiter waiter;
-    
         while (true) {
             wait_lock.lock();
-    
             nobody = std::thread::id{};
-    
             if (owner.compare_exchange_strong(
                     nobody,
                     self,
@@ -86,9 +86,9 @@ public:
                 wait_lock.unlock();
                 return;
             }
+            // nobody updated to self when failed
     
             waiters.push_back(&waiter);
-    
             wait_lock.unlock();
     
             schedule_block(waiter);
@@ -103,7 +103,6 @@ public:
         }
     
         wait_lock.lock();
-    
         if (waiters.empty()) {
             owner.store(std::thread::id{}, std::memory_order_release);
             wait_lock.unlock();
@@ -121,11 +120,8 @@ public:
     }
 };
 
-KernelMutexSim kmutex;
-int shared_counter = 0;
-
-void worker() {
-    for (int i = 0; i < 10000; i++) {
+void test_task(KernelMutexSim & kmutex, int & shared_counter) {
+    for (int i = 0; i < 100000; i++) {
         kmutex.mutex_lock();
 
         shared_counter++;
@@ -135,13 +131,20 @@ void worker() {
 }
 
 int main() {
-    std::thread t1(worker);
-    std::thread t2(worker);
-    std::thread t3(worker);
+    KernelMutexSim kmutex;
+    int shared_counter = 0;
 
-    t1.join();
-    t2.join();
-    t3.join();
+    int worker_cnt = 20;
+    std::vector<std::thread>workers;
+    for (int i = 0; i < worker_cnt; i++) {
+        std::thread worker([&] {
+            test_task(kmutex, shared_counter);
+        });
+        workers.push_back(std::move(worker));
+    }
+    for (int i = 0; i < worker_cnt; i++) {
+        workers[i].join();
+    }
 
     std::cout << "counter = " << shared_counter << "\n";
 }
