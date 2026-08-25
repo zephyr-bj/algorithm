@@ -9,6 +9,27 @@
 #include <chrono>
 
 class SPSCRingBuffer {
+private:
+    const size_t capacity_;
+    const size_t mask_;
+    std::vector<uint8_t> buffer_;
+// 64 bytes, cache line size for x86, prevents false sharing
+    alignas(64) std::atomic<size_t> head_;
+    alignas(64) std::atomic<size_t> tail_;
+    const size_t header_size = sizeof(uint32_t);
+
+    static size_t align4(size_t n)
+    {
+        return (n + 3) & ~size_t(3);
+    }
+
+    static size_t round_up_pow2(size_t v)
+    {
+        size_t p = 1;
+        while (p < v) p <<= 1;
+        return p;
+    }
+
 public:
     explicit SPSCRingBuffer(size_t size)
         : capacity_(round_up_pow2(size)),
@@ -23,7 +44,6 @@ public:
 
     bool push(const void* data, uint32_t len)
     {
-        size_t header_size = sizeof(uint32_t);
         size_t total = align4(header_size + len);
 
         size_t head = head_.load(std::memory_order_relaxed);
@@ -55,8 +75,6 @@ public:
 
     bool pop(std::vector<uint8_t>& out)
     {
-        size_t header_size = sizeof(uint32_t);
-
         size_t tail = tail_.load(std::memory_order_relaxed);
         size_t head = head_.load(std::memory_order_acquire);
 
@@ -90,33 +108,6 @@ public:
         tail_.store(tail + total, std::memory_order_release);
         return true;
     }
-
-    size_t size() const
-    {
-        return head_.load(std::memory_order_acquire) -
-               tail_.load(std::memory_order_acquire);
-    }
-
-private:
-    static size_t align4(size_t n)
-    {
-        return (n + 3) & ~size_t(3);
-    }
-
-    static size_t round_up_pow2(size_t v)
-    {
-        size_t p = 1;
-        while (p < v) p <<= 1;
-        return p;
-    }
-
-private:
-    const size_t capacity_;
-    const size_t mask_;
-    std::vector<uint8_t> buffer_;
-
-    alignas(64) std::atomic<size_t> head_;
-    alignas(64) std::atomic<size_t> tail_;
 };
 
 
